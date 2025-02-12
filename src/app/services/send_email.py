@@ -8,9 +8,9 @@ from abc import abstractmethod
 from fastapi_mail import FastMail, MessageSchema
 from jinja2 import Environment, FileSystemLoader, Template, TemplateError
 
-from settings import Settings
 from settings import TEMPLATE_DIR
 from core.exceptions import CustomMailerException, CustomTemplateException
+from settings import settings
 
 
 log = logging.getLogger("app")
@@ -33,9 +33,8 @@ class EmailServicesProtocol(Protocol):
 
 
 class EmailServicesImpl(EmailServicesProtocol):
-    def __init__(self, mailer: FastMail, settings: Settings) -> None:
+    def __init__(self, mailer: FastMail) -> None:
         self.mailer = mailer
-        self.settings = settings
 
     def get_template(self: Self, template_name: str) -> Template:
         """Получение html шаблона для email'а"""
@@ -61,11 +60,11 @@ class EmailServicesImpl(EmailServicesProtocol):
         """Отправка письма для верификации почты"""
         log.info("Sending verification email.")
         try:
-            template: Template = self.get_template(self.settings.templates.CONFIRM)
+            template: Template = self.get_template(settings.templates.CONFIRM)
             body: str = template.render(token=token)
 
             message = MessageSchema(
-                subject=self.settings.subjects.CONFIRM,
+                subject=settings.subjects.CONFIRM,
                 recipients=[recipient],
                 body=body,
                 subtype="html",
@@ -84,11 +83,11 @@ class EmailServicesImpl(EmailServicesProtocol):
         """Отправка письма для восстановления пароля"""
         log.info("Sending password recovery email.")
         try:
-            template: Template = self.get_template(self.settings.templates.RECOVERY)
+            template: Template = self.get_template(settings.templates.RECOVERY)
             body = template.render(token=token)
 
             message = MessageSchema(
-                subject=self.settings.subjects.RECOVERY,
+                subject=settings.subjects.RECOVERY,
                 recipients=[recipient],
                 body=body,
                 subtype="html",
