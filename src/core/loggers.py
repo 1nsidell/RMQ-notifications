@@ -5,11 +5,11 @@ import logging
 import logging.config
 from pathlib import Path
 
-from settings import ROOT_DIR_SRC
+from settings import PATH_TO_BASE_FOLDER
 
 
 def setup_logging():
-    config_file: Path = ROOT_DIR_SRC / "core" / "log_config.json"
+    config_file: Path = PATH_TO_BASE_FOLDER / "log_config.json"
     with open(config_file) as file:
         config = json.load(file)
     logging.config.dictConfig(config)

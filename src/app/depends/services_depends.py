@@ -6,7 +6,7 @@ from settings import settings
 
 def get_email_service() -> EmailServicesProtocol:
     mailer = FastMail(settings.fast_mail.conf)
-    return EmailServicesImpl(mailer, settings)
+    return EmailServicesImpl(mailer)
 
 
 EmailService: EmailServicesProtocol = get_email_service()
