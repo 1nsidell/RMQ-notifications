@@ -9,7 +9,7 @@ from fastapi_mail import FastMail, MessageSchema
 from jinja2 import Environment, FileSystemLoader, Template, TemplateError
 
 from settings import TEMPLATE_DIR
-from core.exceptions import CustomMailerException, CustomTemplateException
+from app.exceptions import CustomMailerException, CustomTemplateException
 from settings import settings
 
 
