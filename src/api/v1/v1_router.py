@@ -6,6 +6,7 @@ from settings import settings
 
 api_v1_router = APIRouter(
     prefix=settings.api.v1_prefix,
+    tags=["MAILER-V1"],
 )
 
 api_v1_sub_routers = (

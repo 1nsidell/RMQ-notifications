@@ -22,6 +22,6 @@ class SendEmailRecovery:
         return await EmailUseCase.send_recovery_email(data.recipient, data.token)
 
 
-email_confirm = SendEmailRecovery()
+email_recovery = SendEmailRecovery()
 
-router = email_confirm.router
+router = email_recovery.router
