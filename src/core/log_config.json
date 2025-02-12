@@ -1,0 +1,66 @@
+{
+    "version": 1,
+    "disable_existing_loggers": false,
+    "formatters": {
+        "simple": {
+            "()": "core.utils.logging_utils.UTCFormatter",
+            "format": "%(asctime)s - %(name)15s - %(levelname)-8s - %(message)s"
+        },
+        "json": {
+            "()": "core.utils.logging_utils.JsonFormatter",
+            "fmt_dict": {
+                "levelname": "levelname",
+                "message": "message",
+                "asctime": "asctime",
+                "module": "module",
+                "lineno": "lineno",
+                "name": "name"
+            },
+            "time_format": "%Y-%m-%dT%H:%M:%S",
+            "msec_format": "%s.%03dZ"
+        }
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+            "level": "WARNING",
+            "stream": "ext://sys.stdout"
+        },
+        "file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": "logs/app.log",
+            "formatter": "json",
+            "level": "DEBUG",
+            "maxBytes": 10485760,
+            "backupCount": 40,
+            "encoding": "utf8"
+        }
+    },
+    "loggers": {
+        "dependencies": {
+            "level": "DEBUG",
+            "handlers": ["file", "console"],
+            "propagate": false
+        },
+        "app": {
+            "level": "DEBUG",
+            "handlers": ["file", "console"],
+            "propagate": false
+        },
+        "request": {
+            "level": "DEBUG",
+            "handlers": ["file", "console"],
+            "propagate": false
+        },
+        "exception_handler": {
+            "level": "DEBUG",
+            "handlers": ["file", "console"],
+            "propagate": false
+        }
+    },
+    "root": {
+        "level": "WARNING",
+        "handlers": ["console"]
+    }
+}
