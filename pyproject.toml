@@ -8,5 +8,7 @@ dependencies = [
     "fastapi>=0.115.8",
     "fastapi-mail>=1.4.2",
     "pytest>=8.3.4",
+    "pytest-asyncio>=0.25.3",
+    "pytest-mock>=3.14.0",
     "uvicorn>=0.34.0",
 ]
