@@ -4,9 +4,10 @@ from fastapi_mail import ConnectionConfig
 from pydantic import BaseModel
 
 
-ROOT_DIR_SRC: Path = Path(__file__).parent
-PATH_TO_BASE_FOLDER = ROOT_DIR_SRC.parent
-TEMPLATE_DIR: Path = ROOT_DIR_SRC / "core" / "templates"
+class Paths:
+    ROOT_DIR_SRC: Path = Path(__file__).parent
+    PATH_TO_BASE_FOLDER = ROOT_DIR_SRC.parent
+    TEMPLATE_DIR: Path = ROOT_DIR_SRC / "core" / "templates"
 
 
 class RunConfig(BaseModel):
@@ -66,6 +67,7 @@ class Settings:
     fast_mail: FastMailConfig = FastMailConfig()
     subjects: EmailSubjects = EmailSubjects()
     templates: MailTemplate = MailTemplate()
+    paths: Paths = Paths()
 
 
 def get_settings() -> Settings:

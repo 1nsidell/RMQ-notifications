@@ -8,9 +8,8 @@ from abc import abstractmethod
 from fastapi_mail import FastMail, MessageSchema
 from jinja2 import Environment, FileSystemLoader, Template, TemplateError
 
-from settings import TEMPLATE_DIR
-from app.exceptions import CustomMailerException, CustomTemplateException
-from settings import settings
+from src.app.exceptions import CustomMailerException, CustomTemplateException
+from src.settings import Settings
 
 
 log = logging.getLogger("app")
@@ -33,14 +32,15 @@ class EmailServicesProtocol(Protocol):
 
 
 class EmailServicesImpl(EmailServicesProtocol):
-    def __init__(self, mailer: FastMail) -> None:
+    def __init__(self, mailer: FastMail, settings: Settings) -> None:
         self.mailer = mailer
+        self.settings = settings
 
     def get_template(self: Self, template_name: str) -> Template:
         """Получение html шаблона для email'а"""
         log.info("Retrieving a message template: %s.", template_name)
         try:
-            template_dir: Path = TEMPLATE_DIR
+            template_dir: Path = self.settings.paths.TEMPLATE_DIR
             env = Environment(loader=FileSystemLoader(template_dir))
             template = env.get_template(template_name)
             log.info("Template successfully received: %s.", template_name)
@@ -60,11 +60,11 @@ class EmailServicesImpl(EmailServicesProtocol):
         """Отправка письма для верификации почты"""
         log.info("Sending verification email.")
         try:
-            template: Template = self.get_template(settings.templates.CONFIRM)
+            template: Template = self.get_template(self.settings.templates.CONFIRM)
             body: str = template.render(token=token)
 
             message = MessageSchema(
-                subject=settings.subjects.CONFIRM,
+                subject=self.settings.subjects.CONFIRM,
                 recipients=[recipient],
                 body=body,
                 subtype="html",
@@ -83,11 +83,11 @@ class EmailServicesImpl(EmailServicesProtocol):
         """Отправка письма для восстановления пароля"""
         log.info("Sending password recovery email.")
         try:
-            template: Template = self.get_template(settings.templates.RECOVERY)
+            template: Template = self.get_template(self.settings.templates.RECOVERY)
             body = template.render(token=token)
 
             message = MessageSchema(
-                subject=settings.subjects.RECOVERY,
+                subject=self.settings.subjects.RECOVERY,
                 recipients=[recipient],
                 body=body,
                 subtype="html",

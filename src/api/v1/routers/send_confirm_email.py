@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
-from settings import settings
-from app.depends.use_cases_depends import EmailUseCase
-from core.schemas import SSuccessfulRequest, SSendTokenEmail
+from src.settings import settings
+from src.app.depends.use_cases_depends import EmailUseCase
+from src.core.schemas import SSuccessfulRequest, SSendTokenEmail
 
 
 class SendEmailConfirm:

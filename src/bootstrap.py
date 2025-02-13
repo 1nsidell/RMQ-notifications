@@ -1,10 +1,11 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
-from core.loggers import setup_logging
-from routers import apply_routes
-from middleware import apply_middlewares
-from exceptions import apply_exceptions_handlers
+from src.core.loggers import setup_logging
+from src.routers import apply_routes
+from src.middleware import apply_middlewares
+from src.exceptions import apply_exceptions_handlers
+from src.settings import settings
 
 
 @asynccontextmanager
@@ -13,7 +14,7 @@ async def lifespan(app: FastAPI):
     Предварительная инициализация приложения.
     """
     # startup
-    setup_logging()
+    setup_logging(settings)
     yield
     # shutdown
 

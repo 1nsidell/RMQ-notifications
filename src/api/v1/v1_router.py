@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
-from api.v1.routers.send_confirm_email import router as confirm_router
-from api.v1.routers.send_recovery_password import router as recovery_router
-from settings import settings
+from src.api.v1.routers.send_confirm_email import router as confirm_router
+from src.api.v1.routers.send_recovery_password import router as recovery_router
+from src.settings import settings
 
 api_v1_router = APIRouter(
     prefix=settings.api.v1_prefix,

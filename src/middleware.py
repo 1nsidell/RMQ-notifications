@@ -4,7 +4,7 @@
 
 from fastapi import FastAPI
 
-from core.middlewares.logger_middleware import RequestLoggingMiddleware
+from src.core.middlewares.logger_middleware import RequestLoggingMiddleware
 
 
 middlewares = [RequestLoggingMiddleware]

@@ -1,7 +1,8 @@
 from typing import Self
-from app.services.send_email import EmailServicesProtocol
-from core.schemas import SSuccessfulRequest
 from asyncio import create_task
+
+from src.app.services.email_service import EmailServicesProtocol
+from src.core.schemas import SSuccessfulRequest
 
 
 class EmailUseCaseImpl:

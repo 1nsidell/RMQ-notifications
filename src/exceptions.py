@@ -1,9 +1,11 @@
 """Модуль обработчика ошибок"""
 
 import logging
-from core.exceptions import BaseCustomException
+
 from fastapi import Request, FastAPI
 from fastapi.responses import JSONResponse
+
+from src.core.exceptions import BaseCustomException
 
 log = logging.getLogger("exception_handler")
 

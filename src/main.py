@@ -1,7 +1,7 @@
 import uvicorn
 
-from bootstrap import create_app
-from settings import settings
+from src.bootstrap import create_app
+from src.settings import settings
 
 app = create_app()
 

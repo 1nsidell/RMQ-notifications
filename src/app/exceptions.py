@@ -1,4 +1,4 @@
-from core.exceptions import BaseCustomException
+from src.core.exceptions import BaseCustomException
 
 
 class CustomMailerException(BaseCustomException):
