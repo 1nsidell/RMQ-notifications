@@ -21,7 +21,7 @@ class SendEmailRecovery:
         EmailUseCase: EmailUseCase,
         api_access: APIAccessProvider,
         data: SSendTokenEmail,
-        api_key: str = Header(...),
+        api_key: str = Header(..., alias="X-API-Key"),
     ) -> SSuccessfulRequest:
         await api_access.check_api_key(api_key)
         return await EmailUseCase.send_recovery_email(data.recipient, data.token)
