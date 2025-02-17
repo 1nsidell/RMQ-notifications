@@ -62,6 +62,7 @@ class MailTemplate(BaseModel):
 
 
 class Settings:
+    api_key: str = os.getenv("API_KEY")
     run: RunConfig = RunConfig()
     api: ApiPrefix = ApiPrefix()
     fast_mail: FastMailConfig = FastMailConfig()
