@@ -27,7 +27,7 @@ class CustomAccessDeniedException(SecurityException):
     """API key отклонён"""
 
     error_type: str = "API_KEY_ERROR"
-    status_code: int = 401
+    status_code: int = 403
 
     def __init__(self, message: str = None):
         self.message = message or self.__doc__
