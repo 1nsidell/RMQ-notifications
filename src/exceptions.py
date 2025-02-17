@@ -1,4 +1,4 @@
-"""Модуль обработчика ошибок"""
+"""Error Handler Module."""
 
 import logging
 
@@ -11,14 +11,14 @@ log = logging.getLogger("exception_handler")
 
 
 def custom_exception_handler(request: Request, exc: BaseCustomException):
-    """Создание обработкчика кастомных ошибок"""
+    """Creating a custom error handler"""
     error_data = {"error_type": exc.error_type, "message": exc.message}
     log.warning(f"Custom Exception occurred: {error_data} | Path: {request.url}")
     return JSONResponse(content=error_data, status_code=exc.status_code)
 
 
 async def general_exception_handler(request: Request, exc: Exception):
-    """Создание обработкчика непредвиденных ошибок"""
+    """Creating an unexpected error handler"""
     error_data = {
         "error_type": "INTERNAL_SERVER_ERROR",
         "message": "An unexpected error occurred.",

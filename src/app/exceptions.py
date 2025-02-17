@@ -2,7 +2,7 @@ from src.core.exceptions import BaseCustomException, SecurityException
 
 
 class CustomMailerException(BaseCustomException):
-    """Ошибка email сервиса."""
+    """Email service error."""
 
     error_type: str = "MAILER_ERROR"
     status_code: int = 500
@@ -13,7 +13,7 @@ class CustomMailerException(BaseCustomException):
 
 
 class CustomTemplateException(BaseCustomException):
-    """Ошибка шаблона email сообщения."""
+    """Email message template error."""
 
     error_type: str = "TEMPLATE_ERROR"
     status_code: int = 500
@@ -24,7 +24,7 @@ class CustomTemplateException(BaseCustomException):
 
 
 class CustomAccessDeniedException(SecurityException):
-    """API key отклонён"""
+    """API key rejected."""
 
     error_type: str = "API_KEY_ERROR"
     status_code: int = 403

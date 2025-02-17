@@ -1,8 +1,8 @@
-"""Модуль кастомных ошибок приложения"""
+"""Custom application error module."""
 
 
 class BaseCustomException(Exception):
-    """Базовый класс для всех кастомных исключений."""
+    """Base class for all custom exceptions."""
 
     error_type: str = "APPLICATION_ERROR"
     status_code: int = 500
@@ -13,10 +13,10 @@ class BaseCustomException(Exception):
 
 
 class SecurityException(BaseCustomException):
-    """Базовый класс для всех исключений связанных с безопасностью API."""
+    """Base class for all API security related exceptions."""
 
     error_type: str = "SECURITY_ERROR"
-    status_code: int = 400
+    status_code: int = None
 
     def __init__(self, message: str = None):
         self.message = message or self.__doc__

@@ -1,4 +1,4 @@
-"""Логгер конфиг модуль"""
+"""Logger config module."""
 
 import json
 import logging

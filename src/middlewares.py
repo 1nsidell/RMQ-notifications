@@ -1,6 +1,4 @@
-"""
-Основной модуль для middleware приложения.
-"""
+"""Main module for middleware application."""
 
 from fastapi import FastAPI
 

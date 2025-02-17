@@ -1,4 +1,4 @@
-"""Сервис по отправке email писем"""
+"""Service for sending emails."""
 
 import logging
 from typing import Self, Protocol
@@ -37,7 +37,7 @@ class EmailServicesImpl(EmailServicesProtocol):
         self.settings = settings
 
     def get_template(self: Self, template_name: str) -> Template:
-        """Получение html шаблона для email'а"""
+        """Getting the html template for the email."""
         log.info("Retrieving a message template: %s.", template_name)
         try:
             template_dir: Path = self.settings.paths.TEMPLATE_DIR
@@ -57,7 +57,7 @@ class EmailServicesImpl(EmailServicesProtocol):
         recipient: str,
         token: str,
     ) -> None:
-        """Отправка письма для верификации почты"""
+        """Sending an email for mail verification."""
         log.info("Sending verification email.")
         try:
             template: Template = self.get_template(self.settings.templates.CONFIRM)
@@ -80,7 +80,7 @@ class EmailServicesImpl(EmailServicesProtocol):
         recipient: str,
         token: str,
     ) -> None:
-        """Отправка письма для восстановления пароля"""
+        """Sending an email to recover your password."""
         log.info("Sending password recovery email.")
         try:
             template: Template = self.get_template(self.settings.templates.RECOVERY)

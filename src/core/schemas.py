@@ -1,4 +1,4 @@
-"""Модуль с response/request схемами приложения"""
+"""Module with response/request application schemas."""
 
 from pydantic import BaseModel, ConfigDict, EmailStr
 
