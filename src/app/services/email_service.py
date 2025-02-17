@@ -42,7 +42,7 @@ class EmailServicesImpl(EmailServicesProtocol):
         try:
             template_dir: Path = self.settings.paths.TEMPLATE_DIR
             env = Environment(loader=FileSystemLoader(template_dir))
-            template = env.get_template(template_name)
+            template: Template = env.get_template(template_name)
             log.info("Template successfully received: %s.", template_name)
             return template
         except TemplateError as temp_e:
