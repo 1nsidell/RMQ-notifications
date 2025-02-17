@@ -1,4 +1,4 @@
-from src.core.exceptions import BaseCustomException
+from src.core.exceptions import BaseCustomException, SecurityException
 
 
 class CustomMailerException(BaseCustomException):
@@ -17,6 +17,17 @@ class CustomTemplateException(BaseCustomException):
 
     error_type: str = "TEMPLATE_ERROR"
     status_code: int = 500
+
+    def __init__(self, message: str = None):
+        self.message = message or self.__doc__
+        super().__init__(self.message)
+
+
+class CustomAccessDeniedException(SecurityException):
+    """API key отклонён"""
+
+    error_type: str = "API_KEY_ERROR"
+    status_code: int = 401
 
     def __init__(self, message: str = None):
         self.message = message or self.__doc__
