@@ -16,11 +16,11 @@ class RunConfig(BaseModel):
 
 
 class ApiPrefix(BaseModel):
-    prefix: str = "/api"
+    prefix: str = "/api/emails"
     v1_prefix: str = "/v1"
     healthcheck: str = "/healthcheck"
-    send_confirm_email: str = "/send-confirmation-emails"
-    send_recovery_email: str = "/send-recovery-emails"
+    send_confirm_email: str = "/confirmation"
+    send_recovery_email: str = "/recovery"
 
 
 class FastMailConfig(BaseModel):
