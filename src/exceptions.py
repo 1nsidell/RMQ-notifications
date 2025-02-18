@@ -2,7 +2,7 @@
 
 import logging
 
-from fastapi import Request, FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from src.core.exceptions import BaseCustomException
@@ -13,7 +13,9 @@ log = logging.getLogger("exception_handler")
 def custom_exception_handler(request: Request, exc: BaseCustomException):
     """Creating a custom error handler"""
     error_data = {"error_type": exc.error_type, "message": exc.message}
-    log.warning(f"Custom Exception occurred: {error_data} | Path: {request.url}")
+    log.warning(
+        f"Custom Exception occurred: {error_data} | Path: {request.url}"
+    )
     return JSONResponse(content=error_data, status_code=exc.status_code)
 
 

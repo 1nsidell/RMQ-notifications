@@ -3,8 +3,11 @@ from typing import Annotated
 from fastapi import Depends
 from fastapi_mail import FastMail
 
-from src.app.services.email_service import EmailServicesImpl, EmailServicesProtocol
-from src.settings import settings, Settings
+from src.app.services.email_service import (
+    EmailServicesImpl,
+    EmailServicesProtocol,
+)
+from src.settings import Settings, settings
 
 
 def get_email_service(

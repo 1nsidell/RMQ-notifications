@@ -1,7 +1,7 @@
-from src.app.exceptions import CustomAccessDeniedException
-
-from typing import Protocol, Self
 from abc import abstractmethod
+from typing import Protocol, Self
+
+from src.app.exceptions import CustomAccessDeniedException
 
 
 class APIAccessProviderProtocol(Protocol):

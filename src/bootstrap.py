@@ -1,10 +1,11 @@
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 
 from src.core.loggers import setup_logging
-from src.routers import apply_routes
-from src.middlewares import apply_middlewares
 from src.exceptions import apply_exceptions_handlers
+from src.middlewares import apply_middlewares
+from src.routers import apply_routes
 from src.settings import settings
 
 

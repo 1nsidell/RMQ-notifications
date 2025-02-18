@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+
 from fastapi_mail import ConnectionConfig
 from pydantic import BaseModel
 

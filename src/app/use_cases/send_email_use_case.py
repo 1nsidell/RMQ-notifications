@@ -1,5 +1,5 @@
-from typing import Self, Protocol
 from asyncio import create_task
+from typing import Protocol, Self
 
 from src.app.services.email_service import EmailServicesProtocol
 from src.core.schemas import SSuccessfulRequest

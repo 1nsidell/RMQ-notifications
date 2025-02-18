@@ -1,10 +1,10 @@
-from jinja2 import Template
 import pytest
-from pytest_mock import MockerFixture
 from fastapi_mail import FastMail
+from jinja2 import Template
+from pytest_mock import MockerFixture
 
-from src.settings import settings
 from src.app.services.email_service import EmailServicesImpl
+from src.settings import settings
 
 
 @pytest.fixture

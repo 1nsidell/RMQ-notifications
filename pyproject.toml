@@ -1,15 +1,33 @@
 [project]
-name = "fastapi-send-email"
+name = "fastapi-emails"
 version = "0.1.0"
-description = "microservice for sending emails at the request of the main application"
+description = "Microservice for sending emails at the request of the main application"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "autoflake>=2.3.1",
+    "black>=25.1.0",
     "fastapi>=0.115.8",
     "fastapi-mail>=1.4.2",
+    "flake8>=7.1.2",
+    "isort>=6.0.0",
+    "pyright>=1.1.394",
     "pytest>=8.3.4",
     "pytest-asyncio>=0.25.3",
     "pytest-cov>=6.0.0",
     "pytest-mock>=3.14.0",
     "uvicorn>=0.34.0",
 ]
+
+[tool.black]
+line-length = 79
+target-version = ['py312']
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line_length = 79

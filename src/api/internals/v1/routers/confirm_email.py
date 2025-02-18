@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Header
 
-from src.settings import settings
-from src.app.depends.use_cases_depends import EmailUseCase
-from src.core.schemas import SSuccessfulRequest, SSendTokenEmail
 from src.app.depends.providers_depends import APIAccessProvider
+from src.app.depends.use_cases_depends import EmailUseCase
+from src.core.schemas import SSendTokenEmail, SSuccessfulRequest
+from src.settings import settings
 
 
 class SendEmailConfirm:
@@ -24,7 +24,9 @@ class SendEmailConfirm:
         api_key: str = Header(..., alias="X-API-Key"),
     ) -> SSuccessfulRequest:
         await api_access.check_api_key(api_key)
-        return await EmailUseCase.send_confirm_email(data.recipient, data.token)
+        return await EmailUseCase.send_confirm_email(
+            data.recipient, data.token
+        )
 
 
 email_confirm = SendEmailConfirm()

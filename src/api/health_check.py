@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from src.settings import settings
 from src.core.schemas import SSuccessfulRequest
+from src.settings import settings
 
 
 class Healthcheck:

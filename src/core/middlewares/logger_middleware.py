@@ -2,9 +2,10 @@
 
 import logging
 import uuid
+
 from fastapi import Request
-from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.background import BackgroundTask
+from starlette.middleware.base import BaseHTTPMiddleware
 
 log = logging.getLogger("request")
 

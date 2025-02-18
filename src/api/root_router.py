@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from src.api.internals.internal_router import internal_router
 from src.api.health_check import router as healthcheck_router
+from src.api.internals.internal_router import internal_router
 from src.settings import settings
 
 root_router = APIRouter(prefix=settings.api.prefix)

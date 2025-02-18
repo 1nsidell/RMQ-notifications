@@ -1,16 +1,15 @@
 """Service for sending emails."""
 
 import logging
-from typing import Self, Protocol
-from pathlib import Path
 from abc import abstractmethod
+from pathlib import Path
+from typing import Protocol, Self
 
 from fastapi_mail import FastMail, MessageSchema
 from jinja2 import Environment, FileSystemLoader, Template, TemplateError
 
 from src.app.exceptions import CustomMailerException, CustomTemplateException
 from src.settings import Settings
-
 
 log = logging.getLogger("app")
 
@@ -60,7 +59,9 @@ class EmailServicesImpl(EmailServicesProtocol):
         """Sending an email for mail verification."""
         log.info("Sending verification email.")
         try:
-            template: Template = self.get_template(self.settings.templates.CONFIRM)
+            template: Template = self.get_template(
+                self.settings.templates.CONFIRM
+            )
             body: str = template.render(token=token)
 
             message = MessageSchema(
@@ -83,7 +84,9 @@ class EmailServicesImpl(EmailServicesProtocol):
         """Sending an email to recover your password."""
         log.info("Sending password recovery email.")
         try:
-            template: Template = self.get_template(self.settings.templates.RECOVERY)
+            template: Template = self.get_template(
+                self.settings.templates.RECOVERY
+            )
             body = template.render(token=token)
 
             message = MessageSchema(
