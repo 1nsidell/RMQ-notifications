@@ -18,6 +18,7 @@ class RunConfig(BaseModel):
 class ApiPrefix(BaseModel):
     prefix: str = "/api/emails"
     v1_prefix: str = "/v1"
+    internal: str = "/internals"
     healthcheck: str = "/healthcheck"
     send_confirm_email: str = "/confirmation"
     send_recovery_email: str = "/recovery"
