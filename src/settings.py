@@ -63,6 +63,19 @@ class MailTemplate(BaseModel):
     RECOVERY: str = "reset_pass.html"
 
 
+class RabbitMQConfig(BaseModel):
+    USERNAME: str = os.getenv("RABBIT_USERNAME")
+    PASSWORD: str = os.getenv("RABBIT_PASSWORD")
+    HOST: str = os.getenv("RABBIT_HOST")
+    PORT: int = int(os.getenv("RABBIT_PORT"))
+    VHOST: str = os.getenv("RABBIT_VHOST")
+    TIMEOUT: int = int(os.getenv("RABBIT_TIMEOUT"))
+
+    @property
+    def url(self) -> str:
+        return f"pyamqp://{self.USERNAME}:{self.PASSWORD}@{self.HOST}:{self.PORT}/{self.VHOST}"
+
+
 class Settings:
     api_key: str = os.getenv("API_KEY")
     run: RunConfig = RunConfig()
@@ -71,6 +84,7 @@ class Settings:
     subjects: EmailSubjects = EmailSubjects()
     templates: MailTemplate = MailTemplate()
     paths: Paths = Paths()
+    rmq: RabbitMQConfig = RabbitMQConfig()
 
 
 def get_settings() -> Settings:

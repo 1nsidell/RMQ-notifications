@@ -1,8 +1,6 @@
-from asyncio import create_task
 from typing import Protocol, Self
 
 from src.app.services.email_service import EmailServicesProtocol
-from src.core.schemas import SSuccessfulRequest
 
 
 class EmailUseCaseProtocol(Protocol):
@@ -12,13 +10,13 @@ class EmailUseCaseProtocol(Protocol):
         self: Self,
         recipient: str,
         token: str,
-    ) -> SSuccessfulRequest: ...
+    ) -> None: ...
 
-    async def send_recovery_email(
+    async def send_recovery_password(
         self,
         recipient: str,
         token: str,
-    ) -> SSuccessfulRequest: ...
+    ) -> None: ...
 
 
 class EmailUseCaseImpl(EmailUseCaseProtocol):
@@ -29,14 +27,16 @@ class EmailUseCaseImpl(EmailUseCaseProtocol):
         self: Self,
         recipient: str,
         token: str,
-    ) -> SSuccessfulRequest:
-        create_task(self.email_service.send_confirm_email(recipient, token))
-        return SSuccessfulRequest()
+    ) -> None:
+        await self.email_service.send_confirm_email(
+            recipient=recipient, token=token
+        )
 
-    async def send_recovery_email(
+    async def send_recovery_password(
         self,
         recipient: str,
         token: str,
-    ) -> SSuccessfulRequest:
-        create_task(self.email_service.send_recovery_email(recipient, token))
-        return SSuccessfulRequest()
+    ) -> None:
+        await self.email_service.send_recovery_password(
+            recipient=recipient, token=token
+        )

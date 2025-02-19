@@ -23,7 +23,7 @@ class EmailServicesProtocol(Protocol):
     ) -> None: ...
 
     @abstractmethod
-    async def send_recovery_email(
+    async def send_recovery_password(
         self,
         recipient: str,
         token: str,
@@ -76,7 +76,7 @@ class EmailServicesImpl(EmailServicesProtocol):
             log.critical("!Error when sending verification email: %s.", e)
             raise CustomMailerException(e)
 
-    async def send_recovery_email(
+    async def send_recovery_password(
         self: Self,
         recipient: str,
         token: str,

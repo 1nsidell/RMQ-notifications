@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from src.app.tasks.email_tasks import broker
 from src.core.loggers import setup_logging
 from src.exceptions import apply_exceptions_handlers
 from src.middlewares import apply_middlewares
@@ -16,7 +17,12 @@ async def lifespan(app: FastAPI):
     """
     # startup
     setup_logging(settings)
+    if not broker.is_worker_process:
+        await broker.startup()
     yield
+    if not broker.is_worker_process:
+        await broker.shutdown()
+
     # shutdown
 
 
@@ -26,4 +32,5 @@ def create_app() -> FastAPI:
         docs_url="/docs",
         openapi_url="/docs.json",
     )
-    return apply_exceptions_handlers(apply_routes(apply_middlewares(app)))
+    app = apply_exceptions_handlers(apply_middlewares(apply_routes(app)))
+    return app
