@@ -1,14 +1,7 @@
-from abc import abstractmethod
-from typing import Protocol, Self
+from typing import Self
 
 from src.app.exceptions import CustomAccessDeniedException
-
-
-class APIAccessProviderProtocol(Protocol):
-    valid_api_key: str
-
-    @abstractmethod
-    async def check_api_key(self: Self, api_key: str): ...
+from src.app.providers import APIAccessProviderProtocol
 
 
 class APIAccessProviderImpl(APIAccessProviderProtocol):

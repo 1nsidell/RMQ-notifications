@@ -1,22 +1,7 @@
-from typing import Protocol, Self
+from typing import Self
 
-from src.app.services.email_service import EmailServicesProtocol
-
-
-class EmailUseCaseProtocol(Protocol):
-    email_service: EmailServicesProtocol
-
-    async def send_confirm_email(
-        self: Self,
-        recipient: str,
-        token: str,
-    ) -> None: ...
-
-    async def send_recovery_password(
-        self,
-        recipient: str,
-        token: str,
-    ) -> None: ...
+from src.app.services import EmailServicesProtocol
+from src.app.use_cases import EmailUseCaseProtocol
 
 
 class EmailUseCaseImpl(EmailUseCaseProtocol):

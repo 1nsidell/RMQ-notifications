@@ -1,10 +1,5 @@
-from taskiq_aio_pika import AioPikaBroker
-
-from src.settings import settings
+from src.app.tasks.serve import broker
 from src.app.depends.use_cases_depends import EmailUseCase
-
-
-broker = AioPikaBroker(settings.rmq.url)
 
 
 @broker.task

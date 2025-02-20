@@ -1,8 +1,5 @@
-from src.app.services.email_service import EmailServicesProtocol
-from src.app.use_cases.email_use_case import (
-    EmailUseCaseImpl,
-    EmailUseCaseProtocol,
-)
+from src.app.services import EmailServicesProtocol
+from src.app.use_cases import EmailUseCaseProtocol, EmailUseCaseImpl
 from src.app.depends.services_depends import EmailService
 
 

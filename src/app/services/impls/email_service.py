@@ -1,33 +1,17 @@
 """Service for sending emails."""
 
 import logging
-from abc import abstractmethod
+from typing import Self
 from pathlib import Path
-from typing import Protocol, Self
 
 from fastapi_mail import FastMail, MessageSchema
 from jinja2 import Environment, FileSystemLoader, Template, TemplateError
 
-from src.app.exceptions import CustomMailerException, CustomTemplateException
 from src.settings import Settings
+from src.app.exceptions import CustomMailerException, CustomTemplateException
+from src.app.services import EmailServicesProtocol
 
 log = logging.getLogger("app")
-
-
-class EmailServicesProtocol(Protocol):
-    @abstractmethod
-    async def send_confirm_email(
-        self,
-        recipient: str,
-        token: str,
-    ) -> None: ...
-
-    @abstractmethod
-    async def send_recovery_password(
-        self,
-        recipient: str,
-        token: str,
-    ) -> None: ...
 
 
 class EmailServicesImpl(EmailServicesProtocol):
