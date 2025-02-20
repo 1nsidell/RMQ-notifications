@@ -1,4 +1,4 @@
-"""Middleware для логгирования response/request"""
+"""Middleware for response/request logging."""
 
 import logging
 import uuid
