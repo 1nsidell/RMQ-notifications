@@ -32,10 +32,10 @@ class FastMailConfig(BaseModel):
     PORT: int = int(os.getenv("MAIL_PORT"))
     SERVER: str = os.getenv("MAIL_SERVER")
     STARTTLS: bool = bool(int(os.getenv("MAIL_STARTTLS")))
-    FROM_NAME: str = os.getenv("MAIL_FROM_NAME")
     SSL_TLS: bool = bool(int(os.getenv("MAIL_SSL_TLS")))
-    USE_CREDENTIALS: str = os.getenv("MAIL_USE_CREDENTIALS")
-    VALIDATE_CERTS: str = os.getenv("MAIL_VALIDATE_CERTS")
+    FROM_NAME: str = os.getenv("MAIL_FROM_NAME")
+    USE_CREDENTIALS: bool = bool(os.getenv("MAIL_USE_CREDENTIALS"))
+    VALIDATE_CERTS: bool = bool(os.getenv("MAIL_VALIDATE_CERTS"))
 
     @property
     def conf(self) -> ConnectionConfig:

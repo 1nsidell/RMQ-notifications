@@ -1,5 +1,5 @@
 from src.app.tasks.serve import broker
-from src.app.depends.use_cases_depends import EmailUseCase
+from src.app.depends import EmailUseCase
 
 
 @broker.task
