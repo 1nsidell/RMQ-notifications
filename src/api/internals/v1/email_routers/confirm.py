@@ -11,7 +11,7 @@ class EmailConfirmationRouter:
     def __init__(self):
         self.router = APIRouter()
         self.router.add_api_route(
-            settings.api.send_confirm_email,
+            settings.api.confirm_email,
             self.send_confirm_email,
             methods=["POST"],
             response_model=SSuccessfulRequest,

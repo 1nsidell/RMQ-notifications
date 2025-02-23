@@ -11,7 +11,7 @@ class PasswordRecoveryRouter:
     def __init__(self):
         self.router = APIRouter()
         self.router.add_api_route(
-            settings.api.send_recovery_email,
+            settings.api.recovery_email,
             self.send_revocery_email,
             methods=["POST"],
             response_model=SSuccessfulRequest,

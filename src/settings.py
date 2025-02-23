@@ -13,16 +13,17 @@ class Paths:
 
 class RunConfig(BaseModel):
     host: str = "127.0.0.1"
-    port: int = 8002
+    port: int = 8000
 
 
 class ApiPrefix(BaseModel):
-    prefix: str = "/api/emails"
+    prefix: str = "/api/notifications"
     v1_prefix: str = "/v1"
     internal: str = "/internals"
     healthcheck: str = "/healthcheck"
-    send_confirm_email: str = "/confirmation"
-    send_recovery_email: str = "/recovery"
+    emails: str = "/emails"
+    confirm_email: str = "/confirmation"
+    recovery_email: str = "/recovery"
 
 
 class FastMailConfig(BaseModel):
