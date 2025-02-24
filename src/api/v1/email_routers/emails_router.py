@@ -5,7 +5,7 @@ from src.settings import settings
 
 emails_router = APIRouter(
     prefix=settings.api.emails,
-    tags=["MAILER"],
+    tags=["MAILER-V1"],
 )
 
 email_sub_routers = (
