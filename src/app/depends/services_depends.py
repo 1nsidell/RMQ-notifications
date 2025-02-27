@@ -1,6 +1,7 @@
 from fastapi_mail import FastMail
 
-from src.app.services import EmailServicesProtocol, EmailServicesImpl
+from src.app.services import EmailServicesProtocol
+from src.app.services.impls.email_service import EmailServicesImpl
 from src.settings import Settings, settings
 
 

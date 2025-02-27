@@ -2,8 +2,9 @@ from typing import Annotated
 
 from fastapi import Depends
 
+from src.app.providers import APIAccessProviderProtocol
+from src.app.providers.impls.api_access import APIAccessProviderImpl
 from src.settings import settings
-from src.app.providers import APIAccessProviderProtocol, APIAccessProviderImpl
 
 
 def get_api_access_provider() -> APIAccessProviderProtocol:

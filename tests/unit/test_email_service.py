@@ -32,7 +32,9 @@ async def test_send_recovery_email_success(
         email_service, "get_template", return_value=mock_template
     )
 
-    await email_service.send_recovery_email("test@example.com", "fake_token")
+    await email_service.send_recovery_password(
+        "test@example.com", "fake_token"
+    )
 
     email_service.mailer.send_message.assert_called_once()
 
@@ -58,7 +60,7 @@ async def test_send_email_template_error(
 def test_get_template_error_directly(email_service, mocker: MockerFixture):
     """Проверям на обработку ошибки при поулчении шаблона"""
     mocker.patch(
-        "src.app.services.email_service.Environment.get_template",
+        "src.app.services.impls.email_service.Environment.get_template",
         side_effect=TemplateError("Template not found"),
     )
 

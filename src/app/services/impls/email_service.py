@@ -1,15 +1,15 @@
 """Service for sending emails."""
 
 import logging
-from typing import Self
 from pathlib import Path
+from typing import Self
 
 from fastapi_mail import FastMail, MessageSchema
 from jinja2 import Environment, FileSystemLoader, Template, TemplateError
 
-from src.settings import Settings
 from src.app.exceptions import CustomMailerException, CustomTemplateException
 from src.app.services import EmailServicesProtocol
+from src.settings import Settings
 
 log = logging.getLogger("app")
 

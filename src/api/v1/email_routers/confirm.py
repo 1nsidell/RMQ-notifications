@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Header
 
 from src.app.depends import APIAccessProvider
-
 from src.app.tasks.email_tasks import send_confirm_email_task
 from src.core.schemas import SSendTokenEmail, SSuccessfulRequest
 from src.settings import settings

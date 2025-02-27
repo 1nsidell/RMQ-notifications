@@ -3,7 +3,7 @@ from fastapi_mail import FastMail
 from jinja2 import Template
 from pytest_mock import MockerFixture
 
-from src.app.services import EmailServicesImpl
+from src.app.services.impls.email_service import EmailServicesImpl
 from src.settings import settings
 
 

@@ -1,5 +1,5 @@
-from typing import Protocol, Self
 from abc import abstractmethod
+from typing import Protocol, Self
 
 from src.app.services import EmailServicesProtocol
 
