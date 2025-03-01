@@ -23,7 +23,7 @@ class PasswordRecoveryRouter:
         data: SSendTokenEmail,
         api_key: str = Header(..., alias="X-API-Key"),
     ) -> SSuccessfulRequest:
-        await api_access.check_api_key(api_key)
+        api_access.check_api_key(api_key)
         await send_recovery_password_task.kiq(data.recipient, data.token)
         return SSuccessfulRequest()
 

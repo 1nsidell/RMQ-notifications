@@ -7,8 +7,8 @@ from src.settings import settings
 root_router = APIRouter(prefix=settings.api.prefix)
 
 root_sub_routers = (
-    v1_router,
     healthcheck_router,
+    v1_router,
 )
 
 for router in root_sub_routers:

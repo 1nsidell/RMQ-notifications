@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 
-from src.api.v1.email_routers import confirm_router, recovery_router
+from src.api.v1.email_routers.confirm import router as confirm_router
+from src.api.v1.email_routers.recovery import router as recovery_router
 from src.settings import settings
 
 emails_router = APIRouter(
