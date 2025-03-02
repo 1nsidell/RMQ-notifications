@@ -11,7 +11,8 @@ from src.app.exceptions import CustomMailerException, CustomTemplateException
 from src.app.services import EmailServicesProtocol
 from src.settings import Settings
 
-log = logging.getLogger("app")
+
+log = logging.getLogger(__name__)
 
 
 class EmailServicesImpl(EmailServicesProtocol):
@@ -29,10 +30,10 @@ class EmailServicesImpl(EmailServicesProtocol):
             log.info("Template successfully received: %s.", template_name)
             return template
         except TemplateError as temp_e:
-            log.exception("Template retrieval error: %s.", temp_e)
+            log.exception("Template retrieval error.")
             raise CustomTemplateException(temp_e)
         except Exception as e:
-            log.critical("!Template retrieval error: %s.", e)
+            log.exception("!Template retrieval error.")
             raise CustomTemplateException(e)
 
     async def send_confirm_email(
@@ -57,7 +58,7 @@ class EmailServicesImpl(EmailServicesProtocol):
             await self.mailer.send_message(message)
             log.info("Successful sending of verification email.")
         except Exception as e:
-            log.critical("!Error when sending verification email: %s.", e)
+            log.exception("!Error when sending verification email.")
             raise CustomMailerException(e)
 
     async def send_recovery_password(
@@ -82,5 +83,5 @@ class EmailServicesImpl(EmailServicesProtocol):
             await self.mailer.send_message(message)
             log.info("Successful sending of password recovery email.")
         except Exception as e:
-            log.critical("!Error when sending password recovery email: %s.", e)
+            log.exception("!Error when sending password recovery email.")
             raise CustomMailerException(e)

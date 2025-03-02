@@ -17,6 +17,7 @@ async def lifespan(app: FastAPI):
     """
     # startup
     setup_logging(settings)
+
     if not broker.is_worker_process:
         await broker.startup()
     yield

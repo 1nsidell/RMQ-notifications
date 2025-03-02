@@ -3,11 +3,11 @@
     "disable_existing_loggers": false,
     "formatters": {
         "simple": {
-            "()": "core.utils.logging_utils.UTCFormatter",
+            "()": "src.core.utils.logging_utils.UTCFormatter",
             "format": "%(asctime)s - %(name)15s - %(levelname)-8s - %(message)s"
         },
         "json": {
-            "()": "core.utils.logging_utils.JsonFormatter",
+            "()": "src.core.utils.logging_utils.JsonFormatter",
             "fmt_dict": {
                 "levelname": "levelname",
                 "message": "message",
@@ -31,36 +31,14 @@
             "class": "logging.handlers.RotatingFileHandler",
             "filename": "logs/app.log",
             "formatter": "json",
-            "level": "DEBUG",
+            "level": "INFO",
             "maxBytes": 10485760,
             "backupCount": 40,
             "encoding": "utf8"
         }
     },
-    "loggers": {
-        "dependencies": {
-            "level": "DEBUG",
-            "handlers": ["file", "console"],
-            "propagate": false
-        },
-        "app": {
-            "level": "DEBUG",
-            "handlers": ["file", "console"],
-            "propagate": false
-        },
-        "request": {
-            "level": "DEBUG",
-            "handlers": ["file", "console"],
-            "propagate": false
-        },
-        "exception_handler": {
-            "level": "DEBUG",
-            "handlers": ["file", "console"],
-            "propagate": false
-        }
-    },
     "root": {
-        "level": "WARNING",
-        "handlers": ["console"]
+        "level": "DEBUG",
+        "handlers": ["file", "console"]
     }
 }
