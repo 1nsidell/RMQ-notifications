@@ -19,11 +19,11 @@ class EmailConfirmationRouter:
 
     async def send_confirm_email(
         self,
-        api_access: APIAccessProvider,
+        APIAccess: APIAccessProvider,
         data: SSendTokenEmail,
         api_key: str = Header(..., alias="X-API-Key"),
     ) -> SSuccessfulRequest:
-        api_access.check_api_key(api_key)
+        APIAccess.check_api_key(api_key)
         await send_confirm_email_task.kiq(data.recipient, data.token)
         return SSuccessfulRequest()
 
