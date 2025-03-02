@@ -19,14 +19,15 @@ class EmailServicesImpl(EmailServicesProtocol):
     def __init__(self, mailer: FastMail, settings: Settings) -> None:
         self.mailer = mailer
         self.settings = settings
+        self.env: Environment = Environment(
+            loader=FileSystemLoader(self.settings.paths.TEMPLATE_DIR)
+        )
 
     def get_template(self: Self, template_name: str) -> Template:
         """Getting the html template for the email."""
         log.info("Retrieving a message template: %s.", template_name)
         try:
-            template_dir: Path = self.settings.paths.TEMPLATE_DIR
-            env = Environment(loader=FileSystemLoader(template_dir))
-            template: Template = env.get_template(template_name)
+            template: Template = self.env.get_template(template_name)
             log.info("Template successfully received: %s.", template_name)
             return template
         except TemplateError as temp_e:
@@ -36,6 +37,27 @@ class EmailServicesImpl(EmailServicesProtocol):
             log.exception("!Template retrieval error.")
             raise CustomTemplateException(e)
 
+    def get_message(
+        self: Self,
+        template_name: str,
+        recipient: str,
+        token: str,
+    ) -> MessageSchema:
+        log.info("Message assembly has begun.")
+        try:
+            template: Template = self.get_template(template_name)
+            body: str = template.render(token=token)
+            message = MessageSchema(
+                subject=self.settings.subjects.CONFIRM,
+                recipients=[recipient],
+                body=body,
+                subtype="html",
+            )
+            return message
+        except Exception as e:
+            log.exception("!Error during message assembly.")
+            raise CustomMailerException(e)
+
     async def send_confirm_email(
         self: Self,
         recipient: str,
@@ -44,16 +66,10 @@ class EmailServicesImpl(EmailServicesProtocol):
         """Sending an email for mail verification."""
         log.info("Sending verification email.")
         try:
-            template: Template = self.get_template(
-                self.settings.templates.CONFIRM
-            )
-            body: str = template.render(token=token)
-
-            message = MessageSchema(
-                subject=self.settings.subjects.CONFIRM,
-                recipients=[recipient],
-                body=body,
-                subtype="html",
+            message = self.get_message(
+                template_name=self.settings.templates.CONFIRM,
+                recipient=recipient,
+                token=token,
             )
             await self.mailer.send_message(message)
             log.info("Successful sending of verification email.")
@@ -69,16 +85,10 @@ class EmailServicesImpl(EmailServicesProtocol):
         """Sending an email to recover your password."""
         log.info("Sending password recovery email.")
         try:
-            template: Template = self.get_template(
-                self.settings.templates.RECOVERY
-            )
-            body = template.render(token=token)
-
-            message = MessageSchema(
-                subject=self.settings.subjects.RECOVERY,
-                recipients=[recipient],
-                body=body,
-                subtype="html",
+            message = self.get_message(
+                template_name=self.settings.templates.RECOVERY,
+                recipient=recipient,
+                token=token,
             )
             await self.mailer.send_message(message)
             log.info("Successful sending of password recovery email.")

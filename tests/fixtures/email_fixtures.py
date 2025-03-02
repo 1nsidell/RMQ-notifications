@@ -9,19 +9,19 @@ from src.settings import settings
 
 @pytest.fixture
 def mock_mailer(mocker: MockerFixture):
-    """Мокирует FastMail"""
+    """Mocks FastMail."""
     return mocker.AsyncMock(spec=FastMail)
 
 
 @pytest.fixture
 def email_service(mock_mailer: MockerFixture):
-    """Создаёт экземпляр EmailServicesImpl с мокированным mailer"""
+    """Creates an instance of EmailServicesImpl with a mocked mailer."""
     return EmailServicesImpl(mock_mailer, settings)
 
 
 @pytest.fixture
 def mock_template(mocker: MockerFixture) -> Template:
-    """Мокирует шаблон Jinja2"""
+    """Mocks the Jinja2 template."""
     template: Template = mocker.Mock(spec=Template)
-    template.render.return_value = "mocked email body"
+    template.render.return_value = "mocked email body."
     return template
