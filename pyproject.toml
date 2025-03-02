@@ -5,8 +5,10 @@ description = "Microservice for sending emails at the request of the main applic
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "black>=25.1.0",
     "fastapi>=0.115.8",
     "fastapi-mail>=1.4.2",
+    "isort>=6.0.1",
     "pyright>=1.1.394",
     "pytest>=8.3.4",
     "pytest-asyncio>=0.25.3",
