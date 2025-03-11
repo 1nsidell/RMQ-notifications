@@ -12,7 +12,7 @@ from src.app.services import EmailServicesProtocol
 from src.settings import Settings
 
 
-log = logging.getLogger(__name__)
+log = logging.getLogger("app")
 
 
 class EmailServicesImpl(EmailServicesProtocol):

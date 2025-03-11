@@ -37,8 +37,25 @@
             "encoding": "utf8"
         }
     },
+    "loggers": {
+        "app": {
+            "level": "DEBUG",
+            "handlers": ["file", "console"],
+            "propagate": false
+        },
+        "exception_handler": {
+            "level": "DEBUG",
+            "handlers": ["file", "console"],
+            "propagate": false
+        },
+        "requests": {
+            "level": "INFO",
+            "handlers": ["file", "console"],
+            "propagate": false
+        }
+    },
     "root": {
         "level": "DEBUG",
-        "handlers": ["file", "console"]
+        "handlers": ["console"]
     }
 }

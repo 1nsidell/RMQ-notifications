@@ -13,7 +13,7 @@ class Paths:
 
 class RunConfig(BaseModel):
     host: str = "127.0.0.1"
-    port: int = 8000
+    port: int = 8003
 
 
 class ApiPrefix(BaseModel):
@@ -78,6 +78,7 @@ class RabbitMQConfig(BaseModel):
 
 
 class Settings:
+    mode: str = os.getenv("MODE")
     api_key: str = os.getenv("API_KEY")
     run: RunConfig = RunConfig()
     api: ApiPrefix = ApiPrefix()
