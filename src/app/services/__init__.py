@@ -1,3 +1,3 @@
-from ..services.protocols.email_service_protocol import (
+from .protocols.email_protocol import (
     EmailServicesProtocol as EmailServicesProtocol,
 )

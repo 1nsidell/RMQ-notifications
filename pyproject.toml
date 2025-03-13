@@ -5,8 +5,8 @@ description = "Microservice for sending emails at the request of the main applic
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "aio-pika>=9.5.5",
     "black>=25.1.0",
-    "fastapi>=0.115.8",
     "fastapi-mail>=1.4.2",
     "isort>=6.0.1",
     "pyright>=1.1.394",
@@ -14,9 +14,6 @@ dependencies = [
     "pytest-asyncio>=0.25.3",
     "pytest-cov>=6.0.0",
     "pytest-mock>=3.14.0",
-    "taskiq>=0.11.11",
-    "taskiq-aio-pika>=0.4.1",
-    "uvicorn>=0.34.0",
 ]
 
 [tool.black]

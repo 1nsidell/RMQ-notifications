@@ -60,7 +60,7 @@ async def test_send_email_template_error(
 def test_get_template_error_directly(email_service, mocker: MockerFixture):
     """Проверям на обработку ошибки при поулчении шаблона"""
     mocker.patch(
-        "src.app.services.impls.email_service.Environment.get_template",
+        "src.app.services.impls.email.Environment.get_template",
         side_effect=TemplateError("Template not found"),
     )
 

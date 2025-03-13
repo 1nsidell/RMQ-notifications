@@ -37,7 +37,7 @@ class EmailServicesImpl(EmailServicesProtocol):
             log.exception("!Template retrieval error.")
             raise CustomTemplateException(e)
 
-    def get_message(
+    def get_auth_message(
         self: Self,
         template_name: str,
         recipient: str,
@@ -66,7 +66,7 @@ class EmailServicesImpl(EmailServicesProtocol):
         """Sending an email for mail verification."""
         log.info("Sending verification email.")
         try:
-            message = self.get_message(
+            message = self.get_auth_message(
                 template_name=self.settings.templates.CONFIRM,
                 recipient=recipient,
                 token=token,
@@ -85,7 +85,7 @@ class EmailServicesImpl(EmailServicesProtocol):
         """Sending an email to recover your password."""
         log.info("Sending password recovery email.")
         try:
-            message = self.get_message(
+            message = self.get_auth_message(
                 template_name=self.settings.templates.RECOVERY,
                 recipient=recipient,
                 token=token,

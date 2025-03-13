@@ -72,9 +72,11 @@ class RabbitMQConfig(BaseModel):
     VHOST: str = os.getenv("RABBIT_VHOST")
     TIMEOUT: int = int(os.getenv("RABBIT_TIMEOUT"))
 
+    RABBIT_EMAIL_QUEUE: str = os.getenv("RABBIT_EMAIL_QUEUE")
+
     @property
     def url(self) -> str:
-        return f"pyamqp://{self.USERNAME}:{self.PASSWORD}@{self.HOST}:{self.PORT}/{self.VHOST}"
+        return f"amqp://{self.USERNAME}:{self.PASSWORD}@{self.HOST}:{self.PORT}/{self.VHOST}"
 
 
 class Settings:
