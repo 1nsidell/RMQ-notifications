@@ -1,10 +1,10 @@
 import logging
 
-from src.app.use_cases import EmailUseCaseProtocol
-from src.app.notification_handlers.protocols.hendler_protocol import (
+from notifications.app.use_cases import EmailUseCaseProtocol
+from notifications.app.notification_handlers.protocols.hendler_protocol import (
     NotificationHandlerProtocol,
 )
-from src.app.notification_registry import NotificationRegistry
+from notifications.app.notification_registry import NotificationRegistry
 
 
 @NotificationRegistry.register("recovery_password")

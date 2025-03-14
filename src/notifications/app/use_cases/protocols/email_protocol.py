@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import Protocol, Self
 
-from src.app.services import EmailServicesProtocol
+from notifications.app.services import EmailServicesProtocol
 
 
 class EmailUseCaseProtocol(Protocol):

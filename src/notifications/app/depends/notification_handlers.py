@@ -1,11 +1,11 @@
-from src.app.notification_handlers.impls.confirm_email import (
+from notifications.app.notification_handlers.impls.confirm_email import (
     ConfirmEmailHandler,
 )
-from src.app.notification_handlers.impls.recovery_password import (
+from notifications.app.notification_handlers.impls.recovery_password import (
     RecoveryPasswordHandler,
 )
-from src.app.use_cases import EmailUseCaseProtocol
-from src.app.depends import EmailUseCase
+from notifications.app.use_cases import EmailUseCaseProtocol
+from notifications.app.depends import EmailUseCase
 
 
 def get_recovery_password_hendler(

@@ -1,6 +1,6 @@
 import logging
 
-from src.app.depends import Consumer
+from notifications.app.depends import Consumer
 
 
 log = logging.getLogger("app")

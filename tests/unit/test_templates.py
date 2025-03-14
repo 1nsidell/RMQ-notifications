@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from src.settings import settings
+from notifications.settings import settings
 from tests.conftest import REQUIRED_TEMPLATES
 
 

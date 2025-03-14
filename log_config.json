@@ -3,11 +3,11 @@
     "disable_existing_loggers": false,
     "formatters": {
         "simple": {
-            "()": "src.core.utils.logging_utils.UTCFormatter",
+            "()": "notifications.core.utils.logging_utils.UTCFormatter",
             "format": "%(asctime)s - %(name)15s - %(levelname)-8s - %(message)s"
         },
         "json": {
-            "()": "src.core.utils.logging_utils.JsonFormatter",
+            "()": "notifications.core.utils.logging_utils.JsonFormatter",
             "fmt_dict": {
                 "levelname": "levelname",
                 "message": "message",

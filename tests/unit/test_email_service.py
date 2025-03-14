@@ -2,7 +2,10 @@ import pytest
 from jinja2 import TemplateError
 from pytest_mock import MockerFixture
 
-from src.app.exceptions import CustomMailerException, CustomTemplateException
+from notifications.app.exceptions import (
+    CustomMailerException,
+    CustomTemplateException,
+)
 
 
 @pytest.mark.asyncio
@@ -60,7 +63,7 @@ async def test_send_email_template_error(
 def test_get_template_error_directly(email_service, mocker: MockerFixture):
     """Проверям на обработку ошибки при поулчении шаблона"""
     mocker.patch(
-        "src.app.services.impls.email.Environment.get_template",
+        "notifications.app.services.impls.email.Environment.get_template",
         side_effect=TemplateError("Template not found"),
     )
 

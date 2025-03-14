@@ -1,6 +1,9 @@
 """Custom infrastructure exceptions."""
 
-from src.core.exceptions import BaseCustomException, CustomSecurityException
+from notifications.core.exceptions import (
+    BaseCustomException,
+    CustomSecurityException,
+)
 
 
 class CustomMailerException(BaseCustomException):

@@ -2,12 +2,12 @@ import json
 from typing import Dict, Optional
 import logging
 
-from src.app.use_cases.protocols.email_protocol import (
+from notifications.app.use_cases.protocols.email_protocol import (
     EmailUseCaseProtocol,
 )
-from src.app.notification_handlers import NotificationHandlerProtocol
-from src.app.notification_registry import NotificationRegistry
-from src.settings import Settings
+from notifications.app.notification_handlers import NotificationHandlerProtocol
+from notifications.app.notification_registry import NotificationRegistry
+from notifications.settings import Settings
 
 import aio_pika
 

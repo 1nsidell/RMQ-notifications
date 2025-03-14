@@ -1,6 +1,6 @@
 import asyncio
 
-from src.bootstrap import create_app
+from notifications.bootstrap import create_app
 
 
 if __name__ == "__main__":

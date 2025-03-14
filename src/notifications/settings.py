@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 
 class Paths:
-    ROOT_DIR_SRC: Path = Path(__file__).parent
+    ROOT_DIR_SRC: Path = Path(__file__).parent.parent
     PATH_TO_BASE_FOLDER = ROOT_DIR_SRC.parent
     TEMPLATE_DIR: Path = ROOT_DIR_SRC / "core" / "templates"
 

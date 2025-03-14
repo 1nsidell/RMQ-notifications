@@ -1,7 +1,7 @@
 from typing import Self
 
-from src.app.services import EmailServicesProtocol
-from src.app.use_cases import EmailUseCaseProtocol
+from notifications.app.services import EmailServicesProtocol
+from notifications.app.use_cases import EmailUseCaseProtocol
 
 
 class EmailUseCaseImpl(EmailUseCaseProtocol):

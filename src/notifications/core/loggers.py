@@ -5,7 +5,7 @@ import logging
 import logging.config
 from pathlib import Path
 
-from src.settings import Settings
+from notifications.settings import Settings
 
 
 def setup_logging(settings: Settings):
