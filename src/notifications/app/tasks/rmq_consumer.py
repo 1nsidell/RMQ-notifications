@@ -27,12 +27,22 @@ class RMQConsumer:
         self.connection: Optional[aio_pika.Connection] = None
         self.channel: Optional[aio_pika.Channel] = None
 
-        self.email_use_case = email_use_case
-        self.email_queue: Optional[aio_pika.Queue] = None
-        self.email_handlers: Dict[str, NotificationHandlerProtocol] = {
-            notification_type: handler_class(self.email_use_case)
-            for notification_type, handler_class in NotificationRegistry.handlers.items()
+        self.dependency_map = {
+            "email": email_use_case,
         }
+
+        self.notification_handlers: Dict[str, NotificationHandlerProtocol] = {}
+        for notification_type, (
+            handler_class,
+            dependency_type,
+        ) in NotificationRegistry.handlers.items():
+            dependency = self.dependency_map.get(dependency_type)
+            if dependency is None:
+                log.error("No dependency found for type: %s", dependency_type)
+            else:
+                self.notification_handlers[notification_type] = handler_class(
+                    dependency
+                )
 
     async def startup(self):
         self.connection = await aio_pika.connect_robust(url=self.rmq_url)
@@ -57,7 +67,9 @@ class RMQConsumer:
                             )
                             continue
 
-                        handler = self.email_handlers.get(notification_type)
+                        handler = self.notification_handlers.get(
+                            notification_type
+                        )
                         if handler:
                             await handler.handle(data)
                         else:

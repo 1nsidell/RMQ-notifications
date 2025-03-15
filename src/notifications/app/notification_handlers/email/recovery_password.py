@@ -7,7 +7,12 @@ from notifications.app.notification_handlers.protocols.hendler_protocol import (
 from notifications.app.notification_registry import NotificationRegistry
 
 
-@NotificationRegistry.register("recovery_password")
+log = logging.getLogger("app")
+
+
+@NotificationRegistry.register(
+    "email_recovery_password", dependency_type="email"
+)
 class RecoveryPasswordHandler(NotificationHandlerProtocol):
     def __init__(self, email_use_case: EmailUseCaseProtocol):
         self.email_use_case = email_use_case
@@ -20,4 +25,4 @@ class RecoveryPasswordHandler(NotificationHandlerProtocol):
                 recipient=recipient, token=token
             )
         else:
-            logging.error("Missing data for recovery_password.")
+            log.error("Missing data for recovery_password.")
