@@ -1,10 +1,12 @@
-"""Модуль утилит для логгера"""
+"""A utils module for logger."""
 
+from datetime import datetime, timezone
+from functools import lru_cache
 import json
 import logging
 import re
 import time
-from datetime import datetime, timezone
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 
 class UTCFormatter(logging.Formatter):  # UTC for logging
@@ -12,18 +14,81 @@ class UTCFormatter(logging.Formatter):  # UTC for logging
 
 
 class MaskingFilter(logging.Filter):
-    def filter(self, record):
-        record.msg = self.mask_sensitive_data(record.msg)
+    """Filter for masking sensitive data in logs."""
+
+    def __init__(self, patterns: Optional[Dict[str, Tuple[str, str]]] = None):
+        super().__init__()
+        default_patterns = {
+            "email": (
+                r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}",
+                "***@***.com",
+            ),
+            "password": (
+                r'(?i)(["\']?(password|passwd|pwd|secret_key|api_key|token)["\']?\s*[:=]\s*["\']?)([^"\'\s,}]+)',
+                r"\1*****",
+            ),
+        }
+        self._compiled_patterns = {
+            name: (re.compile(pattern), replacement)
+            for name, (pattern, replacement) in (
+                patterns or default_patterns
+            ).items()
+        }
+
+        self._sensitive_keywords = re.compile(
+            r"(password|passwd|pwd|secret|api_?key|token)", flags=re.IGNORECASE
+        )
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        """Apply masking to log record."""
+        msg_str = str(record.msg)
+        if not self._has_sensitive_data(msg_str):
+            return True
+
+        record.msg = self._mask_message(msg_str)
+
+        if record.args:
+            record.args = tuple(
+                (self._mask_message(str(arg)) if isinstance(arg, str) else arg)
+                for arg in record.args
+            )
         return True
 
-    @staticmethod
-    def mask_sensitive_data(data: str) -> str:
-        data = re.sub(
-            r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}",
-            "***@***.com",
-            data,
-        )
-        data = re.sub(r"(?<=password=)[^&]*", "*****", data)
+    def _has_sensitive_data(self, data: str) -> bool:
+        """Check if data might contain sensitive information."""
+        return bool(self._sensitive_keywords.search(data)) or ("@" in data)
+
+    def _mask_message(self, data: str) -> str:
+        """Mask sensitive data in message."""
+        for pattern, replacement in self._compiled_patterns.values():
+            data = pattern.sub(replacement, data)
+
+        if "{" in data and ('"' in data or "'" in data):
+            parsed = json.loads(data)
+            if isinstance(parsed, (dict, list)):
+                return json.dumps(self._recursive_mask(parsed))
+        return data
+
+    @lru_cache(maxsize=1024)
+    def _is_sensitive_key(self, key: str) -> bool:
+        """Check if key contains sensitive data."""
+        if not isinstance(key, str):
+            return False
+        return bool(self._sensitive_keywords.search(key))
+
+    def _recursive_mask(self, data: Union[Dict, List, Any]) -> Any:
+        """Recursively mask sensitive data in structures."""
+        if isinstance(data, dict):
+            return {
+                k: (
+                    "*****"
+                    if self._is_sensitive_key(k)
+                    else self._recursive_mask(v)
+                )
+                for k, v in data.items()
+            }
+        if isinstance(data, list):
+            return [self._recursive_mask(i) for i in data]
         return data
 
 
@@ -38,13 +103,11 @@ class JsonFormatter(logging.Formatter):
 
     def __init__(
         self,
-        fmt_dict: dict = None,
+        fmt_dict: Optional[dict] = None,
         time_format: str = "%Y-%m-%dT%H:%M:%S",
         msec_format: str = "%s.%03dZ",
     ):
-        self.fmt_dict = (
-            fmt_dict if fmt_dict is not None else {"message": "message"}
-        )
+        self.fmt_dict = fmt_dict or {"message": "message"}
         self.default_time_format = time_format
         self.default_msec_format = msec_format
         self.datefmt = None
@@ -72,7 +135,7 @@ class JsonFormatter(logging.Formatter):
         dt = datetime.fromtimestamp(record.created, tz=timezone.utc)
         formatted_time = dt.strftime(datefmt or self.default_time_format)
         milliseconds = int(record.msecs)
-        return f"{formatted_time}.{milliseconds:03d}z"
+        return f"{formatted_time}.{milliseconds:03d}Z"
 
     def format(self, record) -> str:
         """

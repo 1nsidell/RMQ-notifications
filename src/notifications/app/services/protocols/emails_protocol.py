@@ -1,22 +1,18 @@
 from abc import abstractmethod
 from typing import Protocol, Self
 
-from notifications.app.services import EmailServicesProtocol
 
-
-class EmailUseCaseProtocol(Protocol):
-    email_service: EmailServicesProtocol
-
+class EmailServicesProtocol(Protocol):
     @abstractmethod
     async def send_confirm_email(
         self: Self,
         recipient: str,
-        token: str,
+        body: str,
     ) -> None: ...
 
     @abstractmethod
     async def send_recovery_password(
-        self,
+        self: Self,
         recipient: str,
-        token: str,
+        body: str,
     ) -> None: ...

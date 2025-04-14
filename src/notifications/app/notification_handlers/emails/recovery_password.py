@@ -1,18 +1,14 @@
 import logging
 
-from notifications.app.use_cases import EmailUseCaseProtocol
+from notifications.app.exceptions import RMQMessageException
 from notifications.app.notification_handlers.protocols.hendler_protocol import (
     NotificationHandlerProtocol,
 )
-from notifications.app.notification_registry import NotificationRegistry
+from notifications.app.use_cases import EmailUseCaseProtocol
+
+log = logging.getLogger(__name__)
 
 
-log = logging.getLogger("app")
-
-
-@NotificationRegistry.register(
-    "email_recovery_password", dependency_type="email"
-)
 class RecoveryPasswordHandler(NotificationHandlerProtocol):
     def __init__(self, email_use_case: EmailUseCaseProtocol):
         self.email_use_case = email_use_case
@@ -26,3 +22,4 @@ class RecoveryPasswordHandler(NotificationHandlerProtocol):
             )
         else:
             log.error("Missing data for recovery_password.")
+            raise RMQMessageException("Missing data for recovery_password.")

@@ -14,16 +14,20 @@
                 "asctime": "asctime",
                 "module": "module",
                 "lineno": "lineno",
-                "name": "name"
-            },
-            "time_format": "%Y-%m-%dT%H:%M:%S",
-            "msec_format": "%s.%03dZ"
+                "logger": "name"
+            }
+        }
+    },
+    "filters": {
+        "mask_sensitive": {
+            "()": "notifications.core.utils.logging_utils.MaskingFilter"
         }
     },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
             "formatter": "simple",
+            "filters": ["mask_sensitive"],
             "level": "WARNING",
             "stream": "ext://sys.stdout"
         },
@@ -31,31 +35,15 @@
             "class": "logging.handlers.RotatingFileHandler",
             "filename": "logs/app.log",
             "formatter": "json",
+            "filters": ["mask_sensitive"],
             "level": "INFO",
             "maxBytes": 10485760,
             "backupCount": 40,
             "encoding": "utf8"
         }
     },
-    "loggers": {
-        "app": {
-            "level": "DEBUG",
-            "handlers": ["file", "console"],
-            "propagate": false
-        },
-        "exception_handler": {
-            "level": "DEBUG",
-            "handlers": ["file", "console"],
-            "propagate": false
-        },
-        "requests": {
-            "level": "INFO",
-            "handlers": ["file", "console"],
-            "propagate": false
-        }
-    },
     "root": {
-        "level": "DEBUG",
-        "handlers": ["console"]
+        "level": "WARNING",
+        "handlers": ["file"]
     }
 }

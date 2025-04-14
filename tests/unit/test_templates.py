@@ -1,17 +1,24 @@
 from pathlib import Path
 
+from notifications.core.settings import settings
 import pytest
-
-from notifications.settings import settings
-from tests.conftest import REQUIRED_TEMPLATES
+from tests.fixtures.const import REQUIRED_TEMPLATES
 
 
 @pytest.mark.parametrize("template_file", REQUIRED_TEMPLATES)
 def test_template_existence(template_file: str) -> None:
     """
-    Проверяет, что файл шаблона существует в директории TEMPLATE_DIR.
+    Checks if template file exists in the TEMPLATE_DIR directory.
     """
     template_dir: Path = settings.paths.TEMPLATE_DIR
+    template_path = template_dir / template_file
+
     assert (
         template_dir.exists()
-    ), f"Шаблон {template_file} отсутствует по пути {settings.paths.TEMPLATE_DIR}"
+    ), f"Директория шаблонов отсутствует по пути {template_dir}"
+    assert (
+        template_path.exists()
+    ), f"Шаблон {template_file} отсутствует по пути {template_path}"
+    assert (
+        template_path.is_file()
+    ), f"Путь {template_path} существует, но не является файлом"

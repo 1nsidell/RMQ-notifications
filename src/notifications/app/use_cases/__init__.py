@@ -1,3 +1,3 @@
-from .protocols.email_protocol import (
-    EmailUseCaseProtocol as EmailUseCaseProtocol,
-)
+from .protocols.emails_protocol import EmailUseCaseProtocol
+
+__all__ = ("EmailUseCaseProtocol",)

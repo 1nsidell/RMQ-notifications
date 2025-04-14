@@ -1,12 +1,21 @@
-import pytest
-
-from tests.fixtures.email_fixtures import (
+from tests.fixtures.emails import (
     email_service,
+    email_template_service,
+    email_use_case,
     mock_mailer,
     mock_template,
 )
+from tests.fixtures.rmq import (
+    notification_dispatcher,
+    rmq_consumer,
+)
 
-REQUIRED_TEMPLATES = [
-    "confirm_email.html",
-    "recovery_email.html",
-]
+__all__ = (
+    "email_service",
+    "email_template_service",
+    "email_use_case",
+    "mock_mailer",
+    "mock_template",
+    "notification_dispatcher",
+    "rmq_consumer",
+)

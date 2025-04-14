@@ -9,9 +9,13 @@ class BaseCustomException(Exception):
     message: str
 
 
-class CustomSecurityException(BaseCustomException):
-    """Base class for all API security related exceptions."""
+class MailerException(BaseCustomException):
+    """Base email service error."""
 
-    error_type: str
-    status_code: int
-    message: str
+    pass
+
+
+class RMQException(BaseCustomException):
+    """Base rmq errors."""
+
+    pass

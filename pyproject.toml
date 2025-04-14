@@ -1,38 +1,32 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "fastapi-emails"
+name = "fastapi-notifications"
 version = "0.1.0"
 description = "Microservice for sending emails at the request of the main application"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "aio-pika>=9.5.5",
-    "black>=25.1.0",
     "fastapi-mail>=1.4.2",
-    "isort>=6.0.1",
-    "pyright>=1.1.394",
-    "pytest>=8.3.4",
-    "pytest-asyncio>=0.25.3",
-    "pytest-cov>=6.0.0",
-    "pytest-mock>=3.14.0",
 ]
 
+[dependency-groups]
+dev = [
+    "black>=25.1.0",
+    "httpx>=0.28.1",
+    "pytest>=8.3.5",
+    "pytest-asyncio>=0.26.0",
+    "pytest-mock>=3.14.0",
+    "ruff>=0.11.0",
+    "pyright>=1.1.394",
+]
 [tool.setuptools]
 packages = ["notifications"]
 package-dir = {"" = "src"}
 
 [tool.black]
-line-length = 79
+line-length = 80
 target-version = ['py312']
-
-[tool.isort]
-profile = "black"
-multi_line_output = 3
-include_trailing_comma = true
-force_grid_wrap = 0
-use_parentheses = true
-ensure_newline_before_comments = true
-line_length = 79

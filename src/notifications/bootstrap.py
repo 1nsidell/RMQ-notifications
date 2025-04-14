@@ -1,18 +1,28 @@
 import logging
 
-from notifications.app.depends import Consumer
+from notifications.app import notification_handlers  # noqa
+from notifications.gateways.depends import RMQConsumer
+from notifications.gateways.message_queues import NotificationConsumerProtocol
+
+log = logging.getLogger(__name__)
 
 
-log = logging.getLogger("app")
+async def run_consumer(consumer: NotificationConsumerProtocol) -> None:
+    """Starts the RabbitMQ consumer."""
+    await consumer.startup()
 
-
-async def create_app():
-    await Consumer.startup()
     try:
-        log.warning("Starting to consume email notifications...")
-        await Consumer.email_notifications_consume()
-    except Exception as e:
+        log.warning("Starting to consume notifications...")
+        await consumer.consume_notifications()
+        log.warning("Consumer started.")
+    except Exception:
         log.error("Error while consuming messages.", exc_info=True)
     finally:
-        log.warning("Finishing to consume email notifications.")
-        await Consumer.shutdown()
+        log.warning("Stopping consumer...")
+        await consumer.shutdown()
+        log.warning("Consumer stopped.")
+
+
+async def create_app() -> None:
+    """The entry point for launching the application."""
+    await run_consumer(RMQConsumer)

@@ -1,7 +1,13 @@
-from notifications.app.depends.services import EmailService as EmailService
-from notifications.app.depends.use_cases import EmailUseCase as EmailUseCase
-from notifications.app.depends.tasks import Consumer
-from notifications.app.depends.notification_handlers import (
-    RecoveryPasswordHendler as RecoveryPasswordHendler,
-    ConfirmPasswordHendler as ConfirmPasswordHendler,
+from notifications.app.depends.services import (
+    EmailService,
+    EmailTemplateService,
+)
+from notifications.app.depends.tasks import EmailNotificationDispatcher
+from notifications.app.depends.use_cases import EmailUseCase
+
+__all__ = (
+    "EmailNotificationDispatcher",
+    "EmailService",
+    "EmailTemplateService",
+    "EmailUseCase",
 )
