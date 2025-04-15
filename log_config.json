@@ -28,7 +28,7 @@
             "class": "logging.StreamHandler",
             "formatter": "simple",
             "filters": ["mask_sensitive"],
-            "level": "WARNING",
+            "level": "INFO",
             "stream": "ext://sys.stdout"
         },
         "file": {
@@ -43,7 +43,7 @@
         }
     },
     "root": {
-        "level": "WARNING",
-        "handlers": ["file"]
+        "level": "INFO",
+        "handlers": ["file", "console"]
     }
 }
