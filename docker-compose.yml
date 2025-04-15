@@ -1,0 +1,21 @@
+services:
+  app:
+    container_name: FastAPI-notifications
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - fastapi_net
+    env_file:
+      - .env
+    mem_limit: 512m
+    cpus: '1'
+
+
+networks:
+  fastapi_net:
+    external: true
+    name: FastAPI_app
+    # If the network does not exist, create it:
+    # docker network create FastAPI_app
