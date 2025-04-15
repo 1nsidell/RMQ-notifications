@@ -2,6 +2,7 @@ import asyncio
 import logging
 import signal
 
+from notifications.app import notification_handlers  # noqa: F401
 from notifications.core.loggers import setup_logging
 from notifications.core.settings import settings
 from notifications.gateways.message_queues import NotificationConsumerProtocol

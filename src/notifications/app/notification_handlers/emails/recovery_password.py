@@ -4,11 +4,13 @@ from notifications.app.exceptions import RMQMessageException
 from notifications.app.notification_handlers.protocols.hendler_protocol import (
     NotificationHandlerProtocol,
 )
+from notifications.app.notification_registry import EmailNotificationRegistry
 from notifications.app.use_cases import EmailUseCaseProtocol
 
 log = logging.getLogger(__name__)
 
 
+@EmailNotificationRegistry.register("recovery_password")
 class RecoveryPasswordHandler(NotificationHandlerProtocol):
     def __init__(self, email_use_case: EmailUseCaseProtocol):
         self.email_use_case = email_use_case
