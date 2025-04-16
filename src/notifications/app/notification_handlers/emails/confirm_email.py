@@ -10,7 +10,7 @@ from notifications.app.use_cases import EmailUseCaseProtocol
 log = logging.getLogger(__name__)
 
 
-@EmailNotificationRegistry.register("confirm_email")
+@EmailNotificationRegistry.register("confirm_email", implementation="email")
 class ConfirmEmailHandler(NotificationHandlerProtocol):
     def __init__(self, email_use_case: EmailUseCaseProtocol):
         self.email_use_case = email_use_case

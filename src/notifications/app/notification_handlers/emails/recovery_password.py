@@ -10,7 +10,7 @@ from notifications.app.use_cases import EmailUseCaseProtocol
 log = logging.getLogger(__name__)
 
 
-@EmailNotificationRegistry.register("recovery_password")
+@EmailNotificationRegistry.register("recovery_password", implementation="email")
 class RecoveryPasswordHandler(NotificationHandlerProtocol):
     def __init__(self, email_use_case: EmailUseCaseProtocol):
         self.email_use_case = email_use_case

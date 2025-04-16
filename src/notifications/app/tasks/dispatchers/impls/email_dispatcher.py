@@ -18,16 +18,28 @@ log = logging.getLogger("app")
 
 class EmailNotificationDispatcherImpl(BaseDispatcher):
     def __init__(self, email_use_case: EmailUseCaseProtocol):
-        self.email_use_case = email_use_case
+        self.implementations: Dict[str, EmailUseCaseProtocol] = {
+            "email": email_use_case,
+        }
+
         self.handlers = self._init_handlers()
 
     def _init_handlers(self) -> Dict[str, NotificationHandlerProtocol]:
         handlers = {}
-        for (
-            notification_type,
+        for notification_type, (
             handler_class,
+            implementation,
         ) in EmailNotificationRegistry.get_handlers().items():
-            handlers[notification_type] = handler_class(self.email_use_case)
+            dep = self.implementations.get(implementation)
+            if dep is None:
+                log.error(
+                    "No implementation found for type: %s", notification_type
+                )
+                raise ValueError(
+                    "Implementation for '%s' not registered in implementations.",
+                    notification_type,
+                )
+            handlers[notification_type] = handler_class(dep)
         return handlers
 
     async def dispatch(self, data: dict) -> None:

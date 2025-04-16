@@ -15,14 +15,14 @@ class HandlerRegistry(Generic[T]):
         return cls._handlers
 
     @classmethod
-    def register(cls, notification_type: str):
+    def register(cls, notification_type: str, implementation: str):
         def decorator(handler_class: Type[T]):
             handlers = cls._get_handlers_dict()
             if notification_type in handlers:
                 raise ValueError(
                     "Handler for '%s' already registered.", notification_type
                 )
-            handlers[notification_type] = handler_class
+            handlers[notification_type] = (handler_class, implementation)
             return handler_class
 
         return decorator
