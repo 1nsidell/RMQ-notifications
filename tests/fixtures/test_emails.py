@@ -18,7 +18,7 @@ from pytest_mock import MockerFixture
 @pytest.fixture
 def email_template_service() -> EmailTemplateServiceProtocol:
     """Creates EmailTemplateServiceImpl instance."""
-    return EmailTemplateServiceImpl(settings)
+    return EmailTemplateServiceImpl(settings.paths)
 
 
 @pytest.fixture
@@ -38,7 +38,7 @@ def mock_mailer(mocker: MockerFixture) -> FastMail:
 @pytest.fixture
 def email_service(mock_mailer: FastMail) -> EmailServicesProtocol:
     """Creates EmailServicesImpl instance with mocked mailer."""
-    return EmailServicesImpl(mock_mailer, settings)
+    return EmailServicesImpl(mock_mailer, settings.subjects)
 
 
 @pytest.fixture
@@ -48,7 +48,7 @@ def email_use_case(
 ) -> EmailUseCaseProtocol:
     """Creates EmailUseCaseImpl instance with all required dependencies."""
     return EmailUseCaseImpl(
-        settings=settings,
+        templates=settings.templates,
         emails_service=email_service,
         email_templates_service=email_template_service,
     )

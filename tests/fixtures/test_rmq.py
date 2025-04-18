@@ -21,7 +21,7 @@ def rmq_consumer(
 ) -> NotificationConsumerProtocol:
     """Creates RMQConsumerImpl instance with mocked dependencies."""
     consumer = RMQConsumerImpl(
-        settings=settings,
+        settings.rmq,
         dispatchers={settings.rmq.RABBIT_EMAIL_QUEUE: notification_dispatcher},
     )
 

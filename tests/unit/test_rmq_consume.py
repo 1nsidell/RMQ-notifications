@@ -7,7 +7,7 @@ from pytest_mock import MockerFixture
 @pytest.mark.asyncio
 async def test_process_message(rmq_consumer, mocker: MockerFixture):
     """Test message processing."""
-    queue_name = rmq_consumer._RMQConsumerImpl__settings.rmq.RABBIT_EMAIL_QUEUE
+    queue_name = rmq_consumer._RMQConsumerImpl__config.RABBIT_EMAIL_QUEUE
     message_data = {
         "type": "confirm_email",
         "recipient": "test@example.com",
@@ -42,9 +42,7 @@ async def test_startup_shutdown(rmq_consumer, mocker: MockerFixture):
     # Verify connection and channel setup
     queues = rmq_consumer._RMQConsumerImpl__queues
     assert len(queues) == 1
-    assert (
-        rmq_consumer._RMQConsumerImpl__settings.rmq.RABBIT_EMAIL_QUEUE in queues
-    )
+    assert rmq_consumer._RMQConsumerImpl__config.RABBIT_EMAIL_QUEUE in queues
 
     # Test shutdown
     await rmq_consumer.shutdown()

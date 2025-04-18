@@ -2,7 +2,7 @@ from pathlib import Path
 
 from notifications.core.settings import settings
 import pytest
-from tests.fixtures.const import REQUIRED_TEMPLATES
+from tests.fixtures.test_const import REQUIRED_TEMPLATES
 
 
 @pytest.mark.parametrize("template_file", REQUIRED_TEMPLATES)
