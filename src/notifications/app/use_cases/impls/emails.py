@@ -5,29 +5,29 @@ from notifications.app.services import (
     EmailTemplateServiceProtocol,
 )
 from notifications.app.use_cases import EmailUseCaseProtocol
-from notifications.core.settings import Settings
+from notifications.core.settings import MailTemplate
 
 
 class EmailUseCaseImpl(EmailUseCaseProtocol):
     def __init__(
         self,
-        settings: Settings,
+        templates: MailTemplate,
         emails_service: EmailServicesProtocol,
         email_templates_service: EmailTemplateServiceProtocol,
     ) -> None:
-        self.settings = settings
-        self.emails_service = emails_service
-        self.email_templates_service = email_templates_service
+        self.__templates = templates
+        self.__emails_service = emails_service
+        self.__email_templates_service = email_templates_service
 
     async def send_confirm_email(
         self: Self,
         recipient: str,
         token: str,
     ) -> None:
-        body = self.email_templates_service.get_rendered_template(
-            self.settings.templates.CONFIRM, token=token
+        body = self.__email_templates_service.get_rendered_template(
+            self.__templates.CONFIRM, token=token
         )
-        await self.emails_service.send_confirm_email(
+        await self.__emails_service.send_confirm_email(
             recipient=recipient, body=body
         )
 
@@ -36,9 +36,9 @@ class EmailUseCaseImpl(EmailUseCaseProtocol):
         recipient: str,
         token: str,
     ) -> None:
-        body = self.email_templates_service.get_rendered_template(
-            self.settings.templates.RECOVERY, token=token
+        body = self.__email_templates_service.get_rendered_template(
+            self.__templates.RECOVERY, token=token
         )
-        await self.emails_service.send_recovery_password(
+        await self.__emails_service.send_recovery_password(
             recipient=recipient, body=body
         )

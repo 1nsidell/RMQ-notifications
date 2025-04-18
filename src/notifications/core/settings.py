@@ -81,8 +81,7 @@ class RabbitMQConfig(BaseModel):
 
 
 class Settings:
-    mode: str = os.getenv("MODE")
-    api_key: str = os.getenv("API_KEY")
+    mode: str = os.getenv("MODE", "PROD")
     run: RunConfig = RunConfig()
     api: ApiPrefix = ApiPrefix()
     fast_mail: FastMailConfig = FastMailConfig()

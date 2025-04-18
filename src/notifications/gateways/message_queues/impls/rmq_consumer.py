@@ -7,7 +7,7 @@ import aio_pika
 from aio_pika.abc import AbstractRobustConnection
 from notifications.app.exceptions import MissingRMQConnection
 from notifications.app.tasks.dispatchers import MessageDispatcherProtocol
-from notifications.core.settings import Settings
+from notifications.core.settings import RabbitMQConfig
 from notifications.gateways.message_queues.protocols.consumer_protocol import (
     NotificationConsumerProtocol,
 )
@@ -18,12 +18,12 @@ log = logging.getLogger("app")
 class RMQConsumerImpl(NotificationConsumerProtocol):
     def __init__(
         self,
-        settings: Settings,
+        config: RabbitMQConfig,
         dispatchers: Dict[str, MessageDispatcherProtocol],
     ):
-        self.__settings = settings
+        self.__config = config
         self.__dispatchers = dispatchers
-        self.__rmq_url = settings.rmq.url
+        self.__rmq_url = config.url
 
         self.__connection: Optional[AbstractRobustConnection] = None
         self.__channel: Optional[aio_pika.Channel] = None
@@ -44,7 +44,7 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
                 url=self.__rmq_url
             )
             self.__channel = await self.__connection.channel()
-            await self.__channel.set_qos(self.__settings.rmq.PREFETCH_COUNT)
+            await self.__channel.set_qos(self.__config.PREFETCH_COUNT)
 
             for queue_name in self.__dispatchers.keys():
                 self.__queues[queue_name] = await self.__channel.declare_queue(

@@ -35,7 +35,7 @@ class ShutdownHandler:
 
 async def run_app(consumer: NotificationConsumerProtocol) -> None:
     """Starts the consumer and waits for the consumer to work until the completion signal."""
-    setup_logging(settings=settings)
+    setup_logging(config=settings.paths)
     await consumer.startup()
 
     loop = asyncio.get_running_loop()

@@ -6,15 +6,15 @@ from typing import Any, Self
 from jinja2 import Environment, FileSystemLoader, Template
 from notifications.app.exceptions import EmailTemplateException
 from notifications.app.services import EmailTemplateServiceProtocol
-from notifications.core.settings import Settings
+from notifications.core.settings import Paths
 
 log = logging.getLogger(__name__)
 
 
 class EmailTemplateServiceImpl(EmailTemplateServiceProtocol):
-    def __init__(self, settings: Settings) -> None:
+    def __init__(self, config: Paths) -> None:
         self.env: Environment = Environment(
-            loader=FileSystemLoader(settings.paths.TEMPLATE_DIR)
+            loader=FileSystemLoader(config.TEMPLATE_DIR)
         )
 
     def _get_template(self: Self, template_name: str) -> Template:

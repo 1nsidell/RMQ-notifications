@@ -5,23 +5,23 @@ from notifications.app.services import (
 )
 from notifications.app.use_cases import EmailUseCaseProtocol
 from notifications.app.use_cases.impls.emails import EmailUseCaseImpl
-from notifications.core.settings import Settings, settings
+from notifications.core.settings import MailTemplate, settings
 
 
 def get_email_use_case(
-    settings: Settings,
+    templates: MailTemplate,
     email_service: EmailServicesProtocol,
     email_templates_service: EmailTemplateServiceProtocol,
 ) -> EmailUseCaseProtocol:
     return EmailUseCaseImpl(
-        settings=settings,
+        templates=templates,
         emails_service=email_service,
         email_templates_service=email_templates_service,
     )
 
 
 EmailUseCase: EmailUseCaseProtocol = get_email_use_case(
-    settings=settings,
+    templates=settings.templates,
     email_service=EmailService,
     email_templates_service=EmailTemplateService,
 )

@@ -6,15 +6,15 @@ from typing import Self
 from fastapi_mail import FastMail, MessageSchema
 from notifications.app.exceptions import SendEmailException
 from notifications.app.services import EmailServicesProtocol
-from notifications.core.settings import Settings
+from notifications.core.settings import EmailSubjects
 
 log = logging.getLogger(__name__)
 
 
 class EmailServicesImpl(EmailServicesProtocol):
-    def __init__(self, mailer: FastMail, settings: Settings) -> None:
-        self.mailer = mailer
-        self.settings = settings
+    def __init__(self, mailer: FastMail, subjects: EmailSubjects) -> None:
+        self.__mailer = mailer
+        self.__subjects = subjects
 
     def _get_message(
         self: Self,
@@ -39,12 +39,12 @@ class EmailServicesImpl(EmailServicesProtocol):
         """Sending an email for mail verification."""
         log.info("Sending verification email.")
         message = self._get_message(
-            subject=self.settings.subjects.CONFIRM,
+            subject=self.__subjects.CONFIRM,
             recipient=recipient,
             body=body,
         )
         try:
-            await self.mailer.send_message(message)
+            await self.__mailer.send_message(message)
             log.info("Successful sending of verification email.")
         except Exception as e:
             log.exception("Error when sending verification email.")
@@ -58,12 +58,12 @@ class EmailServicesImpl(EmailServicesProtocol):
         """Sending an email to recover your password."""
         log.info("Sending password recovery email.")
         message = self._get_message(
-            subject=self.settings.subjects.RECOVERY,
+            subject=self.__subjects.RECOVERY,
             recipient=recipient,
             body=body,
         )
         try:
-            await self.mailer.send_message(message)
+            await self.__mailer.send_message(message)
             log.info("Successful sending of password recovery email.")
         except Exception as e:
             log.exception("Error when sending password recovery email.")
