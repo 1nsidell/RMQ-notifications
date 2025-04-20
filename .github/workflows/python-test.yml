@@ -1,0 +1,24 @@
+name: Fastapi-Notifications actions
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t fastapi-notifications -f docker/dev.Dockerfile .
+
+      - name: Run lint
+        run: |
+          docker run --rm fastapi-notifications ruff check .
+
+      - name: Run tests
+        run: |
+          docker run --rm fastapi-notifications python -m pytest
