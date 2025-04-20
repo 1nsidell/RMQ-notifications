@@ -12,8 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Use dev .dockerignore for CI build
+        run: cp .dockerignore.dev .dockerignore
+
       - name: Build Docker image
-        run: docker build -t fastapi-notifications -f dev.Dockerfile --ignore-file .dockerignore.dev .
+        run: docker build -t fastapi-notifications -f dev.Dockerfile .
 
       - name: Create .env file from secrets
         run: |
