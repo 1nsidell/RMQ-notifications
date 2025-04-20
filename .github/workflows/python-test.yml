@@ -1,4 +1,4 @@
-name: Fastapi-Notifications actions
+name: Fastapi-Notifications CI/CD
 
 on:
   push:
@@ -15,10 +15,27 @@ jobs:
       - name: Build Docker image
         run: docker build -t fastapi-notifications -f docker/dev.Dockerfile .
 
-      - name: Run lint
+      - name: Create .env file from secrets
         run: |
-          docker run --rm fastapi-notifications ruff check .
+          echo "${{ secrets.DEPLOY }}" > .env
+          sed -i 's/\r$//' .env
+          echo "Generated .env file content:"
+          head -n 3 .env
 
-      - name: Run tests
+      - name: Run lint with environment
         run: |
-          docker run --rm fastapi-notifications python -m pytest
+          docker run --rm \
+            --env-file .env \
+            fastapi-notifications \
+            ruff check .
+
+      - name: Run tests with environment
+        run: |
+          docker run --rm \
+            --env-file .env \
+            fastapi-notifications \
+            python -m pytest
+
+      - name: Cleanup
+        run: rm -f .env 
+        if: always()
