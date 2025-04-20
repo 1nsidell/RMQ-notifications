@@ -22,6 +22,7 @@ dev = [
     "pytest-mock>=3.14.0",
     "ruff>=0.11.0",
     "pyright>=1.1.394",
+    "mypy>=1.15.0",
 ]
 [tool.setuptools]
 packages = ["notifications"]
@@ -30,3 +31,6 @@ package-dir = {"" = "src"}
 [tool.black]
 line-length = 80
 target-version = ['py312']
+
+[tool.mypy]
+explicit_package_bases = true
