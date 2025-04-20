@@ -72,7 +72,7 @@ python -m notifications.main
 Or with Docker:
 
 ```bash
-docker-compose up --build
+docker-compose -f docker/docker-compose.yml up --build
 ```
 
 ---
