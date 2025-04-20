@@ -1,9 +1,10 @@
+import pytest
+from pytest_mock import MockerFixture
+
 from notifications.app.notification_handlers import (
     ConfirmEmailHandler,
     RecoveryPasswordHandler,
 )
-import pytest
-from pytest_mock import MockerFixture
 
 
 @pytest.mark.asyncio

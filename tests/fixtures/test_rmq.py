@@ -1,11 +1,12 @@
+import pytest
+from pytest_mock import MockerFixture
+
 from notifications.app.tasks.dispatchers import MessageDispatcherProtocol
 from notifications.core.settings import settings
 from notifications.gateways.message_queues import NotificationConsumerProtocol
 from notifications.gateways.message_queues.impls.rmq_consumer import (
     RMQConsumerImpl,
 )
-import pytest
-from pytest_mock import MockerFixture
 
 
 @pytest.fixture

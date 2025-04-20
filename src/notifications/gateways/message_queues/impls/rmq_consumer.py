@@ -5,12 +5,14 @@ from typing import Dict, Optional
 
 import aio_pika
 from aio_pika.abc import AbstractRobustConnection
+
 from notifications.app.exceptions import MissingRMQConnection
 from notifications.app.tasks.dispatchers import MessageDispatcherProtocol
 from notifications.core.settings import RabbitMQConfig
 from notifications.gateways.message_queues.protocols.consumer_protocol import (
     NotificationConsumerProtocol,
 )
+
 
 log = logging.getLogger("app")
 

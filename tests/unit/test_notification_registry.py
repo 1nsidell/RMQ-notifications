@@ -1,3 +1,5 @@
+import pytest
+
 from notifications.app.notification_handlers.protocols.hendler_protocol import (
     NotificationHandlerProtocol,
 )
@@ -5,7 +7,6 @@ from notifications.app.notification_registry import (
     EmailNotificationRegistry,
     HandlerRegistry,
 )
-import pytest
 
 
 class DummyHandler(NotificationHandlerProtocol):

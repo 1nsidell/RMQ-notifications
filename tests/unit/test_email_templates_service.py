@@ -1,8 +1,9 @@
 from jinja2 import TemplateError
-from notifications.app.exceptions import EmailTemplateException
-from notifications.core.settings import settings
 import pytest
 from pytest_mock import MockerFixture
+
+from notifications.app.exceptions import EmailTemplateException
+from notifications.core.settings import settings
 
 
 def test_get_rendered_template_success(

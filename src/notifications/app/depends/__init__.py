@@ -5,6 +5,7 @@ from notifications.app.depends.services import (
 from notifications.app.depends.tasks import EmailNotificationDispatcher
 from notifications.app.depends.use_cases import EmailUseCase
 
+
 __all__ = (
     "EmailNotificationDispatcher",
     "EmailService",

@@ -7,6 +7,7 @@ from notifications.app.notification_handlers.protocols.hendler_protocol import (
 from notifications.app.notification_registry import EmailNotificationRegistry
 from notifications.app.use_cases import EmailUseCaseProtocol
 
+
 log = logging.getLogger(__name__)
 
 

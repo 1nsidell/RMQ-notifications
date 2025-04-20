@@ -10,6 +10,7 @@ from tests.fixtures.test_rmq import (
     rmq_consumer,
 )
 
+
 __all__ = (
     "email_service",
     "email_template_service",

@@ -4,6 +4,7 @@ from .notification_handlers.protocols.hendler_protocol import (
     NotificationHandlerProtocol,
 )
 
+
 T = TypeVar("T", bound=NotificationHandlerProtocol)
 
 

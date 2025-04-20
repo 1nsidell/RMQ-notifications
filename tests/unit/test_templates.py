@@ -1,8 +1,9 @@
 from pathlib import Path
 
-from notifications.core.settings import settings
 import pytest
 from tests.fixtures.test_const import REQUIRED_TEMPLATES
+
+from notifications.core.settings import settings
 
 
 @pytest.mark.parametrize("template_file", REQUIRED_TEMPLATES)

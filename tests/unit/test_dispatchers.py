@@ -1,9 +1,10 @@
+import pytest
+from pytest_mock import MockerFixture
+
 from notifications.app.exceptions import MissingHandlerClassException
 from notifications.app.tasks.dispatchers.impls.email_dispatcher import (
     EmailNotificationDispatcherImpl,
 )
-import pytest
-from pytest_mock import MockerFixture
 
 
 @pytest.mark.asyncio

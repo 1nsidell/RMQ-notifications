@@ -5,6 +5,7 @@ from .protocols.dispatcher_protocol import (
     MessageDispatcherProtocol,
 )
 
+
 __all__ = (
     "BaseDispatcher",
     "MessageDispatcherProtocol",

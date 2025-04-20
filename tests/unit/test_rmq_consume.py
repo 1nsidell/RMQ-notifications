@@ -1,12 +1,13 @@
 import asyncio
 
+import pytest
+from pytest_mock import MockerFixture
+
 from notifications.app.exceptions import MissingRMQConnection
 from notifications.core.settings import settings
 from notifications.gateways.message_queues.impls.rmq_consumer import (
     RMQConsumerImpl,
 )
-import pytest
-from pytest_mock import MockerFixture
 
 
 @pytest.mark.asyncio

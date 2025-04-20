@@ -1,4 +1,5 @@
 from fastapi_mail import FastMail
+
 from notifications.app.services import (
     EmailServicesProtocol,
     EmailTemplateServiceProtocol,

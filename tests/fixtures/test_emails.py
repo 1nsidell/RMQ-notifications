@@ -1,5 +1,8 @@
 from fastapi_mail import FastMail
 from jinja2 import Template
+import pytest
+from pytest_mock import MockerFixture
+
 from notifications.app.services import (
     EmailServicesProtocol,
     EmailTemplateServiceProtocol,
@@ -11,8 +14,6 @@ from notifications.app.services.impls.emails import EmailServicesImpl
 from notifications.app.use_cases import EmailUseCaseProtocol
 from notifications.app.use_cases.impls.emails import EmailUseCaseImpl
 from notifications.core.settings import settings
-import pytest
-from pytest_mock import MockerFixture
 
 
 @pytest.fixture

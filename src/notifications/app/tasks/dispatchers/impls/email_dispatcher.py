@@ -13,6 +13,7 @@ from notifications.app.use_cases.protocols.emails_protocol import (
     EmailUseCaseProtocol,
 )
 
+
 log = logging.getLogger("app")
 
 

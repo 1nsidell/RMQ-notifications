@@ -7,6 +7,7 @@ from notifications.core.loggers import setup_logging
 from notifications.core.settings import settings
 from notifications.gateways.message_queues import NotificationConsumerProtocol
 
+
 log = logging.getLogger(__name__)
 
 

@@ -1,7 +1,8 @@
 from fastapi_mail import MessageSchema, MessageType
-from notifications.app.exceptions import SendEmailException
 import pytest
 from pytest_mock import MockerFixture
+
+from notifications.app.exceptions import SendEmailException
 
 
 @pytest.mark.asyncio

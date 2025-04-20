@@ -4,9 +4,11 @@ import logging
 from typing import Any, Self
 
 from jinja2 import Environment, FileSystemLoader, Template
+
 from notifications.app.exceptions import EmailTemplateException
 from notifications.app.services import EmailTemplateServiceProtocol
 from notifications.core.settings import Paths
+
 
 log = logging.getLogger(__name__)
 

@@ -4,9 +4,11 @@ import logging
 from typing import Self
 
 from fastapi_mail import FastMail, MessageSchema
+
 from notifications.app.exceptions import SendEmailException
 from notifications.app.services import EmailServicesProtocol
 from notifications.core.settings import EmailSubjects
+
 
 log = logging.getLogger(__name__)
 
