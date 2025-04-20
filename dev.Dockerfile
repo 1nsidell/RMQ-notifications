@@ -14,7 +14,6 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-install-project
 
 ADD . /app
-COPY tests/ tests/
 
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen

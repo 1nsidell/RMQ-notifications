@@ -97,10 +97,3 @@ venv/
 .vscode/
 .mypy_cache
 .github
-
-# tests
-tests/
-.coverage
-.pytest_cache/
-htmlcov/
-coverage.xml
