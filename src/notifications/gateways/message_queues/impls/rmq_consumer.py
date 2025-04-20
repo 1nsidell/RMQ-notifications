@@ -21,14 +21,14 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
         config: RabbitMQConfig,
         dispatchers: Dict[str, MessageDispatcherProtocol],
     ):
-        self.__config = config
-        self.__dispatchers = dispatchers
-        self.__rmq_url = config.url
+        self._config = config
+        self._dispatchers = dispatchers
+        self._rmq_url = config.url
 
-        self.__connection: Optional[AbstractRobustConnection] = None
-        self.__channel: Optional[aio_pika.Channel] = None
-        self.__queues: Dict[str, aio_pika.Queue] = {}
-        self.__queue_arguments: Dict[str, str] = {
+        self._connection: Optional[AbstractRobustConnection] = None
+        self._channel: Optional[aio_pika.Channel] = None
+        self._queues: Dict[str, aio_pika.Queue] = {}
+        self._queue_arguments: Dict[str, str] = {
             "x-dead-letter-exchange": "dlx",
             "x-dead-letter-routing-key": "dlq",
         }
@@ -40,17 +40,15 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
     async def startup(self) -> None:
         """Initialize RMQ connection and channel."""
         try:
-            self.__connection = await aio_pika.connect_robust(
-                url=self.__rmq_url
-            )
-            self.__channel = await self.__connection.channel()
-            await self.__channel.set_qos(self.__config.PREFETCH_COUNT)
+            self._connection = await aio_pika.connect_robust(url=self._rmq_url)
+            self._channel = await self._connection.channel()
+            await self._channel.set_qos(self._config.PREFETCH_COUNT)
 
-            for queue_name in self.__dispatchers.keys():
-                self.__queues[queue_name] = await self.__channel.declare_queue(
+            for queue_name in self._dispatchers.keys():
+                self._queues[queue_name] = await self._channel.declare_queue(
                     name=queue_name,
                     durable=True,
-                    arguments=self.__queue_arguments,
+                    arguments=self._queue_arguments,
                 )
 
             log.info("Successfully connected to RabbitMQ")
@@ -61,7 +59,7 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
     async def consume_notifications(self) -> None:
         """Process messages from all queues."""
         tasks = []
-        for queue_name, queue in self.__queues.items():
+        for queue_name, queue in self._queues.items():
             tasks.append(self._consume_queue(queue_name, queue))
         await asyncio.gather(*tasks)
 
@@ -114,7 +112,7 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
         try:
             body = message.body.decode("utf-8")
             data: dict = json.loads(body)
-            dispatcher = self.__dispatchers.get(queue_name)
+            dispatcher = self._dispatchers.get(queue_name)
             if dispatcher:
                 await dispatcher.dispatch(data)
             else:
@@ -144,17 +142,17 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
             )
 
         try:
-            if self.__channel and not self.__channel.is_closed:
-                await self.__channel.close()
-                self.__channel = None
+            if self._channel and not self._channel.is_closed:
+                await self._channel.close()
+                self._channel = None
                 log.debug("RabbitMQ channel closed.")
 
-            if self.__connection and not self.__connection.is_closed:
-                await self.__connection.close()
-                self.__connection = None
+            if self._connection and not self._connection.is_closed:
+                await self._connection.close()
+                self._connection = None
                 log.debug("RabbitMQ connection closed.")
 
-            self.__queues.clear()
+            self._queues.clear()
 
             log.info("RabbitMQ consumer shutdown completed.")
         except Exception:

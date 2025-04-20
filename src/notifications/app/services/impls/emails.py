@@ -13,8 +13,8 @@ log = logging.getLogger(__name__)
 
 class EmailServicesImpl(EmailServicesProtocol):
     def __init__(self, mailer: FastMail, subjects: EmailSubjects) -> None:
-        self.__mailer = mailer
-        self.__subjects = subjects
+        self._mailer = mailer
+        self._subjects = subjects
 
     def _get_message(
         self: Self,
@@ -39,12 +39,12 @@ class EmailServicesImpl(EmailServicesProtocol):
         """Sending an email for mail verification."""
         log.info("Sending verification email.")
         message = self._get_message(
-            subject=self.__subjects.CONFIRM,
+            subject=self._subjects.CONFIRM,
             recipient=recipient,
             body=body,
         )
         try:
-            await self.__mailer.send_message(message)
+            await self._mailer.send_message(message)
             log.info("Successful sending of verification email.")
         except Exception as e:
             log.exception("Error when sending verification email.")
@@ -58,12 +58,12 @@ class EmailServicesImpl(EmailServicesProtocol):
         """Sending an email to recover your password."""
         log.info("Sending password recovery email.")
         message = self._get_message(
-            subject=self.__subjects.RECOVERY,
+            subject=self._subjects.RECOVERY,
             recipient=recipient,
             body=body,
         )
         try:
-            await self.__mailer.send_message(message)
+            await self._mailer.send_message(message)
             log.info("Successful sending of password recovery email.")
         except Exception as e:
             log.exception("Error when sending password recovery email.")

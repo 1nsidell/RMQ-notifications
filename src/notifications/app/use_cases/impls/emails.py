@@ -15,19 +15,19 @@ class EmailUseCaseImpl(EmailUseCaseProtocol):
         emails_service: EmailServicesProtocol,
         email_templates_service: EmailTemplateServiceProtocol,
     ) -> None:
-        self.__templates = templates
-        self.__emails_service = emails_service
-        self.__email_templates_service = email_templates_service
+        self._templates = templates
+        self._emails_service = emails_service
+        self._email_templates_service = email_templates_service
 
     async def send_confirm_email(
         self: Self,
         recipient: str,
         token: str,
     ) -> None:
-        body = self.__email_templates_service.get_rendered_template(
-            self.__templates.CONFIRM, token=token
+        body = self._email_templates_service.get_rendered_template(
+            self._templates.CONFIRM, token=token
         )
-        await self.__emails_service.send_confirm_email(
+        await self._emails_service.send_confirm_email(
             recipient=recipient, body=body
         )
 
@@ -36,9 +36,9 @@ class EmailUseCaseImpl(EmailUseCaseProtocol):
         recipient: str,
         token: str,
     ) -> None:
-        body = self.__email_templates_service.get_rendered_template(
-            self.__templates.RECOVERY, token=token
+        body = self._email_templates_service.get_rendered_template(
+            self._templates.RECOVERY, token=token
         )
-        await self.__emails_service.send_recovery_password(
+        await self._emails_service.send_recovery_password(
             recipient=recipient, body=body
         )
