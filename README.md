@@ -121,6 +121,27 @@ pytest
 
 ---
 
+## Typing
+
+- This project strictly adheres to static typing using [mypy](https://mypy-lang.org/).
+- Type annotations are enforced throughout the codebase.
+
+---
+
+## Linting
+
+- Code is linted using [ruff](https://docs.astral.sh/ruff/).
+- All code should pass ruff checks before merging.
+
+---
+
+## Formatting
+
+- Code is formatted using [black](https://black.readthedocs.io/).
+- All code should be auto-formatted with black before merging.
+
+---
+
 ## Logging
 
 - Logs are output to both console and `logs/app.log` (JSON format).
@@ -132,8 +153,10 @@ pytest
 
 1. Fork the repo and create your branch.
 2. Write tests for your feature or bugfix.
-3. Run `ruff` and `black` for linting/formatting.
-4. Submit a pull request.
+3. Run `ruff` for linting.
+4. Run `black` for formatting.
+5. Run `mypy` for type checking.
+6. Submit a pull request.
 
 ---
 
