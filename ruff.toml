@@ -77,7 +77,6 @@ known-first-party = ["notifications"]
 combine-as-imports = true
 force-sort-within-sections = true
 lines-after-imports = 2
-lines-between-types = 1
 section-order = [
     "future",
     "standard-library",

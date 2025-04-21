@@ -1,6 +1,6 @@
 # RabbitMQ Notifications Microservice
 
-A robust microservice for sending email notifications (confirmation, password recovery, etc.) via RabbitMQ, built with FastAPI, aio-pika, and fastapi-mail.
+A robust microservice for sending email notifications (confirmation, password recovery, etc.) via RabbitMQ, built with aio-pika, fastapi-mail.
 
 ---
 

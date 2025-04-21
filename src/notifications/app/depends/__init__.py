@@ -1,3 +1,4 @@
+from notifications.app.depends.message_queues import RMQConsumer
 from notifications.app.depends.services import (
     EmailService,
     EmailTemplateService,
@@ -11,4 +12,5 @@ __all__ = (
     "EmailService",
     "EmailTemplateService",
     "EmailUseCase",
+    "RMQConsumer",
 )

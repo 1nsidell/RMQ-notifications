@@ -1,7 +1,7 @@
 import asyncio
 
+from notifications.app.depends.message_queues import RMQConsumer
 from notifications.bootstrap import run_app
-from notifications.gateways.depends.message_queues import RMQConsumer
 
 
 async def create_app() -> None:
