@@ -41,7 +41,7 @@ class EmailNotificationDispatcherImpl(BaseDispatcher):
                     notification_type,
                 )
             handler_cls: Type[NotificationHandlerProtocol] = handler_class
-            handlers[notification_type] = handler_cls(dep)  # type: ignore
+            handlers[notification_type] = handler_cls(dep)
         return handlers
 
     async def dispatch(self, data: dict) -> None:
