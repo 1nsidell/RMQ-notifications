@@ -1,8 +1,9 @@
 import os
 from pathlib import Path
+from typing import Optional
 
 from fastapi_mail import ConnectionConfig
-from pydantic import BaseModel
+from pydantic import BaseModel, SecretStr
 
 
 class Paths:
@@ -16,27 +17,17 @@ class RunConfig(BaseModel):
     port: int = 8003
 
 
-class ApiPrefix(BaseModel):
-    prefix: str = "/api/notifications"
-    v1_prefix: str = "/v1"
-    internal: str = "/internals"
-    healthcheck: str = "/healthcheck"
-    emails: str = "/emails"
-    confirm_email: str = "/confirmation"
-    recovery_email: str = "/recovery"
-
-
 class FastMailConfig(BaseModel):
-    USERNAME: str = os.getenv("MAIL_USERNAME")
-    PASSWORD: str = os.getenv("MAIL_PASSWORD")
-    FROM: str = os.getenv("MAIL_FROM")
-    PORT: int = int(os.getenv("MAIL_PORT"))
-    SERVER: str = os.getenv("MAIL_SERVER")
-    STARTTLS: bool = bool(int(os.getenv("MAIL_STARTTLS")))
-    SSL_TLS: bool = bool(int(os.getenv("MAIL_SSL_TLS")))
-    FROM_NAME: str = os.getenv("MAIL_FROM_NAME")
-    USE_CREDENTIALS: bool = bool(os.getenv("MAIL_USE_CREDENTIALS"))
-    VALIDATE_CERTS: bool = bool(os.getenv("MAIL_VALIDATE_CERTS"))
+    USERNAME: str = os.getenv("MAIL_USERNAME", "guest")
+    PASSWORD: SecretStr = SecretStr(os.getenv("MAIL_PASSWORD", "guest"))
+    FROM: str = os.getenv("MAIL_FROM", "guest")
+    PORT: int = int(os.getenv("MAIL_PORT", "465"))
+    SERVER: str = os.getenv("MAIL_SERVER", "guest")
+    STARTTLS: bool = bool(int(os.getenv("MAIL_STARTTLS", "0")))
+    SSL_TLS: bool = bool(int(os.getenv("MAIL_SSL_TLS", "1")))
+    FROM_NAME: str = os.getenv("MAIL_FROM_NAME", "guest")
+    USE_CREDENTIALS: bool = bool(int(os.getenv("MAIL_USE_CREDENTIALS", "1")))
+    VALIDATE_CERTS: bool = bool(int(os.getenv("MAIL_VALIDATE_CERTS", "1")))
 
     @property
     def conf(self) -> ConnectionConfig:
@@ -65,14 +56,14 @@ class MailTemplate(BaseModel):
 
 
 class RabbitMQConfig(BaseModel):
-    USERNAME: str = os.getenv("RABBIT_USERNAME")
-    PASSWORD: str = os.getenv("RABBIT_PASSWORD")
-    HOST: str = os.getenv("RABBIT_HOST")
-    PORT: int = int(os.getenv("RABBIT_PORT"))
-    VHOST: str = os.getenv("RABBIT_VHOST")
-    TIMEOUT: int = int(os.getenv("RABBIT_TIMEOUT"))
+    USERNAME: str = os.getenv("RABBIT_USERNAME", "guest")
+    PASSWORD: str = os.getenv("RABBIT_PASSWORD", "guest")
+    HOST: str = os.getenv("RABBIT_HOST", "loaclhost")
+    PORT: int = int(os.getenv("RABBIT_PORT", "5672"))
+    VHOST: Optional[str] = os.getenv("RABBIT_VHOST", "")
+    TIMEOUT: int = int(os.getenv("RABBIT_TIMEOUT", "30"))
 
-    RABBIT_EMAIL_QUEUE: str = os.getenv("RABBIT_EMAIL_QUEUE")
+    RABBIT_EMAIL_QUEUE: str = os.getenv("RABBIT_EMAIL_QUEUE", "test")
     PREFETCH_COUNT: int = int(os.getenv("RABBIT_PREFETCH_COUNT", "10"))
 
     @property
@@ -83,7 +74,6 @@ class RabbitMQConfig(BaseModel):
 class Settings:
     mode: str = os.getenv("MODE", "PROD")
     run: RunConfig = RunConfig()
-    api: ApiPrefix = ApiPrefix()
     fast_mail: FastMailConfig = FastMailConfig()
     subjects: EmailSubjects = EmailSubjects()
     templates: MailTemplate = MailTemplate()

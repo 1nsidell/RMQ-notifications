@@ -26,13 +26,13 @@ class EmailTemplateServiceImpl(EmailTemplateServiceProtocol):
             template: Template = self.env.get_template(template_name)
             log.info("Template successfully received: %s.", template_name)
             return template
-        except Exception as e:
+        except Exception as exc:
             log.exception("Template retrieval error.")
-            raise EmailTemplateException(e)
+            raise EmailTemplateException(str(exc)) from exc
 
     def get_rendered_template(self, template_name: str, **data: Any) -> str:
         try:
             template = self.env.get_template(template_name)
             return template.render(**data)
-        except Exception as e:
-            raise EmailTemplateException(e)
+        except Exception as exc:
+            raise EmailTemplateException(str(exc)) from exc

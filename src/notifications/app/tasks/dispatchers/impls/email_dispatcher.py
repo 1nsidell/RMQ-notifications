@@ -1,5 +1,5 @@
 import logging
-from typing import Dict
+from typing import Dict, Type
 
 from notifications.app.exceptions import (
     MissingHandlerClassException,
@@ -26,7 +26,7 @@ class EmailNotificationDispatcherImpl(BaseDispatcher):
         self.handlers = self._init_handlers()
 
     def _init_handlers(self) -> Dict[str, NotificationHandlerProtocol]:
-        handlers = {}
+        handlers: Dict[str, NotificationHandlerProtocol] = {}
         for notification_type, (
             handler_class,
             implementation,
@@ -40,7 +40,8 @@ class EmailNotificationDispatcherImpl(BaseDispatcher):
                     "Implementation for '%s' not registered in implementations.",
                     notification_type,
                 )
-            handlers[notification_type] = handler_class(dep)
+            handler_cls: Type[NotificationHandlerProtocol] = handler_class
+            handlers[notification_type] = handler_cls(dep)  # type: ignore
         return handlers
 
     async def dispatch(self, data: dict) -> None:

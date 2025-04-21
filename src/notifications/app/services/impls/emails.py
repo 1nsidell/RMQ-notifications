@@ -3,7 +3,7 @@
 import logging
 from typing import Self
 
-from fastapi_mail import FastMail, MessageSchema
+from fastapi_mail import FastMail, MessageSchema, MessageType
 
 from notifications.app.exceptions import SendEmailException
 from notifications.app.services import EmailServicesProtocol
@@ -29,7 +29,7 @@ class EmailServicesImpl(EmailServicesProtocol):
             subject=subject,
             recipients=[recipient],
             body=body,
-            subtype="html",
+            subtype=MessageType.html,
         )
         return message
 
@@ -48,9 +48,9 @@ class EmailServicesImpl(EmailServicesProtocol):
         try:
             await self._mailer.send_message(message)
             log.info("Successful sending of verification email.")
-        except Exception as e:
+        except Exception as exc:
             log.exception("Error when sending verification email.")
-            raise SendEmailException(e)
+            raise SendEmailException(str(exc)) from exc
 
     async def send_recovery_password(
         self: Self,
@@ -67,6 +67,6 @@ class EmailServicesImpl(EmailServicesProtocol):
         try:
             await self._mailer.send_message(message)
             log.info("Successful sending of password recovery email.")
-        except Exception as e:
+        except Exception as exc:
             log.exception("Error when sending password recovery email.")
-            raise SendEmailException(e)
+            raise SendEmailException(str(exc)) from exc

@@ -1,5 +1,7 @@
 """Custom infrastructure exceptions."""
 
+from typing import Optional
+
 from notifications.core.exceptions import (
     MailerException,
     RMQException,
@@ -12,8 +14,9 @@ class SendEmailException(MailerException):
     error_type: str = "MAILER_ERROR"
     status_code: int = 500
 
-    def __init__(self, message: str | None = None):
-        self.message = message or self.__doc__
+    def __init__(self, message: Optional[str] = None):
+        msg: str = message if message is not None else (self.__doc__ or "")
+        self.message: str = msg
         super().__init__(self.message)
 
 
@@ -23,8 +26,9 @@ class EmailTemplateException(MailerException):
     error_type: str = "TEMPLATE_ERROR"
     status_code: int = 500
 
-    def __init__(self, message: str | None = None):
-        self.message = message or self.__doc__
+    def __init__(self, message: Optional[str] = None):
+        msg: str = message if message is not None else (self.__doc__ or "")
+        self.message: str = msg
         super().__init__(self.message)
 
 
@@ -34,8 +38,9 @@ class MissingHandlerClassException(RMQException):
     error_type: str = "RMQ_ERROR"
     status_code: int = 500
 
-    def __init__(self, message: str | None = None):
-        self.message = message or self.__doc__
+    def __init__(self, message: Optional[str] = None):
+        msg: str = message if message is not None else (self.__doc__ or "")
+        self.message: str = msg
         super().__init__(self.message)
 
 
@@ -45,8 +50,9 @@ class RMQMessageException(RMQException):
     error_type: str = "RMQ_ERROR"
     status_code: int = 400
 
-    def __init__(self, message: str | None = None):
-        self.message = message or self.__doc__
+    def __init__(self, message: Optional[str] = None):
+        msg: str = message if message is not None else (self.__doc__ or "")
+        self.message: str = msg
         super().__init__(self.message)
 
 
@@ -56,6 +62,7 @@ class MissingRMQConnection(RMQException):
     error_type: str = "RMQ_ERROR"
     status_code: int = 500
 
-    def __init__(self, message: str | None = None):
-        self.message = message or self.__doc__
+    def __init__(self, message: Optional[str] = None):
+        msg: str = message if message is not None else (self.__doc__ or "")
+        self.message: str = msg
         super().__init__(self.message)

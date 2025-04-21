@@ -118,15 +118,11 @@ class JsonFormatter(logging.Formatter):
         """
         return "asctime" in self.fmt_dict.values()
 
-    def formatMessage(self, record) -> dict:
+    def formatMessage(self, record: logging.LogRecord) -> str:
         """
-        Overwritten to return a dictionary of the relevant LogRecord attributes instead of a string.
-        KeyError is raised if an unknown attribute is provided in the fmt_dict.
+        Overwritten to return a string representation of the relevant LogRecord attributes instead of a dictionary.
         """
-        return {
-            fmt_key: getattr(record, fmt_val, None)
-            for fmt_key, fmt_val in self.fmt_dict.items()
-        }
+        return super().formatMessage(record)
 
     def formatTime(self, record, datefmt=None) -> str:
         """
@@ -147,7 +143,11 @@ class JsonFormatter(logging.Formatter):
         if self.usesTime():
             record.asctime = self.formatTime(record, self.datefmt)
 
-        message_dict = self.formatMessage(record)
+        # Собираем словарь для JSON вручную
+        message_dict = {
+            key: getattr(record, attr, None)
+            for key, attr in self.fmt_dict.items()
+        }
 
         if record.exc_info:
             if not record.exc_text:

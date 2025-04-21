@@ -24,9 +24,14 @@ dev = [
     "pyright>=1.1.394",
     "mypy>=1.15.0",
 ]
+
 [tool.setuptools]
 packages = ["notifications"]
 package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.package-data]
+notifications = ["py.typed"]
 
 [tool.black]
 line-length = 80

@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import AsyncIterator, Protocol
+from typing import Protocol
 
 
 class NotificationConsumerProtocol(Protocol):
@@ -9,7 +9,7 @@ class NotificationConsumerProtocol(Protocol):
     async def startup(self) -> None: ...
 
     @abstractmethod
-    async def consume_notifications(self) -> AsyncIterator[dict]: ...
+    async def consume_notifications(self) -> None: ...
 
     @abstractmethod
     async def shutdown(self) -> None:

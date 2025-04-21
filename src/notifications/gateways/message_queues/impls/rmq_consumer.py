@@ -1,10 +1,15 @@
 import asyncio
 import json
 import logging
-from typing import Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import aio_pika
-from aio_pika.abc import AbstractRobustConnection
+from aio_pika.abc import (
+    AbstractChannel,
+    AbstractIncomingMessage,
+    AbstractQueue,
+    AbstractRobustConnection,
+)
 
 from notifications.app.exceptions import MissingRMQConnection
 from notifications.app.tasks.dispatchers import MessageDispatcherProtocol
@@ -22,36 +27,39 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
         self,
         config: RabbitMQConfig,
         dispatchers: Dict[str, MessageDispatcherProtocol],
-    ):
-        self._config = config
-        self._dispatchers = dispatchers
-        self._rmq_url = config.url
+    ) -> None:
+        self._config: RabbitMQConfig = config
+        self._dispatchers: Dict[str, MessageDispatcherProtocol] = dispatchers
+        self._rmq_url: str = config.url
 
         self._connection: Optional[AbstractRobustConnection] = None
-        self._channel: Optional[aio_pika.Channel] = None
-        self._queues: Dict[str, aio_pika.Queue] = {}
-        self._queue_arguments: Dict[str, str] = {
+        self._channel: Optional[AbstractChannel] = None
+        self._queues: Dict[str, AbstractQueue] = {}
+        self._queue_arguments: Dict[str, Any] = {
             "x-dead-letter-exchange": "dlx",
             "x-dead-letter-routing-key": "dlq",
         }
 
-        self._shutdown_event = asyncio.Event()
+        self._shutdown_event: asyncio.Event = asyncio.Event()
 
-        self._processing_tasks = []
+        self._processing_tasks: List[asyncio.Task[Any]] = []
 
     async def startup(self) -> None:
         """Initialize RMQ connection and channel."""
         try:
             self._connection = await aio_pika.connect_robust(url=self._rmq_url)
             self._channel = await self._connection.channel()
-            await self._channel.set_qos(self._config.PREFETCH_COUNT)
+            if self._channel is not None:
+                await self._channel.set_qos(self._config.PREFETCH_COUNT)
 
-            for queue_name in self._dispatchers.keys():
-                self._queues[queue_name] = await self._channel.declare_queue(
-                    name=queue_name,
-                    durable=True,
-                    arguments=self._queue_arguments,
-                )
+                for queue_name in self._dispatchers.keys():
+                    self._queues[queue_name] = (
+                        await self._channel.declare_queue(
+                            name=queue_name,
+                            durable=True,
+                            arguments=self._queue_arguments,
+                        )
+                    )
 
             log.info("Successfully connected to RabbitMQ")
         except aio_pika.exceptions.AMQPConnectionError as e:
@@ -60,15 +68,17 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
 
     async def consume_notifications(self) -> None:
         """Process messages from all queues."""
-        tasks = []
+        tasks: List[asyncio.Task[None]] = []
         for queue_name, queue in self._queues.items():
-            tasks.append(self._consume_queue(queue_name, queue))
+            tasks.append(
+                asyncio.create_task(self._consume_queue(queue_name, queue))
+            )
         await asyncio.gather(*tasks)
 
     async def _consume_queue(
         self,
         queue_name: str,
-        queue: aio_pika.Queue,
+        queue: AbstractQueue,
     ) -> None:
         """
         Process messages from a specific queue.
@@ -84,7 +94,7 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
                     )
                     break
 
-                task = asyncio.create_task(
+                task: asyncio.Task[None] = asyncio.create_task(
                     self._process_message_wrapper(queue_name, message)
                 )
                 self._processing_tasks.append(task)
@@ -93,7 +103,7 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
                 )
 
     async def _process_message_wrapper(
-        self, queue_name: str, message: aio_pika.IncomingMessage
+        self, queue_name: str, message: AbstractIncomingMessage
     ) -> None:
         """Wrap the message processing so that we can correctly wait for completion."""
         try:
@@ -108,13 +118,15 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
     async def _process_message(
         self,
         queue_name: str,
-        message: aio_pika.IncomingMessage,
+        message: AbstractIncomingMessage,
     ) -> None:
         """Process single message from specific queue."""
         try:
-            body = message.body.decode("utf-8")
-            data: dict = json.loads(body)
-            dispatcher = self._dispatchers.get(queue_name)
+            body: str = message.body.decode("utf-8")
+            data: Dict[str, Any] = json.loads(body)
+            dispatcher: Optional[MessageDispatcherProtocol] = (
+                self._dispatchers.get(queue_name)
+            )
             if dispatcher:
                 await dispatcher.dispatch(data)
             else:

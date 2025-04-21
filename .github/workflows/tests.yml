@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  test:
+  tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,6 +32,14 @@ jobs:
             -w /app \
             fastapi-notifications \
             ruff check .
+        
+      - name: Run mypy static type checking
+        run: |
+          docker run --rm \
+            --env-file .env \
+            -w /app/src \
+            fastapi-notifications \
+            mypy .
 
       - name: Run tests with environment
         run: |
