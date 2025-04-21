@@ -40,7 +40,6 @@ class HandlerRegistry(Generic[T]):
 
     @classmethod
     def get_handlers(cls) -> Dict[str, Tuple[Type[T], str]]:
-        # Возвращаем копию словаря обработчиков
         return cls._get_handlers_dict().copy()
 
 
