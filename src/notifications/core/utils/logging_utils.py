@@ -6,7 +6,7 @@ import json
 import logging
 import re
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union, override
 
 
 class UTCFormatter(logging.Formatter):  # UTC for logging
@@ -39,6 +39,7 @@ class MaskingFilter(logging.Filter):
             r"(password|passwd|pwd|secret|api_?key|token)", flags=re.IGNORECASE
         )
 
+    @override
     def filter(self, record: logging.LogRecord) -> bool:
         """Apply masking to log record."""
         msg_str = str(record.msg)
@@ -76,7 +77,10 @@ class MaskingFilter(logging.Filter):
             return False
         return bool(self._sensitive_keywords.search(key))
 
-    def _recursive_mask(self, data: Union[Dict, List, Any]) -> Any:
+    def _recursive_mask(
+        self,
+        data: Union[Dict[str, Any], List[Any], Any],
+    ) -> Any:
         """Recursively mask sensitive data in structures."""
         if isinstance(data, dict):
             return {
@@ -103,7 +107,7 @@ class JsonFormatter(logging.Formatter):
 
     def __init__(
         self,
-        fmt_dict: Optional[dict] = None,
+        fmt_dict: Optional[Dict[str, str]] = None,
         time_format: str = "%Y-%m-%dT%H:%M:%S",
         msec_format: str = "%s.%03dZ",
     ):
@@ -118,13 +122,19 @@ class JsonFormatter(logging.Formatter):
         """
         return "asctime" in self.fmt_dict.values()
 
+    @override
     def formatMessage(self, record: logging.LogRecord) -> str:
         """
         Overwritten to return a string representation of the relevant LogRecord attributes instead of a dictionary.
         """
         return super().formatMessage(record)
 
-    def formatTime(self, record, datefmt=None) -> str:
+    @override
+    def formatTime(
+        self,
+        record: logging.LogRecord,
+        datefmt: Optional[str] = None,
+    ) -> str:
         """
         Overridden to return the time in UTC with milliseconds.
         """
@@ -133,7 +143,8 @@ class JsonFormatter(logging.Formatter):
         milliseconds = int(record.msecs)
         return f"{formatted_time}.{milliseconds:03d}Z"
 
-    def format(self, record) -> str:
+    @override
+    def format(self, record: logging.LogRecord) -> str:
         """
         Mostly the same as the parent's class method, the difference being that a dict is manipulated and dumped as JSON
         instead of a string.

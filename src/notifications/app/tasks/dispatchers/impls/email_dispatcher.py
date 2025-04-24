@@ -1,5 +1,5 @@
 import logging
-from typing import Dict
+from typing import Any, Dict
 
 from notifications.app.exceptions import (
     MissingHandlerClassException,
@@ -43,7 +43,7 @@ class EmailNotificationDispatcherImpl(BaseDispatcher):
             handlers[notification_type] = handler_class(dep)
         return handlers
 
-    async def dispatch(self, data: dict) -> None:
+    async def dispatch(self, data: Dict[str, Any]) -> None:
         notification_type = self._validate_message_type(data)
         handler = self.handlers.get(notification_type)
         if handler:

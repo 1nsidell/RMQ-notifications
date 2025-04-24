@@ -8,7 +8,7 @@ from pathlib import Path
 from notifications.core.settings import Paths
 
 
-def setup_logging(config: Paths):
+def setup_logging(config: Paths) -> None:
     config_file: Path = config.PATH_TO_BASE_FOLDER / "log_config.json"
     with open(config_file) as file:
         LOGGING_CONFIG = json.load(file)

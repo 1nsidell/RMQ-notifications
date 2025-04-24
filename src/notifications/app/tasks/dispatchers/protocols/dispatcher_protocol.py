@@ -1,8 +1,8 @@
 from abc import abstractmethod
-from typing import Protocol
+from typing import Any, Dict, Protocol
 
 
 class MessageDispatcherProtocol(Protocol):
 
     @abstractmethod
-    async def dispatch(self, message: dict) -> None: ...
+    async def dispatch(self, message: Dict[str, Any]) -> None: ...

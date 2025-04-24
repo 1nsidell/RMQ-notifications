@@ -1,4 +1,5 @@
 import logging
+from typing import Any, Dict
 
 from notifications.app.exceptions import RMQMessageException
 from notifications.app.notification_handlers.protocols.hendler_protocol import (
@@ -16,7 +17,7 @@ class ConfirmEmailHandler(NotificationHandlerProtocol):
     def __init__(self, email_use_case: EmailUseCaseProtocol):
         self.email_use_case = email_use_case
 
-    async def handle(self, data: dict):
+    async def handle(self, data: Dict[str, Any]) -> None:
         recipient = data.get("recipient")
         token = data.get("token")
         if recipient and token:

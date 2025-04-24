@@ -39,3 +39,4 @@ target-version = ['py312']
 
 [tool.mypy]
 explicit_package_bases = true
+strict = true
