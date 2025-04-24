@@ -64,7 +64,8 @@ class RabbitMQConfig(BaseModel):
     TIMEOUT: int = int(os.getenv("RABBIT_TIMEOUT", "30"))
 
     RABBIT_EMAIL_QUEUE: str = os.getenv("RABBIT_EMAIL_QUEUE", "test")
-    PREFETCH_COUNT: int = int(os.getenv("RABBIT_PREFETCH_COUNT", "10"))
+    PREFETCH_COUNT: int = int(os.getenv("RABBIT_PREFETCH_COUNT", "11"))
+    MAX_CONCURRENCY: int = int(os.getenv("RABBIT_MAX_CONCURRENCY", "10"))
 
     @property
     def url(self) -> str:

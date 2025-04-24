@@ -32,6 +32,9 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
         self._dispatchers: Dict[str, MessageDispatcherProtocol] = dispatchers
         self._rmq_url: str = config.url
 
+        self._sem = asyncio.BoundedSemaphore(self._config.MAX_CONCURRENCY)
+        self._processing_tasks: List[asyncio.Task[Any]] = []
+
         self._connection: Optional[AbstractRobustConnection] = None
         self._channel: Optional[AbstractChannel] = None
         self._queues: Dict[str, AbstractQueue] = {}
@@ -41,8 +44,6 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
         }
 
         self._shutdown_event: asyncio.Event = asyncio.Event()
-
-        self._processing_tasks: List[asyncio.Task[Any]] = []
 
     async def startup(self) -> None:
         """Initialize RMQ connection and channel."""
@@ -106,14 +107,15 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
         self, queue_name: str, message: AbstractIncomingMessage
     ) -> None:
         """Wrap the message processing so that we can correctly wait for completion."""
-        try:
-            async with message.process():
-                await self._process_message(queue_name, message)
-        except aio_pika.exceptions.DeliveryError:
-            log.error("Error processing message", exc_info=True)
-        except Exception as e:
-            log.error("Message processing failed: %s", e, exc_info=True)
-            raise
+        async with self._sem:
+            try:
+                async with message.process():
+                    await self._process_message(queue_name, message)
+            except aio_pika.exceptions.DeliveryError:
+                log.error("Error processing message", exc_info=True)
+            except Exception as e:
+                log.error("Message processing failed: %s", e, exc_info=True)
+                raise
 
     async def _process_message(
         self,
