@@ -6,7 +6,7 @@ A robust microservice for sending email notifications (confirmation, password re
 
 ## Features
 
-- **Asynchronous Email Delivery**: Uses FastAPI and fastapi-mail for efficient, non-blocking email sending.
+- **Asynchronous Email Delivery**: Uses fastapi-mail for efficient, non-blocking email sending.
 - **RabbitMQ Integration**: Consumes notification tasks from RabbitMQ queues.
 - **Template-based Emails**: Jinja2 HTML templates for customizable email content.
 - **Extensible Handlers**: Easily add new notification types and handlers.
@@ -19,7 +19,7 @@ A robust microservice for sending email notifications (confirmation, password re
 ## Architecture Overview
 
 ```
-[Main App] --(Publishes JSON to RMQ Queue)--> [FastAPI Notifications Service]
+[Main App] --(Publishes JSON to RMQ Queue)--> [RMQ Notifications Service]
                                                  |
                                                  v
                                     [RMQ Consumer (aio-pika)]
@@ -43,8 +43,8 @@ A robust microservice for sending email notifications (confirmation, password re
 ### 1. Clone and Install
 
 ```bash
-git clone https://github.com/your-org/fastapi-notifications.git
-cd fastapi-notifications
+git clone https://github.com/1nsidell/RMQ-notifications.git
+cd RMQ-notifications
 python3.12 -m venv .venv
 source .venv/bin/activate
 pip install -e .
