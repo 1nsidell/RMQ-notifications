@@ -1,6 +1,6 @@
 from typing import Dict
 
-from notifications.app.depends import EmailNotificationDispatcher
+from notifications.app.depends.tasks import EmailNotificationDispatcher
 from notifications.app.tasks.dispatchers import MessageDispatcherProtocol
 from notifications.core.settings import RabbitMQConfig, settings
 from notifications.gateways.message_queues import NotificationConsumerProtocol

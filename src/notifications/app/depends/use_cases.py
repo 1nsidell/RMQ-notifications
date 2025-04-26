@@ -1,4 +1,7 @@
-from notifications.app.depends import EmailService, EmailTemplateService
+from notifications.app.depends.services import (
+    EmailService,
+    EmailTemplateService,
+)
 from notifications.app.services import (
     EmailServicesProtocol,
     EmailTemplateServiceProtocol,
