@@ -1,6 +1,6 @@
 services:
-  fastapi-notifications:
-    container_name: FastAPI-notifications
+  rmq-notifications:
+    container_name: rmq-notifications
     restart: unless-stopped
     build:
       context: .
