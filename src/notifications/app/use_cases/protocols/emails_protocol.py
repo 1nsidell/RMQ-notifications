@@ -2,7 +2,7 @@ from abc import abstractmethod
 from typing import Protocol, Self
 
 
-class EmailUseCaseProtocol(Protocol):
+class EmailSendUseCaseProtocol(Protocol):
     @abstractmethod
     async def send_confirm_email(
         self: Self,

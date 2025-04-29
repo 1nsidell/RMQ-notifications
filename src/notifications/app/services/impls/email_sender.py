@@ -6,14 +6,14 @@ from typing import Self
 from fastapi_mail import FastMail, MessageSchema, MessageType
 
 from notifications.app.exceptions import SendEmailException
-from notifications.app.services import EmailServicesProtocol
+from notifications.app.services import EmailSenderServicesProtocol
 from notifications.core.settings import EmailSubjects
 
 
 log = logging.getLogger(__name__)
 
 
-class EmailServicesImpl(EmailServicesProtocol):
+class EmailSenderServicesImpl(EmailSenderServicesProtocol):
     def __init__(self, mailer: FastMail, subjects: EmailSubjects) -> None:
         self._mailer = mailer
         self._subjects = subjects

@@ -10,16 +10,16 @@ from notifications.app.tasks.dispatchers.impls.base_dispatcher import (
     BaseDispatcher,
 )
 from notifications.app.use_cases.protocols.emails_protocol import (
-    EmailUseCaseProtocol,
+    EmailSendUseCaseProtocol,
 )
 
 
-log = logging.getLogger("app")
+log = logging.getLogger(__name__)
 
 
 class EmailNotificationDispatcherImpl(BaseDispatcher):
-    def __init__(self, email_use_case: EmailUseCaseProtocol):
-        self.implementations: Dict[str, EmailUseCaseProtocol] = {
+    def __init__(self, email_use_case: EmailSendUseCaseProtocol):
+        self.implementations: Dict[str, EmailSendUseCaseProtocol] = {
             "email": email_use_case,
         }
 

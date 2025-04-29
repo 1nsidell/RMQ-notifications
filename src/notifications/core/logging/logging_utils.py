@@ -1,12 +1,58 @@
 """A utils module for logger."""
 
+import contextvars
 from datetime import datetime, timezone
-from functools import lru_cache
+from functools import lru_cache, wraps
 import json
 import logging
 import re
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union, override
+from typing import (
+    Any,
+    Awaitable,
+    Callable,
+    Dict,
+    List,
+    Optional,
+    ParamSpec,
+    Tuple,
+    TypeVar,
+    Union,
+    override,
+)
+import uuid
+
+
+P = ParamSpec("P")
+R = TypeVar("R")
+
+
+request_id_var = contextvars.ContextVar("request_id", default="-")
+
+
+def with_request_id(
+    func: Callable[P, Awaitable[R]],
+) -> Callable[P, Awaitable[R]]:
+    """
+    A decorator that generates a new request_id for each call to an
+    asynchronous function and resets it after completion.
+    """
+
+    @wraps(func)
+    async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+        token: contextvars.Token[str] = request_id_var.set(str(uuid.uuid4()))
+        try:
+            return await func(*args, **kwargs)
+        finally:
+            request_id_var.reset(token)
+
+    return wrapper
+
+
+class RequestIdFilter(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        record.request_id = request_id_var.get("-")
+        return True
 
 
 class UTCFormatter(logging.Formatter):  # UTC for logging

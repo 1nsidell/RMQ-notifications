@@ -1,13 +1,15 @@
 from fastapi_mail import FastMail
 
 from notifications.app.services import (
-    EmailServicesProtocol,
+    EmailSenderServicesProtocol,
     EmailTemplateServiceProtocol,
+)
+from notifications.app.services.impls.email_sender import (
+    EmailSenderServicesImpl,
 )
 from notifications.app.services.impls.email_templates import (
     EmailTemplateServiceImpl,
 )
-from notifications.app.services.impls.emails import EmailServicesImpl
 from notifications.core.settings import EmailSubjects, Paths, Settings, settings
 
 
@@ -25,12 +27,12 @@ EmailTemplateService: EmailTemplateServiceProtocol = (
 def get_email_service(
     subjects: EmailSubjects,
     settings: Settings,
-) -> EmailServicesProtocol:
+) -> EmailSenderServicesProtocol:
     mailer = FastMail(settings.fast_mail.conf)
-    return EmailServicesImpl(mailer=mailer, subjects=subjects)
+    return EmailSenderServicesImpl(mailer=mailer, subjects=subjects)
 
 
-EmailService: EmailServicesProtocol = get_email_service(
+EmailService: EmailSenderServicesProtocol = get_email_service(
     subjects=settings.subjects,
     settings=settings,
 )

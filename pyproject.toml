@@ -38,5 +38,6 @@ line-length = 80
 target-version = ['py312']
 
 [tool.mypy]
+mypy_path = "src"
 explicit_package_bases = true
 strict = true

@@ -1,4 +1,4 @@
-from .protocols.emails_protocol import EmailUseCaseProtocol
+from .protocols.emails_protocol import EmailSendUseCaseProtocol
 
 
-__all__ = ("EmailUseCaseProtocol",)
+__all__ = ("EmailSendUseCaseProtocol",)

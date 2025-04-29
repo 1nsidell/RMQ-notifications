@@ -32,6 +32,8 @@ RUN rm -rf /root/.cache \
 
 USER appuser
 
-ENV PATH="/app/.venv/bin:$PATH"
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PATH="/app/.venv/bin:$PATH"
 
 CMD ["python", "-m", "notifications.main"]

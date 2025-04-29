@@ -5,11 +5,11 @@ from notifications.app.tasks.dispatchers import (
 from notifications.app.tasks.dispatchers.impls.email_dispatcher import (
     EmailNotificationDispatcherImpl,
 )
-from notifications.app.use_cases import EmailUseCaseProtocol
+from notifications.app.use_cases import EmailSendUseCaseProtocol
 
 
 def get_notification_dispatcher(
-    email_use_case: EmailUseCaseProtocol,
+    email_use_case: EmailSendUseCaseProtocol,
 ) -> MessageDispatcherProtocol:
     return EmailNotificationDispatcherImpl(email_use_case)
 

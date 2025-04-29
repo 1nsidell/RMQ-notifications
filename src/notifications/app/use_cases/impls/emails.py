@@ -1,18 +1,18 @@
 from typing import Self
 
 from notifications.app.services import (
-    EmailServicesProtocol,
+    EmailSenderServicesProtocol,
     EmailTemplateServiceProtocol,
 )
-from notifications.app.use_cases import EmailUseCaseProtocol
+from notifications.app.use_cases import EmailSendUseCaseProtocol
 from notifications.core.settings import MailTemplate
 
 
-class EmailUseCaseImpl(EmailUseCaseProtocol):
+class EmailSendUseCaseImpl(EmailSendUseCaseProtocol):
     def __init__(
         self,
         templates: MailTemplate,
-        emails_service: EmailServicesProtocol,
+        emails_service: EmailSenderServicesProtocol,
         email_templates_service: EmailTemplateServiceProtocol,
     ) -> None:
         self._templates = templates

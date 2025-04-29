@@ -1,8 +1,8 @@
+from .protocols.email_sender_protocol import EmailSenderServicesProtocol
 from .protocols.email_templates_protocol import EmailTemplateServiceProtocol
-from .protocols.emails_protocol import EmailServicesProtocol
 
 
 __all__ = (
-    "EmailServicesProtocol",
+    "EmailSenderServicesProtocol",
     "EmailTemplateServiceProtocol",
 )
