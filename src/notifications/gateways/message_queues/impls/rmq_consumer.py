@@ -11,7 +11,10 @@ from aio_pika.abc import (
     AbstractRobustConnection,
 )
 
-from notifications.app.exceptions import MissingRMQConnection
+from notifications.app.exceptions import (
+    MissingRMQConnection,
+    RMQDispatcherException,
+)
 from notifications.app.tasks.dispatchers import MessageDispatcherProtocol
 from notifications.core.logging.logging_utils import with_request_id
 from notifications.core.settings import RabbitMQConfig
@@ -119,9 +122,11 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
             if dispatcher:
                 await dispatcher.dispatch(data)
             else:
-                log.error(f"No dispatcher found for queue: {queue_name}")
+                log.error("No dispatcher found for queue: %s", queue_name)
+                raise RMQDispatcherException()
         except json.JSONDecodeError:
             log.error("Invalid JSON in message", exc_info=True)
+            raise
         except Exception:
             log.error("Message processing failed", exc_info=True)
             raise

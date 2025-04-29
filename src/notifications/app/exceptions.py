@@ -56,6 +56,18 @@ class RMQMessageException(RMQException):
         super().__init__(self.message)
 
 
+class RMQDispatcherException(RMQException):
+    """RabbitMQ dispatcher error."""
+
+    error_type: str = "RMQ_ERROR"
+    status_code: int = 500
+
+    def __init__(self, message: Optional[str] = None):
+        msg: str = message if message is not None else (self.__doc__ or "")
+        self.message: str = msg
+        super().__init__(self.message)
+
+
 class MissingRMQConnection(RMQException):
     "Problems with RMQ connection."
 
