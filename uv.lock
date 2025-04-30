@@ -179,6 +179,7 @@ source = { editable = "." }
 dependencies = [
     { name = "aio-pika" },
     { name = "fastapi-mail" },
+    { name = "pydantic" },
 ]
 
 [package.dev-dependencies]
@@ -197,6 +198,7 @@ dev = [
 requires-dist = [
     { name = "aio-pika", specifier = ">=9.5.5" },
     { name = "fastapi-mail", specifier = ">=1.4.2" },
+    { name = "pydantic", specifier = ">=2.10.6" },
 ]
 
 [package.metadata.requires-dev]

@@ -1,13 +1,16 @@
 import logging
 from typing import Any, Dict
 
+from pydantic import ValidationError
+
+from notifications.app.dto.email_message import EmailMessageDTO
 from notifications.app.exceptions import (
     MissingHandlerClassException,
 )
 from notifications.app.notification_handlers import NotificationHandlerProtocol
 from notifications.app.notification_registry import EmailNotificationRegistry
-from notifications.app.tasks.dispatchers.impls.base_dispatcher import (
-    BaseDispatcher,
+from notifications.app.tasks.dispatchers.protocols.dispatcher_protocol import (
+    MessageDispatcherProtocol,
 )
 from notifications.app.use_cases.protocols.emails_protocol import (
     EmailSendUseCaseProtocol,
@@ -17,7 +20,7 @@ from notifications.app.use_cases.protocols.emails_protocol import (
 log = logging.getLogger(__name__)
 
 
-class EmailNotificationDispatcherImpl(BaseDispatcher):
+class EmailNotificationDispatcherImpl(MessageDispatcherProtocol):
     def __init__(self, email_use_case: EmailSendUseCaseProtocol):
         self.implementations: Dict[str, EmailSendUseCaseProtocol] = {
             "email": email_use_case,
@@ -44,10 +47,14 @@ class EmailNotificationDispatcherImpl(BaseDispatcher):
         return handlers
 
     async def dispatch(self, data: Dict[str, Any]) -> None:
-        notification_type = self._validate_message_type(data)
-        handler = self.handlers.get(notification_type)
+        try:
+            notification = EmailMessageDTO(**data)
+        except ValidationError:
+            log.error("Invalid notification data: %s.", data)
+            raise ValueError("Invalid notification data.")
+        handler = self.handlers.get(notification.type)
         if handler:
-            await handler.handle(data)
+            await handler.handle(notification)
         else:
-            log.warning("Unknown notification type: %s", notification_type)
+            log.warning("Unknown notification type: %s", notification.type)
             raise MissingHandlerClassException()

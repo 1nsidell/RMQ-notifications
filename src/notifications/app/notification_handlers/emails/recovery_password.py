@@ -1,7 +1,6 @@
 import logging
-from typing import Any, Dict
 
-from notifications.app.exceptions import RMQMessageException
+from notifications.app.dto.email_message import EmailMessageDTO
 from notifications.app.notification_handlers.protocols.hendler_protocol import (
     NotificationHandlerProtocol,
 )
@@ -17,14 +16,8 @@ class RecoveryPasswordHandler(NotificationHandlerProtocol):
     def __init__(self, email_use_case: EmailSendUseCaseProtocol):
         self.email_use_case = email_use_case
 
-    async def handle(self, data: Dict[str, Any]) -> None:
+    async def handle(self, data: EmailMessageDTO) -> None:
         """Handle the recovery password notification."""
-        recipient = data.get("recipient")
-        token = data.get("token")
-        if recipient and token:
-            await self.email_use_case.send_recovery_password(
-                recipient=recipient, token=token
-            )
-        else:
-            log.error("Missing data for recovery_password.")
-            raise RMQMessageException("Missing data for recovery_password.")
+        await self.email_use_case.send_recovery_password(
+            recipient=data.recipient, token=data.token
+        )

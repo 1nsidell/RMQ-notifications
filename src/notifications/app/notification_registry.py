@@ -25,7 +25,7 @@ class HandlerRegistry(Generic[T]):
             handlers = cls._get_handlers_dict()
             if notification_type in handlers:
                 raise ValueError(
-                    f"Handler for '{notification_type}' already registered."
+                    "Handler for '%s' already registered.", notification_type
                 )
             handlers[notification_type] = (handler_class, implementation)
             return handler_class

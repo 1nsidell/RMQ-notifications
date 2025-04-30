@@ -1,7 +1,6 @@
 import logging
-from typing import Any, Dict
 
-from notifications.app.exceptions import RMQMessageException
+from notifications.app.dto.email_message import EmailMessageDTO
 from notifications.app.notification_handlers.protocols.hendler_protocol import (
     NotificationHandlerProtocol,
 )
@@ -17,13 +16,7 @@ class ConfirmEmailHandler(NotificationHandlerProtocol):
     def __init__(self, email_use_case: EmailSendUseCaseProtocol):
         self.email_use_case = email_use_case
 
-    async def handle(self, data: Dict[str, Any]) -> None:
-        recipient = data.get("recipient")
-        token = data.get("token")
-        if recipient and token:
-            await self.email_use_case.send_confirm_email(
-                recipient=recipient, token=token
-            )
-        else:
-            log.error("Missing data for confirm_email.")
-            raise RMQMessageException("Missing data for confirm_email.")
+    async def handle(self, data: EmailMessageDTO) -> None:
+        await self.email_use_case.send_confirm_email(
+            recipient=data.recipient, token=data.token
+        )
