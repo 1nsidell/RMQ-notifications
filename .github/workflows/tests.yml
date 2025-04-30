@@ -1,4 +1,4 @@
-name: Fastapi-Notifications CI/CD
+name: RMQ-Notifications CI/CD
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
         run: cp .dockerignore.dev .dockerignore
 
       - name: Build Docker image
-        run: docker build -t fastapi-notifications -f dev.Dockerfile .
+        run: docker build -t rmq-notifications -f dev.Dockerfile .
 
       - name: Create .env file from secrets
         run: |
@@ -30,7 +30,7 @@ jobs:
           docker run --rm \
             --env-file .env \
             -w /app \
-            fastapi-notifications \
+            rmq-notifications \
             ruff check .
         
       - name: Run mypy static type checking
@@ -38,7 +38,7 @@ jobs:
           docker run --rm \
             --env-file .env \
             -w /app/ \
-            fastapi-notifications \
+            rmq-notifications \
             mypy .
 
       - name: Run tests with environment
@@ -46,7 +46,7 @@ jobs:
           docker run --rm \
             --env-file .env \
             -w /app \
-            fastapi-notifications \
+            rmq-notifications \
             python -m pytest
 
       - name: Cleanup
