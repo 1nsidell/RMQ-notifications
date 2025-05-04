@@ -20,7 +20,7 @@ async def run_app(consumer: NotificationConsumerProtocol) -> None:
 
     consumer_task = asyncio.create_task(consumer.consume_notifications())
     await stop_event.wait()
-    log.info("Signal received, shutting down consumer…")
+    log.info("Signal received, consumer disconnection...")
 
     await consumer.shutdown()
     await consumer_task

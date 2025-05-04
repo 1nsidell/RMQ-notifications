@@ -12,11 +12,6 @@ class Paths:
     TEMPLATE_DIR: Path = ROOT_DIR_SRC / "notifications" / "core" / "templates"
 
 
-class RunConfig(BaseModel):
-    host: str = "127.0.0.1"
-    port: int = 8003
-
-
 class FastMailConfig(BaseModel):
     USERNAME: str = os.getenv("MAIL_USERNAME", "guest")
     PASSWORD: SecretStr = SecretStr(os.getenv("MAIL_PASSWORD", "guest"))
@@ -58,14 +53,16 @@ class MailTemplate(BaseModel):
 class RabbitMQConfig(BaseModel):
     USERNAME: str = os.getenv("RABBIT_USERNAME", "guest")
     PASSWORD: str = os.getenv("RABBIT_PASSWORD", "guest")
-    HOST: str = os.getenv("RABBIT_HOST", "loaclhost")
+    HOST: str = os.getenv("RABBIT_HOST", "localhost")
     PORT: int = int(os.getenv("RABBIT_PORT", "5672"))
     VHOST: Optional[str] = os.getenv("RABBIT_VHOST", "")
     TIMEOUT: int = int(os.getenv("RABBIT_TIMEOUT", "30"))
+    PREFETCH_COUNT: int = int(os.getenv("RABBIT_PREFETCH_COUNT", "10"))
+    MAX_CONCURRENCY: int = int(os.getenv("RABBIT_MAX_CONCURRENCY", "10"))
 
     RABBIT_EMAIL_QUEUE: str = os.getenv("RABBIT_EMAIL_QUEUE", "test")
-    PREFETCH_COUNT: int = int(os.getenv("RABBIT_PREFETCH_COUNT", "11"))
-    MAX_CONCURRENCY: int = int(os.getenv("RABBIT_MAX_CONCURRENCY", "10"))
+    RABBIT_DM_TTL_RETRY: int = int(os.getenv("RABBIT_DM_TTL_RETRY", "5000"))
+    RABBIT_MAX_RETRY_COUNT: int = int(os.getenv("RABBIT_MAX_RETRY_COUNT", "3"))
 
     @property
     def url(self) -> str:
@@ -74,7 +71,6 @@ class RabbitMQConfig(BaseModel):
 
 class Settings:
     mode: str = os.getenv("MODE", "PROD")
-    run: RunConfig = RunConfig()
     fast_mail: FastMailConfig = FastMailConfig()
     subjects: EmailSubjects = EmailSubjects()
     templates: MailTemplate = MailTemplate()

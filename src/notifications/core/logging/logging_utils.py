@@ -9,8 +9,8 @@ import re
 import time
 from typing import (
     Any,
-    Awaitable,
     Callable,
+    Coroutine,
     Dict,
     List,
     Optional,
@@ -31,8 +31,8 @@ request_id_var = contextvars.ContextVar("request_id", default="-")
 
 
 def with_request_id(
-    func: Callable[P, Awaitable[R]],
-) -> Callable[P, Awaitable[R]]:
+    func: Callable[P, Coroutine[Any, Any, R]],
+) -> Callable[P, Coroutine[Any, Any, R]]:
     """
     A decorator that generates a new request_id for each call to an
     asynchronous function and resets it after completion.
