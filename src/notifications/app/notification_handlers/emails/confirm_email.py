@@ -1,11 +1,11 @@
 import logging
 
 from notifications.app.dto.email_message import EmailMessageDTO
-from notifications.app.notification_handlers.protocols.hendler_protocol import (
+from notifications.app.notification_handlers.hendler_protocol import (
     NotificationHandlerProtocol,
 )
 from notifications.app.notification_registry import EmailNotificationRegistry
-from notifications.app.use_cases import EmailSendUseCaseProtocol
+from notifications.app.use_cases.email import EmailSendUseCaseProtocol
 
 
 log = logging.getLogger(__name__)

@@ -1,11 +1,11 @@
 from contextvars import ContextVar
 
-from notifications.app.tasks.dispatchers import MessageDispatcherProtocol
+from notifications.app.dispatchers import MessageDispatcherProtocol
 from notifications.core.logging.logging_utils import request_id_var
 from notifications.core.settings import RabbitMQConfig, settings
 from notifications.depends.tasks import EmailNotificationDispatcher
 from notifications.gateways.message_queues import NotificationConsumerProtocol
-from notifications.gateways.message_queues.impls.rmq_consumer import (
+from notifications.gateways.message_queues.rmq_consumer import (
     RMQConsumerImpl,
 )
 

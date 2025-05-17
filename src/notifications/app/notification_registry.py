@@ -1,6 +1,6 @@
 from typing import Callable, Generic, Type, TypeVar
 
-from .notification_handlers.protocols.hendler_protocol import (
+from .notification_handlers.hendler_protocol import (
     NotificationHandlerProtocol,
 )
 

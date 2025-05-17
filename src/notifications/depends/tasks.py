@@ -1,8 +1,8 @@
-from notifications.app.tasks.dispatchers import MessageDispatcherProtocol
-from notifications.app.tasks.dispatchers.impls.email_dispatcher import (
+from notifications.app.dispatchers import MessageDispatcherProtocol
+from notifications.app.dispatchers.email_dispatcher import (
     EmailNotificationDispatcherImpl,
 )
-from notifications.app.use_cases import EmailSendUseCaseProtocol
+from notifications.app.use_cases.email import EmailSendUseCaseProtocol
 from notifications.depends.use_cases import EmailUseCase
 
 

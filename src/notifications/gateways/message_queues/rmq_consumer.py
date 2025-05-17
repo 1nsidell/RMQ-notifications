@@ -17,13 +17,13 @@ from aio_pika.abc import (
     AbstractRobustConnection,
 )
 
+from notifications.app.dispatchers import MessageDispatcherProtocol
 from notifications.app.exceptions import (
     MissingRMQConnectionException,
     RMQDispatcherException,
 )
-from notifications.app.tasks.dispatchers import MessageDispatcherProtocol
 from notifications.core.settings import RabbitMQConfig
-from notifications.gateways.message_queues.protocols.consumer_protocol import (
+from notifications.gateways.message_queues.consumer_protocol import (
     NotificationConsumerProtocol,
 )
 
@@ -197,7 +197,9 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
             log.info("Successfully connected to RabbitMQ")
         except aio_pika.exceptions.AMQPConnectionError as e:
             log.exception("Failed to connect to RabbitMQ.")
-            raise MissingRMQConnectionException() from e
+            raise MissingRMQConnectionException(
+                "Failed to connect to RabbitMQ."
+            ) from e
 
     async def consume_notifications(self) -> None:
         """Process messages from all queues."""

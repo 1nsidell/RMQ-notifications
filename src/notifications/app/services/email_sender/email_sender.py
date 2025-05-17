@@ -5,7 +5,9 @@ import logging
 from fastapi_mail import FastMail, MessageSchema, MessageType
 
 from notifications.app.exceptions import SendEmailException
-from notifications.app.services import EmailSenderServicesProtocol
+from notifications.app.services.email_sender.email_sender_protocol import (
+    EmailSenderServicesProtocol,
+)
 from notifications.core.settings import EmailSubjects
 
 

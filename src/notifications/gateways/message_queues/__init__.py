@@ -1,4 +1,8 @@
-from .protocols.consumer_protocol import NotificationConsumerProtocol
+from .consumer_protocol import NotificationConsumerProtocol
+from .rmq_consumer import RMQConsumerImpl
 
 
-__all__ = ("NotificationConsumerProtocol",)
+__all__ = (
+    "NotificationConsumerProtocol",
+    "RMQConsumerImpl",
+)

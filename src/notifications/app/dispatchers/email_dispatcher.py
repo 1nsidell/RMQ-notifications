@@ -1,6 +1,7 @@
 import logging
 from typing import Any
 
+from notifications.app.dispatchers import MessageDispatcherProtocol
 from notifications.app.dto.email_message import EmailMessageDTO
 from notifications.app.exceptions import (
     MissingHandlerClassException,
@@ -8,10 +9,7 @@ from notifications.app.exceptions import (
 )
 from notifications.app.notification_handlers import NotificationHandlerProtocol
 from notifications.app.notification_registry import EmailNotificationRegistry
-from notifications.app.tasks.dispatchers.protocols.dispatcher_protocol import (
-    MessageDispatcherProtocol,
-)
-from notifications.app.use_cases.protocols.emails_protocol import (
+from notifications.app.use_cases.email.email_protocol import (
     EmailSendUseCaseProtocol,
 )
 

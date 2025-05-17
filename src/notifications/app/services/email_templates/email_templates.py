@@ -6,7 +6,9 @@ from typing import Any
 from jinja2 import Environment, Template
 
 from notifications.app.exceptions import EmailTemplateException
-from notifications.app.services import EmailTemplateServiceProtocol
+from notifications.app.services.email_templates.email_templates_protocol import (
+    EmailTemplateServiceProtocol,
+)
 
 
 log = logging.getLogger(__name__)

@@ -1,9 +1,11 @@
 from notifications.app.dto.email_message import EmailMessageDTO
-from notifications.app.services import (
-    EmailSenderServicesProtocol,
+from notifications.app.services.email_sender import EmailSenderServicesProtocol
+from notifications.app.services.email_templates import (
     EmailTemplateServiceProtocol,
 )
-from notifications.app.use_cases import EmailSendUseCaseProtocol
+from notifications.app.use_cases.email.email_protocol import (
+    EmailSendUseCaseProtocol,
+)
 from notifications.core.settings import MailTemplate
 
 
