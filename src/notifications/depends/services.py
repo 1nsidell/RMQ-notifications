@@ -1,18 +1,15 @@
 from fastapi_mail import FastMail
+from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 from notifications.app.services import (
-    EmailSenderServicesProtocol,
-    EmailTemplateServiceProtocol,
-)
-from notifications.app.services.impls.email_sender import (
     EmailSenderServicesImpl,
-)
-from notifications.app.services.impls.email_templates import (
+    EmailSenderServicesProtocol,
     EmailTemplateServiceImpl,
+    EmailTemplateServiceProtocol,
 )
 from notifications.core.settings import (
     EmailSubjects,
-    FastMailConfig,
+    MailConfig,
     Paths,
     settings,
 )
@@ -21,7 +18,13 @@ from notifications.core.settings import (
 def get_email_templates_service(
     config: Paths,
 ) -> EmailTemplateServiceProtocol:
-    return EmailTemplateServiceImpl(config=config)
+    env = Environment(
+        loader=FileSystemLoader(config.TEMPLATE_DIR),
+        undefined=StrictUndefined,
+        autoescape=True,
+        auto_reload=True,
+    )
+    return EmailTemplateServiceImpl(env=env)
 
 
 EmailTemplateService: EmailTemplateServiceProtocol = (
@@ -31,7 +34,7 @@ EmailTemplateService: EmailTemplateServiceProtocol = (
 
 def get_email_service(
     subjects: EmailSubjects,
-    config: FastMailConfig,
+    config: MailConfig,
 ) -> EmailSenderServicesProtocol:
     mailer = FastMail(config.conf)
     return EmailSenderServicesImpl(mailer=mailer, subjects=subjects)

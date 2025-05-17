@@ -17,6 +17,4 @@ class ConfirmEmailHandler(NotificationHandlerProtocol):
         self.email_use_case = email_use_case
 
     async def handle(self, data: EmailMessageDTO) -> None:
-        await self.email_use_case.send_confirm_email(
-            recipient=data.recipient, token=data.token
-        )
+        await self.email_use_case.send_confirm_email(data=data)

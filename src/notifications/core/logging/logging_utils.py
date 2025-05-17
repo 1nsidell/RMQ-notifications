@@ -1,52 +1,26 @@
 """A utils module for logger."""
 
-import contextvars
+from contextvars import ContextVar
 from datetime import datetime, timezone
-from functools import lru_cache, wraps
+from functools import lru_cache
 import json
 import logging
 import re
 import time
 from typing import (
     Any,
-    Callable,
-    Coroutine,
-    Dict,
-    List,
-    Optional,
     ParamSpec,
-    Tuple,
     TypeVar,
     Union,
     override,
 )
-import uuid
+
+
+request_id_var: ContextVar[str] = ContextVar("request_id", default="-")
 
 
 P = ParamSpec("P")
 R = TypeVar("R")
-
-
-request_id_var = contextvars.ContextVar("request_id", default="-")
-
-
-def with_request_id(
-    func: Callable[P, Coroutine[Any, Any, R]],
-) -> Callable[P, Coroutine[Any, Any, R]]:
-    """
-    A decorator that generates a new request_id for each call to an
-    asynchronous function and resets it after completion.
-    """
-
-    @wraps(func)
-    async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
-        token: contextvars.Token[str] = request_id_var.set(str(uuid.uuid4()))
-        try:
-            return await func(*args, **kwargs)
-        finally:
-            request_id_var.reset(token)
-
-    return wrapper
 
 
 class RequestIdFilter(logging.Filter):
@@ -62,7 +36,7 @@ class UTCFormatter(logging.Formatter):  # UTC for logging
 class MaskingFilter(logging.Filter):
     """Filter for masking sensitive data in logs."""
 
-    def __init__(self, patterns: Optional[Dict[str, Tuple[str, str]]] = None):
+    def __init__(self, patterns: dict[str, tuple[str, str]] | None = None):
         super().__init__()
         default_patterns = {
             "email": (
@@ -119,13 +93,11 @@ class MaskingFilter(logging.Filter):
     @lru_cache(maxsize=1024)
     def _is_sensitive_key(self, key: str) -> bool:
         """Check if key contains sensitive data."""
-        if not isinstance(key, str):
-            return False
         return bool(self._sensitive_keywords.search(key))
 
     def _recursive_mask(
         self,
-        data: Union[Dict[str, Any], List[Any], Any],
+        data: Union[dict[str, Any], list[Any], Any],
     ) -> Any:
         """Recursively mask sensitive data in structures."""
         if isinstance(data, dict):
@@ -153,7 +125,7 @@ class JsonFormatter(logging.Formatter):
 
     def __init__(
         self,
-        fmt_dict: Optional[Dict[str, str]] = None,
+        fmt_dict: dict[str, str] | None = None,
         time_format: str = "%Y-%m-%dT%H:%M:%S",
         msec_format: str = "%s.%03dZ",
     ):
@@ -179,7 +151,7 @@ class JsonFormatter(logging.Formatter):
     def formatTime(
         self,
         record: logging.LogRecord,
-        datefmt: Optional[str] = None,
+        datefmt: str | None = None,
     ) -> str:
         """
         Overridden to return the time in UTC with milliseconds.

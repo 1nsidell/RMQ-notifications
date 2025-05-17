@@ -1,10 +1,9 @@
 import asyncio
 import logging
 
-from notifications.app.depends.message_queues import RMQConsumer
 from notifications.bootstrap import run_app
-from notifications.core.logging.loggers import setup_logging
-from notifications.core.settings import settings
+from notifications.core import settings, setup_logging
+from notifications.depends.message_queues import RMQConsumer
 
 
 log = logging.getLogger(__name__)

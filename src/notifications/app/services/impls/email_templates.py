@@ -1,28 +1,22 @@
 """Service for sending emails."""
 
 import logging
-from typing import Any, Self
+from typing import Any
 
-from jinja2 import Environment, FileSystemLoader, StrictUndefined, Template
+from jinja2 import Environment, Template
 
 from notifications.app.exceptions import EmailTemplateException
 from notifications.app.services import EmailTemplateServiceProtocol
-from notifications.core.settings import Paths
 
 
 log = logging.getLogger(__name__)
 
 
 class EmailTemplateServiceImpl(EmailTemplateServiceProtocol):
-    def __init__(self, config: Paths) -> None:
-        self.env = Environment(
-            loader=FileSystemLoader(config.TEMPLATE_DIR),
-            undefined=StrictUndefined,
-            autoescape=True,
-            auto_reload=True,
-        )
+    def __init__(self, env: Environment) -> None:
+        self.env = env
 
-    def _get_template(self: Self, template_name: str) -> Template:
+    def _get_template(self, template_name: str) -> Template:
         """Getting the html template for the email."""
         log.info("Retrieving a message template: %s.", template_name)
         try:

@@ -1,4 +1,4 @@
-from typing import Callable, Dict, Generic, Tuple, Type, TypeVar
+from typing import Callable, Generic, Type, TypeVar
 
 from .notification_handlers.protocols.hendler_protocol import (
     NotificationHandlerProtocol,
@@ -9,10 +9,10 @@ T = TypeVar("T", bound=NotificationHandlerProtocol)
 
 
 class HandlerRegistry(Generic[T]):
-    _handlers: Dict[str, Tuple[Type[T], str]]
+    _handlers: dict[str, tuple[Type[T], str]]
 
     @classmethod
-    def _get_handlers_dict(cls) -> Dict[str, Tuple[Type[T], str]]:
+    def _get_handlers_dict(cls) -> dict[str, tuple[Type[T], str]]:
         if not hasattr(cls, "_handlers"):
             cls._handlers = {}
         return cls._handlers
@@ -43,7 +43,7 @@ class HandlerRegistry(Generic[T]):
         handlers.clear()
 
     @classmethod
-    def get_handlers(cls) -> Dict[str, Tuple[Type[T], str]]:
+    def get_handlers(cls) -> dict[str, tuple[Type[T], str]]:
         return cls._get_handlers_dict().copy()
 
 

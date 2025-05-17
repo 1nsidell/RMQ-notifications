@@ -1,14 +1,16 @@
-from notifications.app.depends.services import (
-    EmailService,
-    EmailTemplateService,
-)
 from notifications.app.services import (
     EmailSenderServicesProtocol,
     EmailTemplateServiceProtocol,
 )
-from notifications.app.use_cases import EmailSendUseCaseProtocol
-from notifications.app.use_cases.impls.emails import EmailSendUseCaseImpl
+from notifications.app.use_cases import (
+    EmailSendUseCaseImpl,
+    EmailSendUseCaseProtocol,
+)
 from notifications.core.settings import MailTemplate, settings
+from notifications.depends.services import (
+    EmailService,
+    EmailTemplateService,
+)
 
 
 def get_email_use_case(

@@ -1,6 +1,5 @@
 import os
 from pathlib import Path
-from typing import Optional
 
 from fastapi_mail import ConnectionConfig
 from pydantic import BaseModel, SecretStr
@@ -12,7 +11,7 @@ class Paths:
     TEMPLATE_DIR: Path = ROOT_DIR_SRC / "notifications" / "core" / "templates"
 
 
-class FastMailConfig(BaseModel):
+class MailConfig(BaseModel):
     USERNAME: str = os.getenv("MAIL_USERNAME", "guest")
     PASSWORD: SecretStr = SecretStr(os.getenv("MAIL_PASSWORD", "guest"))
     FROM: str = os.getenv("MAIL_FROM", "guest")
@@ -55,7 +54,7 @@ class RabbitMQConfig(BaseModel):
     PASSWORD: str = os.getenv("RABBIT_PASSWORD", "guest")
     HOST: str = os.getenv("RABBIT_HOST", "localhost")
     PORT: int = int(os.getenv("RABBIT_PORT", "5672"))
-    VHOST: Optional[str] = os.getenv("RABBIT_VHOST", "")
+    VHOST: str | None = os.getenv("RABBIT_VHOST", "")
     TIMEOUT: int = int(os.getenv("RABBIT_TIMEOUT", "30"))
     PREFETCH_COUNT: int = int(os.getenv("RABBIT_PREFETCH_COUNT", "10"))
     MAX_CONCURRENCY: int = int(os.getenv("RABBIT_MAX_CONCURRENCY", "10"))
@@ -71,7 +70,7 @@ class RabbitMQConfig(BaseModel):
 
 class Settings:
     mode: str = os.getenv("MODE", "PROD")
-    fast_mail: FastMailConfig = FastMailConfig()
+    fast_mail: MailConfig = MailConfig()
     subjects: EmailSubjects = EmailSubjects()
     templates: MailTemplate = MailTemplate()
     paths: Paths = Paths()

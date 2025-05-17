@@ -1,4 +1,5 @@
 import asyncio
+from contextvars import ContextVar
 import json
 import logging
 from typing import (
@@ -6,10 +7,6 @@ from typing import (
     AsyncIterator,
     Awaitable,
     Callable,
-    Dict,
-    List,
-    Optional,
-    Set,
 )
 
 import aio_pika
@@ -21,11 +18,10 @@ from aio_pika.abc import (
 )
 
 from notifications.app.exceptions import (
-    MissingRMQConnection,
+    MissingRMQConnectionException,
     RMQDispatcherException,
 )
 from notifications.app.tasks.dispatchers import MessageDispatcherProtocol
-from notifications.core.logging.logging_utils import with_request_id
 from notifications.core.settings import RabbitMQConfig
 from notifications.gateways.message_queues.protocols.consumer_protocol import (
     NotificationConsumerProtocol,
@@ -39,25 +35,31 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
     def __init__(
         self,
         config: RabbitMQConfig,
-        dispatchers: Dict[str, MessageDispatcherProtocol],
+        dispatchers: dict[str, MessageDispatcherProtocol],
+        request_context_manager: ContextVar[str],
         connector: Callable[
             [str], Awaitable[AbstractRobustConnection]
         ] = aio_pika.connect_robust,
     ) -> None:
         self._config = config
-        self._connector = connector
         self._dispatchers = dispatchers
+        self._request_context_manager = request_context_manager
+        self._connector = connector
 
-        self._queues: Dict[str, AbstractQueue] = {}
+        self._connection: AbstractRobustConnection | None = None
+        self._channel: AbstractChannel | None = None
+        self._queues: dict[str, AbstractQueue] = {}
         self._sem: asyncio.BoundedSemaphore = asyncio.BoundedSemaphore(
             self._config.MAX_CONCURRENCY
         )
 
         self._shutdown_event: asyncio.Event = asyncio.Event()
-        self._active_tasks: Set[asyncio.Task[None]] = set()
+        self._active_tasks: set[asyncio.Task[None]] = set()
 
     async def _declare(self) -> None:
         """Declare queues for all dispatchers and setup DLQ with TTL."""
+        if not self._channel:
+            raise MissingRMQConnectionException("RMQ channel is missing.")
         await self._channel.declare_exchange("dlx", type="direct", durable=True)
 
         for name in self._dispatchers:
@@ -115,7 +117,6 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
             async for msg in it:
                 yield msg
 
-    @with_request_id
     async def _process_message(
         self,
         queue_name: str,
@@ -123,16 +124,23 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
     ) -> None:
         """Process single message from specific queue."""
         async with self._sem:
+            correlation_id = message.correlation_id or "-"
+            token = self._request_context_manager.set(correlation_id)
+
             try:
                 retries = await self._get_count_retries(queue_name, message)
                 body: str = message.body.decode("utf-8")
-                data: Dict[str, Any] = json.loads(body)
-                dispatcher: Optional[MessageDispatcherProtocol] = (
+                data: dict[str, Any] = json.loads(body)
+                dispatcher: MessageDispatcherProtocol | None = (
                     self._dispatchers.get(queue_name)
                 )
                 if not dispatcher:
-                    log.error("No dispatcher found for queue: %s.", queue_name)
-                    raise RMQDispatcherException()
+                    log.exception(
+                        "No dispatcher found for queue: %s.", queue_name
+                    )
+                    raise RMQDispatcherException(
+                        f"Dispatcher for '{queue_name}' not initialized."
+                    )
                 await dispatcher.dispatch(data)
                 await message.ack()
             except Exception:
@@ -140,17 +148,19 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
                     await self._send_to_dead_queue(message, queue_name)
                     await message.ack()
                     return
-                log.error("Message processing failed.", exc_info=True)
+                log.exception("Message processing failed.", exc_info=True)
                 await message.nack(requeue=False)
+            finally:
+                self._request_context_manager.reset(token)
 
     async def _get_count_retries(
         self,
         queue_name: str,
         message: AbstractIncomingMessage,
-    ) -> Optional[int]:
+    ) -> int | None:
         retries = None
-        headers: Dict[str, Any] = message.headers or {}
-        x_death: List[Dict[str, Any]] = headers.get("x-death", [])
+        headers: dict[str, Any] = message.headers or {}
+        x_death: list[dict[str, Any]] = headers.get("x-death", [])
         if x_death:
             for x_death_header in x_death:
                 if x_death_header.get("queue") == queue_name:
@@ -163,6 +173,8 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
         message: AbstractIncomingMessage,
         queue_name: str,
     ) -> None:
+        if not self._channel:
+            raise MissingRMQConnectionException("RMQ channel is missing.")
         await self._channel.default_exchange.publish(
             aio_pika.Message(
                 body=message.body,
@@ -171,28 +183,25 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
             ),
             routing_key=f"{queue_name}_dead",
         )
-        log.error(
-            "Message processing failed, number of sending attempts exceeded.",
-            exc_info=True,
+        log.exception(
+            "Message processing failed, number of sending attempts exceeded."
         )
 
     async def startup(self) -> None:
         """Initialize RMQ connection and channel."""
         try:
-            self._connection: AbstractRobustConnection = await self._connector(
-                self._config.url,
-            )
-            self._channel: AbstractChannel = await self._connection.channel()
+            self._connection = await self._connector(self._config.url)
+            self._channel = await self._connection.channel()
             await self._channel.set_qos(self._config.PREFETCH_COUNT)
             await self._declare()
             log.info("Successfully connected to RabbitMQ")
         except aio_pika.exceptions.AMQPConnectionError as e:
-            log.error("Failed to connect to RabbitMQ.", exc_info=True)
-            raise MissingRMQConnection() from e
+            log.exception("Failed to connect to RabbitMQ.")
+            raise MissingRMQConnectionException() from e
 
     async def consume_notifications(self) -> None:
         """Process messages from all queues."""
-        tasks: List[asyncio.Task[None]] = []
+        tasks: list[asyncio.Task[None]] = []
         for queue_name, queue in self._queues.items():
             tasks.append(
                 asyncio.create_task(self._consume_queue(queue_name, queue))
@@ -201,10 +210,7 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
 
     async def shutdown(self) -> None:
         """
-        Initiate graceful shutdown:
-            - Fix that you no longer need to retrieve new messages.
-            - Wait for the tasks that are already running to finish.
-            - Close the channel and the connection.
+        Initiate graceful shutdown.
         """
         log.info("Initiating graceful shutdown for RabbitMQ consumer.")
         self._shutdown_event.set()
@@ -222,5 +228,5 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
 
             log.info("RabbitMQ consumer shutdown completed.")
         except Exception:
-            log.error("Error during shutdown.", exc_info=True)
+            log.exception("Error during shutdown.", exc_info=True)
             raise

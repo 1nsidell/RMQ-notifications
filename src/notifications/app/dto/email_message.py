@@ -1,10 +1,9 @@
-from pydantic import EmailStr
-
-from notifications.app.dto.base import BaseDTO
+from dataclasses import dataclass
 
 
-class EmailMessageDTO(BaseDTO):
+@dataclass(slots=True)
+class EmailMessageDTO:
 
     type: str
-    recipient: EmailStr
+    recipient: str
     token: str

@@ -18,6 +18,4 @@ class RecoveryPasswordHandler(NotificationHandlerProtocol):
 
     async def handle(self, data: EmailMessageDTO) -> None:
         """Handle the recovery password notification."""
-        await self.email_use_case.send_recovery_password(
-            recipient=data.recipient, token=data.token
-        )
+        await self.email_use_case.send_recovery_password(data=data)

@@ -1,7 +1,6 @@
 """Service for sending emails."""
 
 import logging
-from typing import Self
 
 from fastapi_mail import FastMail, MessageSchema, MessageType
 
@@ -18,8 +17,8 @@ class EmailSenderServicesImpl(EmailSenderServicesProtocol):
         self._mailer = mailer
         self._subjects = subjects
 
-    def _get_message(
-        self: Self,
+    def _get_single_message(
+        self,
         subject: str,
         recipient: str,
         body: str,
@@ -34,13 +33,13 @@ class EmailSenderServicesImpl(EmailSenderServicesProtocol):
         return message
 
     async def send_confirm_email(
-        self: Self,
+        self,
         recipient: str,
         body: str,
     ) -> None:
         """Sending an email for mail verification."""
         log.info("Sending verification email.")
-        message = self._get_message(
+        message = self._get_single_message(
             subject=self._subjects.CONFIRM,
             recipient=recipient,
             body=body,
@@ -53,13 +52,13 @@ class EmailSenderServicesImpl(EmailSenderServicesProtocol):
             raise SendEmailException(str(exc)) from exc
 
     async def send_recovery_password(
-        self: Self,
+        self,
         recipient: str,
         body: str,
     ) -> None:
         """Sending an email to recover your password."""
         log.info("Sending password recovery email.")
-        message = self._get_message(
+        message = self._get_single_message(
             subject=self._subjects.RECOVERY,
             recipient=recipient,
             body=body,

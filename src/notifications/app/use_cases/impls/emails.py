@@ -1,5 +1,4 @@
-from typing import Self
-
+from notifications.app.dto.email_message import EmailMessageDTO
 from notifications.app.services import (
     EmailSenderServicesProtocol,
     EmailTemplateServiceProtocol,
@@ -20,25 +19,23 @@ class EmailSendUseCaseImpl(EmailSendUseCaseProtocol):
         self._email_templates_service = email_templates_service
 
     async def send_confirm_email(
-        self: Self,
-        recipient: str,
-        token: str,
+        self,
+        data: EmailMessageDTO,
     ) -> None:
         body = self._email_templates_service.get_rendered_template(
-            self._templates.CONFIRM, token=token
+            self._templates.CONFIRM, token=data.token
         )
         await self._emails_service.send_confirm_email(
-            recipient=recipient, body=body
+            recipient=data.recipient, body=body
         )
 
     async def send_recovery_password(
         self,
-        recipient: str,
-        token: str,
+        data: EmailMessageDTO,
     ) -> None:
         body = self._email_templates_service.get_rendered_template(
-            self._templates.RECOVERY, token=token
+            self._templates.RECOVERY, token=data.token
         )
         await self._emails_service.send_recovery_password(
-            recipient=recipient, body=body
+            recipient=data.recipient, body=body
         )
