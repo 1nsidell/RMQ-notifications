@@ -2,10 +2,8 @@ from notifications.app.services import (
     EmailSenderServicesProtocol,
     EmailTemplateServiceProtocol,
 )
-from notifications.app.use_cases import (
-    EmailSendUseCaseImpl,
-    EmailSendUseCaseProtocol,
-)
+from notifications.app.use_cases import EmailSendUseCaseProtocol
+from notifications.app.use_cases.impls.emails import EmailSendUseCaseImpl
 from notifications.core.settings import MailTemplate, settings
 from notifications.depends.services import (
     EmailService,

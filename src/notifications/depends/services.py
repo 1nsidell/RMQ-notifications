@@ -2,10 +2,14 @@ from fastapi_mail import FastMail
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 from notifications.app.services import (
-    EmailSenderServicesImpl,
     EmailSenderServicesProtocol,
-    EmailTemplateServiceImpl,
     EmailTemplateServiceProtocol,
+)
+from notifications.app.services.impls.email_sender import (
+    EmailSenderServicesImpl,
+)
+from notifications.app.services.impls.email_templates import (
+    EmailTemplateServiceImpl,
 )
 from notifications.core.settings import (
     EmailSubjects,
