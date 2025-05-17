@@ -2,7 +2,10 @@ import logging
 from typing import Any
 
 from notifications.app.dto.email_message import EmailMessageDTO
-from notifications.app.exceptions import MissingHandlerClassException
+from notifications.app.exceptions import (
+    MissingHandlerClassException,
+    RMQMessageError,
+)
 from notifications.app.notification_handlers import NotificationHandlerProtocol
 from notifications.app.notification_registry import EmailNotificationRegistry
 from notifications.app.tasks.dispatchers.protocols.dispatcher_protocol import (
@@ -45,9 +48,10 @@ class EmailNotificationDispatcherImpl(MessageDispatcherProtocol):
     async def dispatch(self, data: dict[str, Any]) -> None:
         try:
             notification = EmailMessageDTO(**data)
-        except TypeError:
-            log.error("Invalid notification data: %s.", data)
-            raise TypeError("Invalid notification data.")
+        except (TypeError, ValueError):
+            log.error("Invalid email notification data: %s.", data)
+            raise RMQMessageError("Invalid email notification data.")
+
         handler = self.handlers.get(notification.type)
         if handler:
             await handler.handle(notification)
