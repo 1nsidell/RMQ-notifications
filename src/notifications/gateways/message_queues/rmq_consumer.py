@@ -35,7 +35,7 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
     def __init__(
         self,
         config: RabbitMQConfig,
-        dispatchers: dict[str, MessageDispatcherProtocol],
+        dispatchers: dict[str, Callable[[], MessageDispatcherProtocol]],
         request_context_manager: ContextVar[str],
         connector: Callable[
             [str], Awaitable[AbstractRobustConnection]
@@ -131,16 +131,15 @@ class RMQConsumerImpl(NotificationConsumerProtocol):
                 retries = await self._get_count_retries(queue_name, message)
                 body: str = message.body.decode("utf-8")
                 data: dict[str, Any] = json.loads(body)
-                dispatcher: MessageDispatcherProtocol | None = (
-                    self._dispatchers.get(queue_name)
-                )
-                if not dispatcher:
+                dispatcher_factory = self._dispatchers.get(queue_name)
+                if not dispatcher_factory:
                     log.exception(
-                        "No dispatcher found for queue: %s.", queue_name
+                        "No dispatcher factory found for queue: %s.", queue_name
                     )
                     raise RMQDispatcherException(
-                        f"Dispatcher for '{queue_name}' not initialized."
+                        f"Dispatcher factory for '{queue_name}' not initialized."
                     )
+                dispatcher = dispatcher_factory()
                 await dispatcher.dispatch(data)
                 await message.ack()
             except Exception:

@@ -3,7 +3,7 @@ import logging
 
 from notifications.bootstrap import run_app
 from notifications.core import settings, setup_logging
-from notifications.depends.message_queues import RMQConsumer
+from notifications.depends import RMQConsumer
 
 
 log = logging.getLogger(__name__)
