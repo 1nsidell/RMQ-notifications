@@ -23,13 +23,13 @@ WORKDIR /app
 
 COPY --from=builder /app /app
 
-RUN rm -rf /root/.cache \
-    && addgroup -S appgroup \
-    && adduser -S appuser -G appgroup \
-    && chown -R appuser:appgroup /app \
-    && apk add --no-cache curl
+# RUN rm -rf /root/.cache \
+#     && addgroup -S appgroup \
+#     && adduser -S appuser -G appgroup \
+#     && chown -R appuser:appgroup /app \
+#     && apk add --no-cache curl
 
-USER appuser
+# USER appuser
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \

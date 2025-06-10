@@ -12,6 +12,11 @@ services:
     mem_limit: 512m
     cpus: '1'
 
+    depends_on:
+      - notification-recipient
+      - rabbitmq
+      - maildev
+
   rabbitmq:
     image: rabbitmq:4.1.0-beta.3-management-alpine
     hostname: rabbitmq
@@ -31,6 +36,7 @@ services:
   maildev:
     image: maildev/maildev
     restart: unless-stopped
+    container_name: maildev
     environment:
       - TZ=Asia/Yekaterinburg
       - MAILDEV_WEB_PORT=1080
@@ -45,6 +51,36 @@ services:
       options:
         max-size: "1m"
 
+  notification-recipient:
+    image: postgres:17.2-alpine3.21
+    restart: unless-stopped
+    container_name: notification-recipient
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: notification-recipient
+    ports:
+      - "5434:5432"
+    networks:
+      - local
+    volumes:
+      - data_notification:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4:8.14.0
+    restart: unless-stopped
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8080:80"
+    networks:
+      - local
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    depends_on:
+      - notification-recipient
 
 networks:
   local:
@@ -52,3 +88,5 @@ networks:
 
 volumes:
   rabbitmq-data:
+  data_notification:
+  pgadmin:
