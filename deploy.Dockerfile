@@ -35,4 +35,4 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PATH="/app/.venv/bin:$PATH"
 
-CMD ["python", "-m", "notifications.main"]
+CMD ["python", "-m", "notifications.main.main"]

@@ -5,13 +5,18 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "fastapi-notifications"
 version = "0.1.0"
-description = "Microservice for sending emails at the request of the main application"
+description = "Microservice for sending notifications at the request of the main application"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "aio-pika>=9.5.5",
+    "alembic>=1.15.2",
+    "asyncpg>=0.30.0",
+    "dishka>=1.5.3",
     "fastapi-mail>=1.4.2",
+    "faststream[rabbit]>=0.5.40",
     "pydantic>=2.10.6",
+    "sqlalchemy>=2.0.41",
 ]
 
 [dependency-groups]
@@ -40,5 +45,19 @@ target-version = ['py312']
 
 [tool.mypy]
 mypy_path = "src"
+files = ["src", "tests"]
+python_version = "3.12"
+
 explicit_package_bases = true
 strict = true
+pretty = true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_ignores = true
+allow_untyped_calls = true
+show_error_codes = true
+show_error_context = true
+show_column_numbers = true
+check_untyped_defs = true
+namespace_packages = true
+disallow_untyped_defs = true
