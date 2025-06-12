@@ -1,6 +1,6 @@
 from typing import TypeVar
 
-from notifications.application.common.errors.errors import EntityNotFoundError
+from notifications.application.common.errors.entity import EntityNotFoundError
 
 
 T = TypeVar("T")

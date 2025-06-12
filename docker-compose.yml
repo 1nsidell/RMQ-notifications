@@ -7,13 +7,14 @@ services:
       dockerfile: deploy.Dockerfile
     networks:
       - local
+    volumes:
+      - rmq-notifications-logs:/app/logs
     env_file:
       - .env
     mem_limit: 512m
     cpus: '1'
-
     depends_on:
-      - notification-recipient
+      - postgres-notification-recipient
       - rabbitmq
       - maildev
 
@@ -23,7 +24,6 @@ services:
     container_name: rabbitmq
     restart: unless-stopped
     ports:
-      - "5672:5672"
       - "15672:15672"
     networks:
       - local
@@ -43,7 +43,6 @@ services:
       - MAILDEV_SMTP_PORT=1025
     ports:
       - "1080:1080"
-      - "1025:1025"
     networks:
       - local
     logging:
@@ -51,16 +50,14 @@ services:
       options:
         max-size: "1m"
 
-  notification-recipient:
+  postgres-notification-recipient:
     image: postgres:17.2-alpine3.21
     restart: unless-stopped
-    container_name: notification-recipient
+    container_name: postgres-notification-recipient
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: notification-recipient
-    ports:
-      - "5434:5432"
     networks:
       - local
     volumes:
@@ -80,13 +77,14 @@ services:
     volumes:
       - pgadmin:/var/lib/pgadmin
     depends_on:
-      - notification-recipient
+      - postgres-notification-recipient
 
 networks:
   local:
     driver: bridge
 
 volumes:
+  rmq-notifications-logs:
   rabbitmq-data:
   data_notification:
   pgadmin:

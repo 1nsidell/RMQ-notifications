@@ -1,4 +1,4 @@
-from .email_notification import EmailNotificationDTO
+from .email_notification import EmailNotificationDTO, EmailSignature
 from .recipient import (
     ChangeEmailRecipientDTO,
     CreateRecipientDTO,
@@ -11,4 +11,5 @@ __all__ = (
     "CreateRecipientDTO",
     "DeleteRecipientDTO",
     "EmailNotificationDTO",
+    "EmailSignature",
 )

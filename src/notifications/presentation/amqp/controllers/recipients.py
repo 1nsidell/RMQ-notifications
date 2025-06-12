@@ -11,7 +11,7 @@ from notifications.application.interactors import (
     ChangeEmailRecipientInteractor,
     DeleteRecipientInteractor,
 )
-from notifications.infrastructure.common.resources.rmq import (
+from notifications.infrastructure.common.resources import (
     add_recipient_queue,
     change_email_recipient_queue,
     delete_recipient_queue,

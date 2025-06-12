@@ -43,3 +43,8 @@ email_notification_queue = RabbitQueue(
     name=RabbitQueues.EMAIL_NOTIFICATION,
     durable=True,
 )
+
+bulk_mailing_queue = RabbitQueue(
+    name=RabbitQueues.BULK_MAILING,
+    durable=True,
+)

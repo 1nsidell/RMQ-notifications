@@ -2,8 +2,6 @@ from dishka import Provider, Scope, from_context, provide
 
 from notifications.main.setup.config.constants import (
     Directories,
-    EmailSubjects,
-    MailTemplates,
 )
 from notifications.main.setup.config.settings import (
     MailConfig,
@@ -29,14 +27,6 @@ class CommonSettingsProvider(Provider):
     @provide
     def provide_rmq_config(self, settings: Settings) -> RabbitMQConfig:
         return settings.rmq
-
-    @provide
-    def provide_email_subjects(self) -> EmailSubjects:
-        return EmailSubjects()
-
-    @provide
-    def provide_mail_templates(self) -> MailTemplates:
-        return MailTemplates()
 
     @provide
     def provide_paths(self) -> Directories:

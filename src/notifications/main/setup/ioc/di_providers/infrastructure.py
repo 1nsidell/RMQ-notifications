@@ -26,9 +26,13 @@ from notifications.infrastructure.adapters.application import (
     EmailStrategyImpl,
     EntityManagerImpl,
     FastEmailSenderProvider,
+    JsonSignatureLoader,
     RecipientRepository,
     SqlaTransactionManager,
     StorageEmailTemplateProvider,
+)
+from notifications.infrastructure.common.ports.email.signature_loader import (
+    SignatureLoader,
 )
 from notifications.main.setup.config.constants import (
     Directories,
@@ -97,6 +101,10 @@ class EmailsInfrastructureProvider(Provider):
             autoescape=True,
             auto_reload=True,
         )
+
+    @provide(scope=Scope.APP)
+    def get_signature_loader(self, config: Directories) -> SignatureLoader:
+        return JsonSignatureLoader(config.EMAIL_SIGNATURES_DIR)
 
     storage_email_templates_provider = provide(
         StorageEmailTemplateProvider,

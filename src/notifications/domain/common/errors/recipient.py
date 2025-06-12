@@ -13,6 +13,12 @@ class EmailFieldValidationError(DomainFieldError):
     error_type: str = "EMAIL_FIELD_VALIDATION_ERROR"
 
 
+class UsernameFieldValidationError(DomainFieldError):
+    "Username field validation error"
+
+    error_type: str = "USERNAME_FIELD_VALIDATION_ERROR"
+
+
 class EntityAddError(DomainError):
     "Conflict when adding an entity."
 

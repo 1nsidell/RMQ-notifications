@@ -1,9 +1,9 @@
 from notifications.infrastructure.common.exceptions.base import (
-    BaseInfrastructureException,
+    InfrastructureException,
 )
 
 
-class RepositoryException(BaseInfrastructureException):
+class RepositoryException(InfrastructureException):
     "Exception when working with a repository."
 
     error_type: str = "REPOSITORY_EXCEPTION"

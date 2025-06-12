@@ -1,39 +1,33 @@
 FROM ghcr.io/astral-sh/uv:python3.12-alpine AS builder
-
-WORKDIR /app
-
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy
 
+WORKDIR /app
 COPY pyproject.toml uv.lock /app/
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --frozen --no-install-project
-
-ADD . /app
-
+    uv sync --locked --no-install-project
+COPY . /app
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen
+    uv sync --locked
+
 
 FROM python:3.12.9-alpine3.20 AS runner
-
-WORKDIR /app
-
-COPY --from=builder /app /app
-
-RUN rm -rf /root/.cache \
-    && addgroup -S appgroup \
-    && adduser -S appuser -G appgroup \
-    && chown -R appuser:appgroup /app \
-    && apk add --no-cache curl
-
-USER appuser
-
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PATH="/app/.venv/bin:$PATH"
 
-CMD ["python", "-m", "notifications.main"]
+WORKDIR /app
+
+COPY --from=builder --chown=app:app /app /app
+
+RUN addgroup -S appgroup \
+    && adduser -S appuser -G appgroup \
+    && chown -R appuser:appgroup /app
+
+USER appuser
+
+CMD ["python", "-m", "notifications.main.main"]

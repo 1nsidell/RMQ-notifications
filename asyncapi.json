@@ -1,0 +1,288 @@
+{
+  "asyncapi": "2.6.0",
+  "defaultContentType": "application/json",
+  "info": {
+    "title": "FastStream",
+    "version": "0.1.0",
+    "description": ""
+  },
+  "servers": {
+    "development": {
+      "url": "amqp://guest:guest@rabbitmq:5672/",
+      "protocol": "amqp",
+      "protocolVersion": "0.9.1",
+      "security": [
+        {
+          "user-password": []
+        }
+      ]
+    }
+  },
+  "channels": {
+    "email_notification:_:EmailNotifications": {
+      "servers": [
+        "development"
+      ],
+      "bindings": {
+        "amqp": {
+          "is": "routingKey",
+          "bindingVersion": "0.2.0",
+          "queue": {
+            "name": "email_notification",
+            "durable": true,
+            "exclusive": false,
+            "autoDelete": false,
+            "vhost": "/"
+          },
+          "exchange": {
+            "type": "default",
+            "vhost": "/"
+          }
+        }
+      },
+      "subscribe": {
+        "bindings": {
+          "amqp": {
+            "cc": "email_notification",
+            "ack": true,
+            "bindingVersion": "0.2.0"
+          }
+        },
+        "message": {
+          "$ref": "#/components/messages/email_notification:_:EmailNotifications:Message"
+        }
+      }
+    },
+    "add_recipient:_:AddRecipient": {
+      "servers": [
+        "development"
+      ],
+      "bindings": {
+        "amqp": {
+          "is": "routingKey",
+          "bindingVersion": "0.2.0",
+          "queue": {
+            "name": "add_recipient",
+            "durable": true,
+            "exclusive": false,
+            "autoDelete": false,
+            "vhost": "/"
+          },
+          "exchange": {
+            "type": "default",
+            "vhost": "/"
+          }
+        }
+      },
+      "subscribe": {
+        "bindings": {
+          "amqp": {
+            "cc": "add_recipient",
+            "ack": true,
+            "bindingVersion": "0.2.0"
+          }
+        },
+        "message": {
+          "$ref": "#/components/messages/add_recipient:_:AddRecipient:Message"
+        }
+      }
+    },
+    "delete_recipient:_:DeleteRecipient": {
+      "servers": [
+        "development"
+      ],
+      "bindings": {
+        "amqp": {
+          "is": "routingKey",
+          "bindingVersion": "0.2.0",
+          "queue": {
+            "name": "delete_recipient",
+            "durable": true,
+            "exclusive": false,
+            "autoDelete": false,
+            "vhost": "/"
+          },
+          "exchange": {
+            "type": "default",
+            "vhost": "/"
+          }
+        }
+      },
+      "subscribe": {
+        "bindings": {
+          "amqp": {
+            "cc": "delete_recipient",
+            "ack": true,
+            "bindingVersion": "0.2.0"
+          }
+        },
+        "message": {
+          "$ref": "#/components/messages/delete_recipient:_:DeleteRecipient:Message"
+        }
+      }
+    },
+    "change_email_recipient:_:ChangeEmailRecipient": {
+      "servers": [
+        "development"
+      ],
+      "bindings": {
+        "amqp": {
+          "is": "routingKey",
+          "bindingVersion": "0.2.0",
+          "queue": {
+            "name": "change_email_recipient",
+            "durable": true,
+            "exclusive": false,
+            "autoDelete": false,
+            "vhost": "/"
+          },
+          "exchange": {
+            "type": "default",
+            "vhost": "/"
+          }
+        }
+      },
+      "subscribe": {
+        "bindings": {
+          "amqp": {
+            "cc": "change_email_recipient",
+            "ack": true,
+            "bindingVersion": "0.2.0"
+          }
+        },
+        "message": {
+          "$ref": "#/components/messages/change_email_recipient:_:ChangeEmailRecipient:Message"
+        }
+      }
+    }
+  },
+  "components": {
+    "messages": {
+      "email_notification:_:EmailNotifications:Message": {
+        "title": "email_notification:_:EmailNotifications:Message",
+        "correlationId": {
+          "location": "$message.header#/correlation_id"
+        },
+        "payload": {
+          "$ref": "#/components/schemas/EmailNotificationRequest"
+        }
+      },
+      "add_recipient:_:AddRecipient:Message": {
+        "title": "add_recipient:_:AddRecipient:Message",
+        "correlationId": {
+          "location": "$message.header#/correlation_id"
+        },
+        "payload": {
+          "$ref": "#/components/schemas/AddRecipientRequest"
+        }
+      },
+      "delete_recipient:_:DeleteRecipient:Message": {
+        "title": "delete_recipient:_:DeleteRecipient:Message",
+        "correlationId": {
+          "location": "$message.header#/correlation_id"
+        },
+        "payload": {
+          "$ref": "#/components/schemas/DeleteRecipientRequest"
+        }
+      },
+      "change_email_recipient:_:ChangeEmailRecipient:Message": {
+        "title": "change_email_recipient:_:ChangeEmailRecipient:Message",
+        "correlationId": {
+          "location": "$message.header#/correlation_id"
+        },
+        "payload": {
+          "$ref": "#/components/schemas/ChangeEmailRecipientRequest"
+        }
+      }
+    },
+    "schemas": {
+      "EmailNotificationRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "title": "Type",
+            "type": "string"
+          },
+          "recipient": {
+            "format": "email",
+            "title": "Recipient",
+            "type": "string"
+          },
+          "data": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Data",
+            "type": "object"
+          }
+        },
+        "required": [
+          "type",
+          "recipient",
+          "data"
+        ],
+        "title": "EmailNotificationRequest",
+        "type": "object"
+      },
+      "AddRecipientRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "oid": {
+            "title": "Oid",
+            "type": "integer"
+          },
+          "email": {
+            "format": "email",
+            "title": "Email",
+            "type": "string"
+          }
+        },
+        "required": [
+          "oid",
+          "email"
+        ],
+        "title": "AddRecipientRequest",
+        "type": "object"
+      },
+      "DeleteRecipientRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "oid": {
+            "title": "Oid",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "oid"
+        ],
+        "title": "DeleteRecipientRequest",
+        "type": "object"
+      },
+      "ChangeEmailRecipientRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "oid": {
+            "title": "Oid",
+            "type": "integer"
+          },
+          "new_email": {
+            "format": "email",
+            "title": "New Email",
+            "type": "string"
+          }
+        },
+        "required": [
+          "oid",
+          "new_email"
+        ],
+        "title": "ChangeEmailRecipientRequest",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "user-password": {
+        "type": "userPassword"
+      }
+    }
+  }
+}

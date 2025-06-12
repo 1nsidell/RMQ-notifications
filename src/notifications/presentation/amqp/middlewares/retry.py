@@ -6,7 +6,7 @@ from faststream import BaseMiddleware
 from faststream.broker.message import StreamMessage
 
 from notifications.infrastructure.common.exceptions import (
-    BaseInfrastructureException,
+    InfrastructureException,
 )
 
 
@@ -26,7 +26,7 @@ class RetryMiddleware(BaseMiddleware):
         for attempt in range(1, self.retries + 1):
             try:
                 return await call_next(msg)
-            except BaseInfrastructureException as exc:
+            except InfrastructureException as exc:
                 last_exc = exc
                 log.warning(
                     "Retry %s/%s failed.", attempt, self.retries, exc_info=True

@@ -1,4 +1,4 @@
-class BaseInfrastructureException(Exception):
+class InfrastructureException(Exception):
     """Base class for infrastructure custom exceptions."""
 
     error_type: str

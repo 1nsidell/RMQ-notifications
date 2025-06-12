@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from pathlib import Path
 
 from notifications.infrastructure.persistence.models.all import setup_map_tables
 from notifications.main.bootstrap import get_faststream_app
@@ -14,8 +15,8 @@ from notifications.main.setup.config.settings import (
 log = logging.getLogger(__name__)
 
 
-async def main(settings: Settings, config_paths: Directories) -> None:
-    setup_logging(config_paths)
+async def main(settings: Settings, config_path: Path) -> None:
+    setup_logging(config_path)
     setup_map_tables()
     app = get_faststream_app(settings=settings, logger=log)
     await app.run()
@@ -23,5 +24,5 @@ async def main(settings: Settings, config_paths: Directories) -> None:
 
 if __name__ == "__main__":
     settings = get_settings()
-    config_paths = Directories()
-    asyncio.run(main(settings=settings, config_paths=config_paths))
+    config_path = Directories().LOGGER_CONFIG_DIR
+    asyncio.run(main(settings=settings, config_path=config_path))

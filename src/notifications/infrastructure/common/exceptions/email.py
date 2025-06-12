@@ -1,11 +1,11 @@
 """Custom exceptions."""
 
 from notifications.infrastructure.common.exceptions.base import (
-    BaseInfrastructureException,
+    InfrastructureException,
 )
 
 
-class EmailException(BaseInfrastructureException):
+class EmailException(InfrastructureException):
     """Base mailer exceptions."""
 
     pass
@@ -21,9 +21,3 @@ class EmailTemplateException(EmailException):
     """Email message template exception."""
 
     error_type: str = "TEMPLATE_EXCEPTION"
-
-
-class UnknownNotificationType(EmailException):
-    "Incorrect notification type"
-
-    error_type: str = "UNKNOW_NOTIFICATION_TYPE"

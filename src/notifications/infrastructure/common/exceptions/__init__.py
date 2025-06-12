@@ -1,4 +1,4 @@
-from .base import BaseInfrastructureException
+from .base import InfrastructureException
 from .email import (
     EmailException,
     EmailTemplateException,
@@ -8,7 +8,7 @@ from .repository import RepositoryException
 
 
 __all__ = (
-    "BaseInfrastructureException",
+    "InfrastructureException",
     "EmailException",
     "EmailTemplateException",
     "RepositoryException",

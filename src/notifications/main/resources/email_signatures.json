@@ -1,0 +1,10 @@
+{
+  "confirm_email": {
+    "subject": "ПИСЬМО ДЛЯ ВЕРИФИКАЦИИ ПОЧТЫ СЕРВИСА КРУТОЙ БОБР.",
+    "template": "confirm_email.html"
+  },
+  "recovery_password": {
+    "subject": "ПИСЬМО ДЛЯ ВОССТАНОВЛЕНИЯ ПАРОЛЯ СЕРВИСА КРУТОЙ БОБР.",
+    "template": "reset_pass.html"
+  }
+}

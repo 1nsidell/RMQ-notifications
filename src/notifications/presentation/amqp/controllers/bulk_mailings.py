@@ -6,24 +6,20 @@ from notifications.application.interactors import (
     EmailNotificationInteractor,
 )
 from notifications.infrastructure.common.resources import (
-    email_notification_queue,
+    bulk_mailing_queue,
 )
 from notifications.presentation.amqp.common.request_models import (
     EmailNotificationRequest,
 )
 
 
-notifications_router = RabbitRouter()
+bulk_mailing_router = RabbitRouter()
 
 
-@notifications_router.subscriber(queue=email_notification_queue)
-async def email_notifications(
-    data: EmailNotificationRequest,
-    interactor: Depends[EmailNotificationInteractor],
+@bulk_mailing_router.subscriber(queue=bulk_mailing_queue)
+async def bulk_mailing_handler(
+    request:,
+    interactor:,
 ) -> None:
-    dto = EmailNotificationDTO(
-        type=data.type,
-        recipient=data.recipient,
-        data=data.data,
-    )
-    await interactor(dto)
+
+    await interactor.bulk_mailing(dto)

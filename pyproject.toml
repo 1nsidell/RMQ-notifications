@@ -3,13 +3,12 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "fastapi-notifications"
+name = "rmq-notifications"
 version = "0.1.0"
 description = "Microservice for sending notifications at the request of the main application"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "aio-pika>=9.5.5",
     "alembic>=1.15.2",
     "asyncpg>=0.30.0",
     "dishka>=1.5.3",
@@ -17,6 +16,7 @@ dependencies = [
     "faststream[rabbit]>=0.5.40",
     "pydantic>=2.10.6",
     "sqlalchemy>=2.0.41",
+    "taskiq>=0.11.17",
 ]
 
 [dependency-groups]

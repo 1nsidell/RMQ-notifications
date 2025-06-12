@@ -20,12 +20,11 @@ class RecipientRepository(RecipientGateway):
     async def with_id(
         self,
         recipient_id: RecipientId,
-        with_for_update: bool = False,
     ) -> Recipient | None:
-        stmt = select(Recipient).where(
-            recipients_table.c.recipient_id == recipient_id
+        stmt = (
+            select(Recipient)
+            .where(recipients_table.c.recipient_id == recipient_id)
+            .with_for_update()
         )
-        if with_for_update:
-            stmt = stmt.with_for_update()
         result = await self._session.execute(stmt)
         return result.scalar_one_or_none()
