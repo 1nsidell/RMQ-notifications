@@ -26,3 +26,15 @@ class SqlaTransactionManager(TransactionManager):
             raise RepositoryException(
                 "Database query failed, commit failed."
             ) from e
+
+    async def flush(self) -> None:
+        try:
+            await self._session.flush()
+            log.debug("Flush was done by session.")
+        except IntegrityError as e:
+            log.error("Conflict when adding an entity.", exc_info=True)
+            raise EntityAddError() from e
+        except SQLAlchemyError as e:
+            raise RepositoryException(
+                "Database query failed, flush failed."
+            ) from e

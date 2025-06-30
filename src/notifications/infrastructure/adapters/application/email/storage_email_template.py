@@ -28,11 +28,13 @@ class StorageEmailTemplateProvider(EmailTemplateProvider):
     def get_rendered_template(
         self,
         template_name: str,
-        data: dict[str, str],
+        data: dict[str, str] | None = None,
     ) -> str:
         template = self._get_template(template_name)
-        try:
-            return template.render(**data)
-        except TemplateError as exc:
-            log.exception("Template rendering error '%s'.", template_name)
-            raise EmailTemplateException(str(exc)) from exc
+        if data:
+            try:
+                return template.render(**data)
+            except TemplateError as exc:
+                log.exception("Template rendering error '%s'.", template_name)
+                raise EmailTemplateException(str(exc)) from exc
+        return template.render()

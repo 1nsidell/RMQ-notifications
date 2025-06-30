@@ -3,22 +3,26 @@ from faststream.rabbit import RabbitRouter
 
 from notifications.application.common.dto import (
     ChangeEmailRecipientDTO,
+    ChangeUsernameRecipientDTO,
     CreateRecipientDTO,
     DeleteRecipientDTO,
 )
 from notifications.application.interactors import (
     AddRecipientInteractor,
     ChangeEmailRecipientInteractor,
+    ChangeUsernameRecipientInteractor,
     DeleteRecipientInteractor,
 )
-from notifications.infrastructure.common.resources import (
+from notifications.infrastructure.common.external import (
     add_recipient_queue,
     change_email_recipient_queue,
+    change_username_recipient_queue,
     delete_recipient_queue,
 )
 from notifications.presentation.amqp.common.request_models import (
     AddRecipientRequest,
     ChangeEmailRecipientRequest,
+    ChangeUsernameRecipientRequest,
     DeleteRecipientRequest,
 )
 
@@ -31,7 +35,11 @@ async def add_recipient(
     data: AddRecipientRequest,
     interactor: Depends[AddRecipientInteractor],
 ) -> None:
-    dto = CreateRecipientDTO(oid=data.oid, email=data.email)
+    dto = CreateRecipientDTO(
+        oid=data.oid,
+        email=data.email,
+        username=data.username,
+    )
     await interactor(data=dto)
 
 
@@ -50,4 +58,15 @@ async def change_email_recipient(
     interactor: Depends[ChangeEmailRecipientInteractor],
 ) -> None:
     dto = ChangeEmailRecipientDTO(oid=data.oid, new_email=data.new_email)
+    await interactor(data=dto)
+
+
+@recipient_router.subscriber(queue=change_username_recipient_queue)
+async def change_username_recipient(
+    data: ChangeUsernameRecipientRequest,
+    interactor: Depends[ChangeUsernameRecipientInteractor],
+) -> None:
+    dto = ChangeUsernameRecipientDTO(
+        oid=data.oid, new_username=data.new_username
+    )
     await interactor(data=dto)

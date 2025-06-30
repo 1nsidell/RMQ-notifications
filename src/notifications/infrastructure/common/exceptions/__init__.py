@@ -8,9 +8,9 @@ from .repository import RepositoryException
 
 
 __all__ = (
-    "InfrastructureException",
     "EmailException",
     "EmailTemplateException",
+    "InfrastructureException",
     "RepositoryException",
     "SendEmailException",
 )

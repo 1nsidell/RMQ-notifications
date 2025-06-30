@@ -16,9 +16,12 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
+from notifications.infrastructure.common.config.settings import (
+    Settings,
+    SQLDatabaseConfig,
+)
 from notifications.infrastructure.persistence.models.base import metadata
-from notifications.main.setup.config.settings import Settings, SQLDatabaseConfig
-from notifications.main.setup.ioc.di_providers.infrastructure import (
+from notifications.main.ioc.di_providers.infrastructure import (
     CommonInfrastructureProvider,
 )
 

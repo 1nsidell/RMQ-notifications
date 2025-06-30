@@ -5,7 +5,7 @@ from notifications.application.common.dto import EmailNotificationDTO
 from notifications.application.interactors import (
     EmailNotificationInteractor,
 )
-from notifications.infrastructure.common.resources import (
+from notifications.infrastructure.common.external import (
     email_notification_queue,
 )
 from notifications.presentation.amqp.common.request_models import (

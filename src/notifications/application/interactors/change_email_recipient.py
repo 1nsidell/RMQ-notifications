@@ -1,4 +1,4 @@
-from notifications.application.common.dto.recipient import (
+from notifications.application.common.dto import (
     ChangeEmailRecipientDTO,
 )
 from notifications.application.common.ports import (
@@ -25,9 +25,9 @@ class ChangeEmailRecipientInteractor:
 
     async def __call__(self, data: ChangeEmailRecipientDTO) -> None:
         recipient = await self._recipient_gateway.with_id(
-            RecipientId(data.oid),
-            with_for_update=True,
+            RecipientId(data.oid)
         )
         recipient = validate_empty(entity=recipient, oid=data.oid)
         recipient.change_email(RecipientEmail(email=data.new_email))
         await self._transaction_manager.commit()
+        

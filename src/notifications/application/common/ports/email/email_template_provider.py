@@ -7,5 +7,5 @@ class EmailTemplateProvider(Protocol):
     def get_rendered_template(
         self,
         template_name: str,
-        data: dict[str, str],
+        data: dict[str, str] | None = None,
     ) -> str: ...

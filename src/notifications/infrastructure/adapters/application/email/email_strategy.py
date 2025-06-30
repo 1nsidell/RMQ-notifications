@@ -1,4 +1,4 @@
-from notifications.application.common.dto.email_notification import (
+from notifications.application.common.dto import (
     EmailSignature,
 )
 from notifications.application.common.ports.email.email_strategy import (

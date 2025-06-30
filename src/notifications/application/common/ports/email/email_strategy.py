@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import Protocol
 
-from notifications.application.common.dto.email_notification import (
+from notifications.application.common.dto import (
     EmailSignature,
 )
 

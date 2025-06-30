@@ -3,7 +3,7 @@ from typing import Any, Awaitable, Callable
 from faststream import BaseMiddleware
 from faststream.broker.message import StreamMessage
 
-from notifications.main.setup.config.logging_utils import (
+from notifications.infrastructure.common.config.logging_utils import (
     request_id_var,
 )
 

@@ -8,7 +8,7 @@ from pydantic import SecretStr
 import pytest
 from pytest_mock import MockerFixture
 
-from notifications.main.setup.config.settings import MailConfig
+from notifications.infrastructure.common.config.settings import MailConfig
 
 
 @pytest.fixture
@@ -48,4 +48,6 @@ def mock_template_render(mocker: MockerFixture) -> Any:
 
 @pytest.fixture
 async def mock_send_message(mocker: MockerFixture) -> Any:
-    return mocker.patch("fastapi_mail.FastMail.send_message", return_value=None)
+    return mocker.patch(
+        "fastapi_mail.FastMail.send_message", return_value=None
+    )

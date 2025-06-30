@@ -11,17 +11,19 @@ requires-python = ">=3.12"
 dependencies = [
     "alembic>=1.15.2",
     "asyncpg>=0.30.0",
+    "black>=25.1.0",
     "dishka>=1.5.3",
     "fastapi-mail>=1.4.2",
-    "faststream[rabbit]>=0.5.40",
+    "faststream[cli,rabbit]>=0.5.43",
     "pydantic>=2.10.6",
     "sqlalchemy>=2.0.41",
     "taskiq>=0.11.17",
+    "taskiq-aio-pika>=0.4.2",
+    "taskiq-faststream>=0.2.3",
 ]
 
 [dependency-groups]
 dev = [
-    "black>=25.1.0",
     "httpx>=0.28.1",
     "pytest>=8.3.5",
     "pytest-asyncio>=0.26.0",
@@ -40,7 +42,7 @@ include-package-data = true
 notifications = ["py.typed"]
 
 [tool.black]
-line-length = 80
+line-length = 79
 target-version = ['py312']
 
 [tool.mypy]

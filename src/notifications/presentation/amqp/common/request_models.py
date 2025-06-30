@@ -14,6 +14,7 @@ class EmailNotificationRequest(BaseRequest):
 class AddRecipientRequest(BaseRequest):
     oid: int
     email: EmailStr
+    username: str
 
 
 class DeleteRecipientRequest(BaseRequest):
@@ -23,3 +24,17 @@ class DeleteRecipientRequest(BaseRequest):
 class ChangeEmailRecipientRequest(BaseRequest):
     oid: int
     new_email: EmailStr
+
+
+class ChangeUsernameRecipientRequest(BaseRequest):
+    oid: int
+    new_username: str
+
+
+class BulkMailingRequest(BaseRequest):
+    type: str
+
+
+class PersonalBulkMailingRequest(BaseRequest):
+    type: str
+    data: dict[str, str] | None

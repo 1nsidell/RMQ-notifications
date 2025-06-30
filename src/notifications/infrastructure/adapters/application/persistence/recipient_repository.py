@@ -21,10 +21,8 @@ class RecipientRepository(RecipientGateway):
         self,
         recipient_id: RecipientId,
     ) -> Recipient | None:
-        stmt = (
-            select(Recipient)
-            .where(recipients_table.c.recipient_id == recipient_id)
-            .with_for_update()
+        stmt = select(Recipient).where(
+            recipients_table.c.recipient_id == recipient_id
         )
         result = await self._session.execute(stmt)
         return result.scalar_one_or_none()

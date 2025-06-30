@@ -33,7 +33,7 @@ src = [
 ]
 
 # Same as Black.
-line-length = 80
+line-length = 79
 indent-width = 4
 
 # Assume Python 3.12
@@ -65,14 +65,6 @@ docstring-code-format = false
 docstring-code-line-length = "dynamic"
 
 [lint.isort]
-known-third-party = [
-    "aio_pika",
-    "alembic",
-    "fastapi",
-    "pytest",
-    "redis",
-    "uvicorn",
-]
 known-first-party = ["notifications"]
 combine-as-imports = true
 force-sort-within-sections = true

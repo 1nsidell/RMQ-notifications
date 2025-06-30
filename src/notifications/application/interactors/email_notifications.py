@@ -1,4 +1,4 @@
-from notifications.application.common.dto.email_notification import (
+from notifications.application.common.dto import (
     EmailNotificationDTO,
 )
 from notifications.application.common.ports import (
@@ -26,7 +26,7 @@ class EmailNotificationInteractor:
         body = self._email_template_provider.get_rendered_template(
             template_name=email_signature.template, data=data.data
         )
-        await self._email_sender.send_single_email(
+        await self._email_sender.send_personal_email(
             subject=email_signature.subject,
             recipient=data.recipient,
             body=body,

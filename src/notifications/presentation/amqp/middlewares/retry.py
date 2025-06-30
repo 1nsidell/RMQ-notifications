@@ -33,6 +33,6 @@ class RetryMiddleware(BaseMiddleware):
                 )
                 if attempt < self.retries:
                     await asyncio.sleep(self.delay)
-        log.error("All retries failed.")
+        log.exception("All retries failed.")
         if last_exc:
             raise last_exc

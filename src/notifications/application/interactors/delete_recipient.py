@@ -1,4 +1,4 @@
-from notifications.application.common.dto.recipient import DeleteRecipientDTO
+from notifications.application.common.dto import DeleteRecipientDTO
 from notifications.application.common.ports import (
     EntityManager,
     RecipientGateway,

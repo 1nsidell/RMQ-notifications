@@ -6,12 +6,14 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from notifications.infrastructure.persistence.models.all import setup_map_tables
-from notifications.infrastructure.persistence.models.base import metadata
-from notifications.main.setup.config.settings import (
+from notifications.infrastructure.common.config.settings import (
     Settings,
     get_settings,
 )
+from notifications.infrastructure.persistence.models.all import (
+    setup_map_tables,
+)
+from notifications.infrastructure.persistence.models.base import metadata
 
 
 # this is the Alembic Config object, which provides

@@ -1,4 +1,4 @@
-from notifications.application.common.dto.recipient import CreateRecipientDTO
+from notifications.application.common.dto.recipients import CreateRecipientDTO
 from notifications.application.common.ports import (
     EntityManager,
     RecipientGateway,
@@ -9,6 +9,7 @@ from notifications.domain.entities.recipient.entity import (
 )
 from notifications.domain.entities.recipient.value_objects import (
     RecipientEmail,
+    RecipientUsername,
 )
 from notifications.domain.services.recipients import RecipientService
 
@@ -33,6 +34,7 @@ class AddRecipientInteractor:
         recipient = self._recipient_service.create_recipient(
             oid=RecipientId(data.oid),
             email=RecipientEmail(email=data.email),
+            username=RecipientUsername(username=data.username),
         )
         self._entity_manager.add_one(recipient)
         await self._transaction_manager.commit()

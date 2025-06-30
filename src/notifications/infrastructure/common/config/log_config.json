@@ -1,0 +1,53 @@
+{
+    "version": 1,
+    "disable_existing_loggers": false,
+    "formatters": {
+        "simple": {
+            "()": "notifications.infrastructure.common.config.logging_utils.UTCFormatter",
+            "format": "%(asctime)s - %(name)15s - %(levelname)-8s - %(message)s"
+        },
+        "json": {
+            "()": "notifications.infrastructure.common.config.logging_utils.JsonFormatter",
+            "fmt_dict": {
+                "levelname": "levelname",
+                "request_id": "request_id",
+                "message": "message",
+                "asctime": "asctime",
+                "module": "module",
+                "lineno": "lineno",
+                "logger": "name"
+            }
+        }
+    },
+    "filters": {
+        "mask_sensitive": {
+            "()": "notifications.infrastructure.common.config.logging_utils.MaskingFilter"
+        },
+        "request_id_filter": {
+            "()": "notifications.infrastructure.common.config.logging_utils.RequestIdFilter"
+    }
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+            "filters": ["mask_sensitive"],
+            "level": "INFO",
+            "stream": "ext://sys.stdout"
+        },
+        "file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": "logs/app.log",
+            "formatter": "json",
+            "filters": ["mask_sensitive", "request_id_filter"],
+            "level": "INFO",
+            "maxBytes": 10485760,
+            "backupCount": 40,
+            "encoding": "utf8"
+        }
+    },
+    "root": {
+        "level": "INFO",
+        "handlers": ["console", "file"]
+    }
+}

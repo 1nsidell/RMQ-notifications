@@ -1,0 +1,18 @@
+{
+  "confirm_email": {
+    "subject": "ПИСЬМО ДЛЯ ВЕРИФИКАЦИИ ПОЧТЫ.",
+    "template": "confirm_email.html"
+  },
+  "recovery_password": {
+    "subject": "ПИСЬМО ДЛЯ ВОССТАНОВЛЕНИЯ ПАРОЛЯ.",
+    "template": "reset_pass.html"
+  },
+  "first_bulk_mailing": {
+    "subject": "МАССОВАЯ РАССЫЛКА.",
+    "template": "first_bulk_mailing.html"
+  },
+  "first_personal_mailing": {
+    "subject": "МАССОВАЯ ПЕРСОНАЛЬНАЯ РАССЫЛКА.",
+    "template": "first_personal_mailing.html"
+  }
+}
