@@ -24,7 +24,7 @@ from notifications.main.ioc.registry import get_providers
 from notifications.presentation.amqp.controllers import (
     bulk_email_router,
     notifications_router,
-  dependency  recipient_router,
+    recipient_router,
 )
 from notifications.presentation.amqp.middlewares import (
     LogMiddleware,
