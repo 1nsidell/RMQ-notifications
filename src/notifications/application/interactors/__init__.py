@@ -3,7 +3,7 @@ from .bulk_email import BulkEmailInteractor
 from .change_email_recipient import ChangeEmailRecipientInteractor
 from .change_username_recipient import ChangeUsernameRecipientInteractor
 from .delete_recipient import DeleteRecipientInteractor
-from .email_notifications import EmailNotificationInteractor
+from .notifications import NotificationsInteractor
 
 
 __all__ = (
@@ -13,4 +13,5 @@ __all__ = (
     "ChangeUsernameRecipientInteractor",
     "DeleteRecipientInteractor",
     "EmailNotificationInteractor",
+    "NotificationsInteractor",
 )

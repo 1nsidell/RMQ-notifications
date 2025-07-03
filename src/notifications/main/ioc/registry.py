@@ -1,25 +1,28 @@
 from typing import Iterable
 
 from dishka import Provider
+from dishka.provider import ProviderWrapper
 
 from notifications.main.ioc.di_providers import (
-    ApplicationProvider,
     CommonInfrastructureProvider,
     CommonSettingsProvider,
     DomainProvider,
     EmailsInfrastructureProvider,
     GatewaysInfrastructureProvider,
+    InteractorProvider,
+    ServicesProvider,
     TasksProvider,
 )
 
 
-def get_providers() -> Iterable[Provider]:
+def get_providers() -> Iterable[Provider | ProviderWrapper]:
     return (
         CommonSettingsProvider(),
         CommonInfrastructureProvider(),
-        ApplicationProvider(),
+        InteractorProvider(),
         EmailsInfrastructureProvider(),
         GatewaysInfrastructureProvider(),
         DomainProvider(),
-        TasksProvider(),
+        ServicesProvider(),
+        TasksProvider().to_component(""),
     )

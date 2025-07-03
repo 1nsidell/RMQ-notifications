@@ -31,7 +31,6 @@ from notifications.infrastructure.adapters.application import (
     StorageEmailTemplateProvider,
 )
 from notifications.infrastructure.adapters.infrastructure import (
-    BulkMailingTaskImpl,
     JsonSignatureLoader,
 )
 from notifications.infrastructure.common.config.constants import (
@@ -41,10 +40,7 @@ from notifications.infrastructure.common.config.settings import (
     MailConfig,
     SQLDatabaseConfig,
 )
-from notifications.infrastructure.common.ports import (
-    BulkMailingTask,
-    SignatureLoader,
-)
+from notifications.infrastructure.common.ports import SignatureLoader
 
 
 class CommonInfrastructureProvider(Provider):
@@ -151,12 +147,4 @@ class GatewaysInfrastructureProvider(Provider):
         RecipientBatchesImpl,
         scope=Scope.REQUEST,
         provides=RecipientBatches,
-    )
-
-
-class TasksProvider(Provider):
-    bulk_mailing_task = provide(
-        BulkMailingTaskImpl,
-        scope=Scope.REQUEST,
-        provides=BulkMailingTask,
     )

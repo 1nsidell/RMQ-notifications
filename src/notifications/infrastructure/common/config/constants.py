@@ -6,7 +6,7 @@ from pathlib import Path
 
 class RabbitQueues(StrEnum):
     ADD_RECIPIENT = os.getenv("RABBIT_ADD_RECIPIENT", "test")
-    EMAIL_NOTIFICATION = os.getenv("RABBIT_EMAIL_NOTIFICATION", "test")
+    EMAIL_NOTIFICATION = os.getenv("RABBIT_NOTIFICATIONS", "test")
     BULK_MAILING = os.getenv("RABBIT_BULK_MAILING", "test")
     DELETE_RECIPIENT = os.getenv("RABBIT_DELETE_RECIPIENT", "test")
     CHANGE_EMAIL_RECIPIENT = os.getenv("RABBIT_CHANGE_EMAIL_RECIPIENT", "test")

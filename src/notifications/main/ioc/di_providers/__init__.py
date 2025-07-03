@@ -1,20 +1,21 @@
-from .application import ApplicationProvider
+from .application import InteractorProvider, ServicesProvider
 from .domain import DomainProvider
 from .infrastructure import (
     CommonInfrastructureProvider,
     EmailsInfrastructureProvider,
     GatewaysInfrastructureProvider,
-    TasksProvider,
 )
 from .settings import CommonSettingsProvider
+from .tasks import TasksProvider
 
 
 __all__ = (
-    "ApplicationProvider",
     "CommonInfrastructureProvider",
     "CommonSettingsProvider",
     "DomainProvider",
     "EmailsInfrastructureProvider",
     "GatewaysInfrastructureProvider",
+    "InteractorProvider",
+    "ServicesProvider",
     "TasksProvider",
 )

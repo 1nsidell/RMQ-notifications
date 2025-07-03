@@ -7,7 +7,7 @@ class EmailError(ApplicationError):
     pass
 
 
-class UnknownNotificationTypeError(EmailError):
+class UnknownEmailNotificationTypeError(EmailError):
     "Incorrect notification type"
 
-    error_type: str = "UNKNOW_NOTIFICATION_TYPE"
+    error_type: str = "UNKNOW_EMAIL_NOTIFICATION_TYPE"

@@ -1,3 +1,5 @@
+from typing import Any
+
 from pydantic import BaseModel, ConfigDict, EmailStr
 
 
@@ -5,10 +7,9 @@ class BaseRequest(BaseModel):
     model_config = ConfigDict(strict=True, extra="forbid")
 
 
-class EmailNotificationRequest(BaseRequest):
+class NotificationRequest(BaseRequest):
     type: str
-    recipient: EmailStr
-    data: dict[str, str]
+    data: dict[str, Any]
 
 
 class AddRecipientRequest(BaseRequest):

@@ -1,5 +1,5 @@
 from .bulk_emails import BulkEmailDTO
-from .notifications import EmailNotificationDTO
+from .notifications import EmailNotificationDTO, NotificationDTO
 from .recipients import (
     ChangeEmailRecipientDTO,
     ChangeUsernameRecipientDTO,
@@ -18,5 +18,6 @@ __all__ = (
     "DeleteRecipientDTO",
     "EmailNotificationDTO",
     "EmailSignature",
+    "NotificationDTO",
     "RecipientView",
 )

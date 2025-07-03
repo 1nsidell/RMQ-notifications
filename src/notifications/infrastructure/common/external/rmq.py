@@ -5,11 +5,14 @@ from faststream.security import SASLPlaintext
 from taskiq_aio_pika import AioPikaBroker
 
 from notifications.infrastructure.common.config.constants import RabbitQueues
-from notifications.infrastructure.common.config.settings import RabbitMQConfig
+from notifications.infrastructure.common.config.settings import (
+    RabbitMQConfig,
+    get_settings,
+)
 
 
-rmq_config = RabbitMQConfig()
-taskiq_broker = AioPikaBroker(rmq_config.url)
+config = get_settings()
+taskiq_broker = AioPikaBroker(config.rmq.url)
 
 
 def new_faststream_broker(

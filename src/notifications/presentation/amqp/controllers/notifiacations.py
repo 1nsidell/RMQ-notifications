@@ -1,15 +1,13 @@
 from dishka.integrations.faststream import FromDishka as Depends
 from faststream.rabbit import RabbitRouter
 
-from notifications.application.common.dto import EmailNotificationDTO
-from notifications.application.interactors import (
-    EmailNotificationInteractor,
-)
+from notifications.application.common.dto import NotificationDTO
+from notifications.application.interactors import NotificationsInteractor
 from notifications.infrastructure.common.external import (
     email_notification_queue,
 )
 from notifications.presentation.amqp.common.request_models import (
-    EmailNotificationRequest,
+    NotificationRequest,
 )
 
 
@@ -18,12 +16,11 @@ notifications_router = RabbitRouter()
 
 @notifications_router.subscriber(queue=email_notification_queue)
 async def email_notifications(
-    data: EmailNotificationRequest,
-    interactor: Depends[EmailNotificationInteractor],
+    data: NotificationRequest,
+    interactor: Depends[NotificationsInteractor],
 ) -> None:
-    dto = EmailNotificationDTO(
+    dto = NotificationDTO(
         type=data.type,
-        recipient=data.recipient,
         data=data.data,
     )
     await interactor(dto)

@@ -6,7 +6,7 @@ from notifications.application.common.dto import (
     EmailSignature,
 )
 from notifications.application.common.errors import (
-    UnknownNotificationTypeError,
+    UnknownEmailNotificationTypeError,
 )
 from notifications.infrastructure.common.ports.email.signature_loader import (
     SignatureLoader,
@@ -64,7 +64,7 @@ class JsonSignatureLoader(SignatureLoader):
                 logger.error(
                     "Email notification type not found: %s.", email_type
                 )
-                raise UnknownNotificationTypeError(
+                raise UnknownEmailNotificationTypeError(
                     f"Email notification type '{email_type}' not found.",
                 )
             logger.error(

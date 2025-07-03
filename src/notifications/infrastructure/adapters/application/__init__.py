@@ -6,9 +6,11 @@ from .persistence.recipient_batches import RecipientBatchesImpl
 from .persistence.recipient_reader import RecipientReaderImpl
 from .persistence.recipient_repository import RecipientRepository
 from .persistence.transaction_manager import SqlaTransactionManager
+from .tasks.bulk_mailing import BulkMailingTask
 
 
 __all__ = (
+    "BulkMailingTask",
     "EmailStrategyImpl",
     "EntityManagerImpl",
     "FastEmailSenderProvider",
